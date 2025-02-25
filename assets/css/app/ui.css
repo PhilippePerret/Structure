@@ -19,7 +19,7 @@ body {
     position:fixed;
     bottom:0; left:0; width: 100%;
     padding:0;
-    height: 50px;
+    height: 68px;
     background-color:#DDDDDD;
     font-size: 0.8em;
     z-index: 500;
@@ -36,11 +36,17 @@ body {
     font-family:inherit;
     font-size: inherit;
   }
-  input.horloge {
+  .horloge {
     width: 80px; 
     background-color:#555;
     color:white;
     font-family:Monospace;
+    text-align: center;
   }
   label + input {margin-left:0.5em}
   .center {text-align: center}
+
+  .iblock {display:inline-block}
+
+  div.iblock > label {display:block;}
+  div.iblock > label+input{margin-left:0}

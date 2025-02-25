@@ -1,4 +1,5 @@
 import "phoenix_html";
+import "./structure.js";
 
 /**
  * Table des couleurs
@@ -11,7 +12,6 @@ const TABLE_COULEURS = {
 
 class Stt {
   static prepare(){
-    console.info("-> prepare()")
     this.positionneElementsStt()
     setTimeout(this.setVisible.bind(this), 500)
   }
@@ -45,6 +45,10 @@ class Stt {
     })
   }
 
+  static positionneElement(elt) {
+    console.error("Je dois apprendre à positionner une élément dans la structure.")
+  }
+
   /**
    * Fonction qui transforme l'horloge +horloge+ en pixel (left)
    */
@@ -73,6 +77,8 @@ class Stt {
     return parseInt((filmWidth / filmDuree) * 1000) / 1000
   }
 }
+
+window.Stt = Stt;
 
 window.onload = function(ev){
   setTimeout(function(){Stt.prepare()}, 200)

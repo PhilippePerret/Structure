@@ -1,0 +1,70 @@
+div#structure {
+  position: fixed;
+  width: 3000px;
+  min-height: 600px;
+  border: 1px solid #CCCCCC;
+}
+div.quart-temps {
+  position: absolute;
+  top: 75%;
+  height: 25%;
+  width: 25%;
+  border:1px solid blue;
+  background-color: #EEFFEE;
+}
+div.quart-temps:before {
+  position: absolute;
+  width: 400px;
+  text-align:center;
+  left: calc(50% - 200px);
+  top: calc(50% - 80px);
+  font-size:2em;
+  color: #CCCCCC;
+}
+div#exposition {left:0}
+div#exposition:before {content: "Exposition"}
+div#developpement-part1 {left: 25%;}
+div#developpement-part1:before {content: "Dév - Part.2"}
+div#developpement-part2 {left: 50%;}
+div#developpement-part2:before {content: "Dév - Part.2"}
+div#denouement {left:75%}
+div#denouement:before {content: "Dénouement"}
+
+/* 
+  === Scènes ===
+
+  Chaque scène (.scene) doit définir son top et son left
+*/
+scene {
+  position: absolute;
+  display: block;
+}
+/* Taille des scènes */
+scene {font-size: 13pt}
+scene.main {font-size: 15pt; font-weight: bold}
+scene:before {
+  position: absolute;
+  content: "•"; 
+  font-size: 40px;
+  left: -24px;
+  top: -12px;
+}
+scene.biais {
+  transform-origin: top left;
+  transform:rotate(-60deg) translateY(-28px);
+  top: 200px;
+}
+scene.biais:before {top: -4px;}
+
+/* === SÉQUENCES === */
+
+seq {
+  position: absolute;
+  display:block;
+  border: 1px solid;
+  padding: 4px 8px;
+}
+seq:not(.meta) { top: 40px;}
+seq.meta {
+  top: 0;
+}

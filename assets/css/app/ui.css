@@ -1,0 +1,46 @@
+body {
+  font-size:16pt;
+  margin-top: 100px;
+  }
+  header {
+    position:fixed;
+    top:0; left:0; width: 100%;
+    height: auto;
+    background-color:#555555;
+    color: white;
+    z-index:500;
+  }
+  header a, footer a {
+    all: unset;
+    color: inherit
+  }
+
+  footer {
+    position:fixed;
+    bottom:0; left:0; width: 100%;
+    padding:0;
+    height: 50px;
+    background-color:#DDDDDD;
+    font-size: 0.8em;
+    z-index: 500;
+  }
+
+  /* Pour footer et header */
+  div.content {
+    padding: 12px 1em;
+  }
+  a, a:link, a:visited, a:hover {text-decoration: none}
+
+
+  input[type="text"] {
+    font-family:inherit;
+    font-size: inherit;
+  }
+  input.horloge {
+    width: 80px; 
+    background-color:#555;
+    color:white;
+    font-family:Monospace;
+  }
+  label + input {margin-left:0.5em}
+  .center {text-align: center}

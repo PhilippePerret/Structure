@@ -44,7 +44,12 @@ body {
     text-align: center;
   }
   label + input {margin-left:0.5em}
+  
+.btn {
+  cursor:pointer;
+}
   .center {text-align: center}
+  .fright {float:right}
 
   .iblock {display:inline-block}
 

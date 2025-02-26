@@ -14,6 +14,12 @@ defmodule SttWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/structure", SttWeb do
+    pipe_through :browser
+    post "/load", StructureController, :load
+    post "/save", StructureController, :save
+  end
+
   scope "/", SttWeb do
     pipe_through :browser
 

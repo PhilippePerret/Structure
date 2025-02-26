@@ -16,13 +16,20 @@
 
   </head>
   <body>
-    <header><div class="content"><a href={~p"/"}>Structure</a></div></header>
+    <header>
+      <div class="content">
+        <a href={~p"/"}>Structure</a>
+        <input id="structure-name" type="text" value="default" style="margin-left:1em;background-color:#999;color:white;padding:0 1em;width:140px;text-align:center;" />
+      </div>
+    </header>
 
     <.flash_group flash={@flash} />
 
     <%= @inner_content %>
 
     <footer>
+      <button class="btn fright" onclick="Structure.save()">Enregistrer…</button>
+
       <label for="film-duree">Durée du film</label>
       <input type="text" id="film-duree" value="2:00:00" placeholder="H:MM:SS" class="center horloge" />
 

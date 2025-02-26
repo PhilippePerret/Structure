@@ -1,4 +1,6 @@
 import "phoenix_html";
+import "./flash.js";
+import "./server_talk.js";
 import "./structure.js";
 
 /**
@@ -10,7 +12,11 @@ const TABLE_COULEURS = {
   , 'green' : 'green'
 }
 
-class Stt {
+class STT {
+  static init(){
+    const sttName = DGet('input#structure-name').value
+    Structure.load(sttName)
+  }
   static prepare(){
     this.positionneElementsStt()
     setTimeout(this.setVisible.bind(this), 500)
@@ -78,8 +84,8 @@ class Stt {
   }
 }
 
-window.Stt = Stt;
+window.STT = STT;
 
 window.onload = function(ev){
-  setTimeout(function(){Stt.prepare()}, 200)
+  STT.init()
 }

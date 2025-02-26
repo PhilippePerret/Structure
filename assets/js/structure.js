@@ -7,6 +7,44 @@ function nullIfEmpty(value){
 class Structure {
 
   /**
+   * Chargement de la structure
+   */
+  static load(sttName){
+    sttName = sttName || "default"
+    ServerTalk.dial({
+        route: "structure/load"
+      , method: "POST"
+      , data: {structure_path: "default"}
+      , callback: this.afterLoad.bind(this) 
+    })
+  }
+  static afterLoad(retour){
+    if (retour.ok) {
+      console.log("Dispatcher la structure", retour)
+    } else {
+      Flash.error(retour.error)
+    }
+  }
+
+  /**
+   * Sauvegarde de la structure
+   */
+  static save(){
+    ServerTalk.dial({
+        route: "/structure/save"
+      , data:  {structure: this.getData()}
+      , callback: this.afterSave.bind(this)
+    })
+  }
+  static afterSave(retour){
+    if (retour.ok) {
+      console.info("Structure sauvegardée")
+    } else {
+      Flash.error(retour.error)
+    }
+  }
+
+  /**
    * Fonction pour ajouter ou actualiser
    */
   static createOrUpdate(){
@@ -25,6 +63,19 @@ class Structure {
    */
   static update(){
     console.log("Je dois apprendre à updater")
+  }
+
+  /**
+   * Retourne les données de la structure, c'est-à-dire la liste
+   * de tous les éléments créés
+   */
+  static getData(){
+    return {
+      elements: [
+        {type: 'scene', text: 'Incident déclencheur', time: '12:00', duree: '2:00', tension: '3'}
+      ]
+    , metadata: {path: "default"}
+    , preferences: {display: 'paysage'}}
   }
 }
 
@@ -51,8 +102,8 @@ class SttElForm {
     div.setAttribute("time", data.time)
     div.setAttribute("duree", data.duree)
     this.obj = div
-    Stt.structure.appendChild(this.obj)
-    Stt.positionneElement()
+    STT.structure.appendChild(this.obj)
+    STT.positionneElement()
   }
 
   getData(){

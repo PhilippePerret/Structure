@@ -3,6 +3,11 @@ div#structure {
   width: 3000px;
   min-height: 600px;
   border: 1px solid #CCCCCC;
+  user-select: none;
+}
+div#structure span {
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
 }
 div.quart-temps {
   position: absolute;
@@ -38,6 +43,7 @@ div#denouement:before {content: "Dénouement"}
 scene {
   position: absolute;
   display: block;
+  cursor: pointer;
 }
 /* Taille des scènes */
 scene {font-size: 13pt}
@@ -52,7 +58,10 @@ scene:before {
 scene.biais {
   transform-origin: top left;
   transform:rotate(-60deg) translateY(-28px);
-  top: 200px;
+  top: 300px;
+}
+scene:not(.biais) {
+  top: 300px;
 }
 scene.biais:before {top: -4px;}
 
@@ -63,8 +72,7 @@ seq {
   display:block;
   border: 1px solid;
   padding: 4px 8px;
+  top: calc(460px + 40px);
+  cursor: pointer;
 }
-seq:not(.meta) { top: 40px;}
-seq.meta {
-  top: 0;
-}
+seq.meta { top: 460px; }

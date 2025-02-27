@@ -44,20 +44,6 @@ class Structure {
     }
   }
 
-  /**
-   * Fonction pour ajouter ou actualiser
-   */
-  static createOrUpdate(){
-    console.log("Je dois apprendre à créer ou actualiser")
-  }
-
-  /**
-   * Fonction principale pour ajouter un élément à la structure
-   */
-  static create(){
-    console.log("Je dois apprendre à ajouter un élément.")
-  }
-
   static get cadre(){return this._cadre || (this._cadre = DGet('div#structure'))}
   static masquer_cadre(){this.setCadreVisi(false)}
   static display_cadre(){setTimeout(this.setCadreVisi.bind(this, true), 100)}
@@ -73,28 +59,12 @@ class Structure {
 
   }
 
-  /**
-   * Retourne les données de la structure, c'est-à-dire la liste
-   * de tous les éléments créés
-   */
-  static getData(){
-    return {
-      elements: [
-          {type: 'scene', text: 'Incident déclencheur', stype: 'biais main', time: '12:00', duree: '2:00', tension: '3'}
-        , {type: 'scene', text: 'La scène normal à plat', time: '12:00'}
-        , {type: 'seq', text: "Introduction", stype: 'meta', color: "green;white"}
-        , {type: 'seq', text: "Séquence non méta", stype: null, color: "red;white", duree:"10:00", temps:"15:00"}
-      ]
-    , metadata: {path: "default"}
-    , preferences: {display: 'paysage'}}
-  }
-
-
   // =========  I N S T A N C E   S T R U C T U R E  =============
 
   constructor(data){
     this.data = data
-    this.elements = []
+    this.elements = []; // pour liste des instances d'élément
+    this.table    = {};
   }
   get metadata(){return this.data.metadata}
   get data_elements(){return this.data.elements}
@@ -107,22 +77,63 @@ class Structure {
    */
   build(){
     Structure.masquer_cadre()
-    console.log("Je dois apprendre à construire la structure.")
     this.data.elements.forEach( delement => {
-      const elt = new SttElForm(delement)
+      const elt = new SttElement(delement)
+      this.elements.push(elt)
+      Object.assign(this.table, {[elt.id]: elt})
       elt.build()
     })
     Structure.display_cadre()
+  }
+
+  /**
+   * Fonction appelée pour ajouter l'élément
+   */
+  addElement(element){
+    this.elements.push(element)
   }
 }
 
 /**
  * Gestion de l'édition d'un élément de structure
  */
-class SttElForm {
+class SttElement {
 
-  static getNewId(){
-    return String(new Date().getTime() + Math.random() * 100)
+  static getNewId(type){
+    const partDate = String(new Date().getTime()).replace("\.", "")
+    const partAlea = String(parseInt(Math.random() * 100))
+    const chunk4 = (partDate+partAlea).match(/.{1,4}/g)
+    return type + "-" + chunk4.join("-")
+  }
+
+  /**
+   * Foncton appelée par le bouton "Enregistrer" du formulaire
+   * d'édition de l'élément
+   */
+  static createOrUpdate(){
+    const dataElement = ElementForm.getData()
+    if ( ElementForm.areValidData(dataElement) ) {
+      if ( dataElement.id ) {
+        this.updateElement(dataElement)
+      } else /* création */ {
+        this.createElement(dataElement)
+      }
+    } else /* Données invalides */ {
+      return false
+    }
+  }
+
+  static updateElement(data){
+    const element = Structure.current.getElement(data.id)
+    element.update(data)
+    console.info("Je dois apprendre à updater l'élément d'id", data.id)
+  }
+  static createElement(data){
+    data.id = this.getNewId(data.type)
+    console.info("Je dois apprendre à créer l'élément avec", data)
+    const newElement = new SttElement(data)
+    Structure.current.addElement(newElement)
+    newElement.build()
   }
 
   // --- INSTANCE ---
@@ -131,15 +142,17 @@ class SttElForm {
     this.data = data
   }
 
-  get id(){return this.data.id || (this.data.id = SttElForm.getNewId())}
+  get id(){return this.data.id || SttElement.getNewId(this.data.type) }
   get text(){return this.data.pitch || this.data.text}
   get type(){return this.data.type}
-  get temps(){return this.data.temps || "0:00"}
+  get time(){return this.data.time || "0:00"}
   get duree(){return this.data.duree || "2:00"}
+  get tension(){return this.data.tension || ""}
+  get color(){return this.data.color || ""}
 
 
   edit(ev){
-    console.info("Je dois apprendre à éditer l'élément", this.id)
+    ElementForm.setData(this)
   }
 
   build(){
@@ -148,7 +161,7 @@ class SttElForm {
     const div = DCreate(data.type.toUpperCase(), {id:eltId})
     this.obj = div
     div.appendChild(DCreate('SPAN', {text: this.text}))
-    div.setAttribute("temps", this.temps);
+    div.setAttribute("time", this.time);
     div.setAttribute("duree", this.duree);
     data.stype && (this.setClass(data.style));
     Structure.cadre.appendChild(this.obj)
@@ -161,7 +174,7 @@ class SttElForm {
     this.obj.addEventListener('dblclick', this.edit.bind(this))
   }
   positionne(){
-    this.obj.style.left = `${STT.horlogeToPixels(this.data.temps || "0:00")}px`
+    this.obj.style.left = `${STT.horlogeToPixels(this.data.time || "0:00")}px`
     this.data.duree && (this.obj.style.width = `${STT.horlogeToPixels(this.data.duree)}px`);
     this.data.top   && (this.obj.style.top = `${this.data.top}px`);
     this.data.color && this.setColor();
@@ -181,9 +194,56 @@ class SttElForm {
     const [bg,fg] = dColor.split(/[-,;\.]/);
     this.obj.style.backgroundColor = bg;
     this.obj.style.color = fg;
+  }
 }
 
-  getData(){
+class ElementForm {
+
+  /**
+   * Vérifie la validité des données. Retourne true en cas de succès
+   * ou false en cas de problème, en affichant les erreurs
+   */
+  static areValidData(data){
+    try {
+      if (data.pitch === null || data.pitch.length < 10) throw new Error("Pitch trop court (> 10)");
+      // TODO Vérifier que le pitch soit unique si c'est une création
+      if (data.time === null || this.NotATime(data.time)) throw new Error("Le time doit être une horloge valide.")
+      if ( this.NotATime(data.duree) ) throw new Error("La durée doit être une horloge valide.")
+      if (data.tension !== null && this.NotATension(data.tension)) throw new Error("La tension n'est pas une tension valide.")
+      if (data.color !== null && this.NotAColor(data.color)) throw new Error("La couleur n'est pas une couleur valide.")
+      return true
+    } catch(err) {
+      Flash.error(err.message) + "\nImpossible d'enregistrer l'élément."
+      return false
+    }
+  }
+
+  static NotATime(horloge){return !this.IsATime(horloge)}
+  static IsATime(horloge){return this.regHorloge.test(horloge) === true}
+  static get regHorloge(){
+    if ( undefined === this._reghorloge ) {
+      this._reghorloge = new RegExp("^[0-9]{1,2}\:[0-9]{1,2}(\:[0-9]{1,2})?$")
+    }; return this._reghorloge
+  }
+
+  static NotATension(tension){return !this.IsATension(tension)}
+  static IsATension(tension){return this.regTension.test(tension) === true}
+  static get regTension(){
+    if (undefined == this._regtension){
+      this._regtension = new RegExp("^[0-9]\;[0-9]{1,2}\:[0-9]{1,2}(\:[0-9]{1,2})?$")
+    } return this._regtension;
+  }
+
+  static NotAColor(color){return !this.IsAColor(color)}
+  static IsAColor(color){return true === this.regColor.test(color)}
+  static get regColor(){
+    if (undefined == this._regcolor) {
+      const colors = STT_COLORS.join("|")
+      this._regcolor = new RegExp("^("+colors+")\;("+colors+")$")
+    }; return this._regcolor
+  }
+
+  static getData(){
     return {
         id:       nullIfEmpty(this.fieldId.value)
       , type:     nullIfEmpty(this.fieldType.value)
@@ -191,10 +251,10 @@ class SttElForm {
       , time:     nullIfEmpty(this.fieldTime.value)
       , duree:    nullIfEmpty(this.fieldDuree.value)    || "2:00"
       , color:    nullIfEmpty(this.fieldColor.value)    || "white:black"
-      , tension:  nullIfEmpty(this.fieldTension.value)  || ""
+      , tension:  nullIfEmpty(this.fieldTension.value)
     }
   }
-  setData(data){
+  static setData(data){
     this.fieldId.value      = data.id
     this.fieldType.value    = data.type
     this.fieldPitch.value   = data.pitch
@@ -203,15 +263,17 @@ class SttElForm {
     this.fieldColor.value   = data.color
     this.fieldTension.value = data.tension
   }
-  get fieldId(){return this._fieldid || (this._fieldid = DGet('input#elt-id'))}
-  get fieldType(){return this._fieldtype || (this._fieldtype = DGet('select#elt-type'))}
-  get fieldPitch(){return this._fieldpitch || (this._fieldpitch = DGet('input#elt-pitch'))}
-  get fieldTime(){return this._fieldtime || (this._fieldtime = DGet('input#elt-time'))}
-  get fieldDuree(){return this._fielduree || (this._fielduree = DGet('input#elt-duree'))}
-  get fieldColor(){return this._fieldcolor || (this._fieldcolor = DGet('input#elt-color'))}
-  get fieldTension(){return this._fieldtension || (this._fieldtension = DGet('input#elt-tension'))}
+  static get fieldId(){return this._fieldid || (this._fieldid = DGet('input#elt-id'))}
+  static get fieldType(){return this._fieldtype || (this._fieldtype = DGet('select#elt-type'))}
+  static get fieldPitch(){return this._fieldpitch || (this._fieldpitch = DGet('input#elt-pitch'))}
+  static get fieldTime(){return this._fieldtime || (this._fieldtime = DGet('input#elt-time'))}
+  static get fieldDuree(){return this._fielduree || (this._fielduree = DGet('input#elt-duree'))}
+  static get fieldColor(){return this._fieldcolor || (this._fieldcolor = DGet('input#elt-color'))}
+  static get fieldTension(){return this._fieldtension || (this._fieldtension = DGet('input#elt-tension'))}
+
 }
 
 
 
-window.Structure = Structure
+window.Structure  = Structure;
+window.SttElement = SttElement;

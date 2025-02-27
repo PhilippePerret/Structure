@@ -3,6 +3,10 @@ import "./flash.js";
 import "./server_talk.js";
 import "./structure.js";
 
+const STT_COLORS = [
+  "red", "blue", "green", "black", "white"
+]
+
 /**
  * Table des couleurs
  * L'user doit pouvoir les déterminer.
@@ -48,6 +52,7 @@ class STT {
 }
 
 window.STT = STT;
+window.STT_COLORS = STT_COLORS
 
 window.onload = function(ev){
   STT.init()

@@ -28,7 +28,7 @@
     <%= @inner_content %>
 
     <footer>
-      <button class="btn fright" onclick="Structure.save()">Enregistrer…</button>
+      <button class="btn fright" onclick="Structure.save()">Sauver</button>
 
       <label for="film-duree">Durée du film</label>
       <input type="text" id="film-duree" value="2:00:00" placeholder="H:MM:SS" class="center horloge" />
@@ -44,28 +44,28 @@
         <input 
           id="elt-pitch" 
           type="text" 
-          value="" 
+          value="Le premier résumé" 
           placeholder="Résumé" 
           style="width:400px;" />
       </div>
       <div class="iblock">
         <label for="elt-time" class="block">Position</label>
-        <input id="elt-time" type="text" class="horloge" value="" placeholder="H:MM:SS"/>
+        <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
       </div>
       <div class="iblock">
         <label for="elt-duree" class="block">Durée</label>
-        <input id="elt-duree" type="text" class="horloge" value="" placeholder="H:MM:SS"/>
+        <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
       </div>
       <div class="iblock">
         <label for="elt-color" class="block">Couleur</label>
-        <input id="elt-color" type="text" style="width:200px;" value="" placeholder="back;fore" />
+        <input id="elt-color" type="text" style="width:200px;" value="green;white" placeholder="back;fore" />
       </div>
       <div class="iblock">
         <label for="elt-tension" class="block">Tension</label>
         <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
       </div>
 
-      <button class="btn" onclick="Structure.createOrUpdate()">Ajouter</button>
+      <button class="btn" onclick="SttElement.createOrUpdate()">Enregistrer</button>
 
     </footer>
 

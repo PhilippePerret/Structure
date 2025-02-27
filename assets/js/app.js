@@ -57,3 +57,43 @@ window.STT_COLORS = STT_COLORS
 window.onload = function(ev){
   STT.init()
 }
+
+STT.ctest = function(){
+	if (!this.active) {
+		this.active = true
+    return active_lib_testor(STT)
+	}
+  /* === DÉBUT DES TESTS === */
+
+  t("--- ElementForm ---")
+  const Fo = ElementForm;
+  [
+      ["0:00", "0:00"]
+    , ["0,00", "0:00"]
+    , ["0:12:00", "12:00"]
+    , ["0,12,00", "12:00"]
+    , ["0:0+ 1", "0:01"]
+    // , ["0,0+ 1", "0:01"]
+    // , ["0:00+10", "0:10"]
+    // , ["0:0 +60", "1:00"]
+    // , ["0:00 + 3660", "1:00:00"]
+    // , ["0:12 + 3660", "1:00:12"]
+    // , ["0:12:0 + 3660", "1:12:00"]
+    // , ["0:12:0 + 4m", "1:16:00"]
+    // , ["0:12:0 + 4:0", "1:16:00"]
+    // , ["0:12:0 + 4s", "1:12:04"]
+    // , ["0:12:0 + 0:4", "1:12:04"]
+    // , ["0:12:0 + 0,4", "1:12:04"]
+    // , ["0:12:0 + 4h", "5:12:00"]
+    // , ["0:12:0 + 4,0,0", "5:12:00"]
+    // , ["0:12:0 + 4:0:0", "5:12:00"]
+  ].forEach(paire => {
+    const [sujet, expected] = paire;
+    const actual = TimeCalc.treateAsOpeOnTime(sujet, false)
+    equal(actual, expected)
+  })
+
+  t("--- Création d'élément ---")
+
+
+}

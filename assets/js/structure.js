@@ -1,5 +1,7 @@
 'use strict';
 
+const FULL = 'FULL'
+
 function nullIfEmpty(value){
   return value.trim() == "" ? null : value
 }
@@ -222,7 +224,7 @@ class ElementForm {
   static IsATime(horloge){return this.regHorloge.test(horloge) === true}
   static get regHorloge(){
     if ( undefined === this._reghorloge ) {
-      this._reghorloge = new RegExp("^[0-9]{1,2}\:[0-9]{1,2}(\:[0-9]{1,2})?$")
+      this._reghorloge = new RegExp("^[0-9]{1,2}[\:,][0-9]{1,2}([\:,][0-9]{1,2})?$")
     }; return this._reghorloge
   }
 
@@ -230,7 +232,7 @@ class ElementForm {
   static IsATension(tension){return this.regTension.test(tension) === true}
   static get regTension(){
     if (undefined == this._regtension){
-      this._regtension = new RegExp("^[0-9]\;[0-9]{1,2}\:[0-9]{1,2}(\:[0-9]{1,2})?$")
+      this._regtension = new RegExp("^[0-9]\;[0-9]{1,2}[\:,][0-9]{1,2}([\:,][0-9]{1,2})?$")
     } return this._regtension;
   }
 
@@ -243,12 +245,13 @@ class ElementForm {
     }; return this._regcolor
   }
 
+
   static getData(){
     return {
         id:       nullIfEmpty(this.fieldId.value)
       , type:     nullIfEmpty(this.fieldType.value)
       , pitch:    nullIfEmpty(this.fieldPitch.value)
-      , time:     nullIfEmpty(this.fieldTime.value)
+      , time:     TimeCalc.treateAsOpeOnTime(nullIfEmpty(this.fieldTime.value), FULL)
       , duree:    nullIfEmpty(this.fieldDuree.value)    || "2:00"
       , color:    nullIfEmpty(this.fieldColor.value)    || "white:black"
       , tension:  nullIfEmpty(this.fieldTension.value)
@@ -270,10 +273,58 @@ class ElementForm {
   static get fieldDuree(){return this._fielduree || (this._fielduree = DGet('input#elt-duree'))}
   static get fieldColor(){return this._fieldcolor || (this._fieldcolor = DGet('input#elt-color'))}
   static get fieldTension(){return this._fieldtension || (this._fieldtension = DGet('input#elt-tension'))}
+}
+
+class TimeCalc {
+
+  static h2s(h){
+    const segs = h.split(/[,:]/).reverse().map(x => {return parseInt(x)})
+    let s = segs[0] || 0;
+    let m = segs[1] || 0;
+    h = segs[2] || 0;
+    return s + m * 60 + h * 3600
+  }
+  static s2h(s, full = false){
+    const h = parseInt(s / 3600)
+    s = s - h * 3600
+    let m = parseInt(s / 60)
+    m = (full == FULL && m < 10) ? `0${m}` : m;
+    s = s - m * 60
+    s = s < 10 ? `0${s}` : s;
+    const res = [m, s]
+    if ( full == FULL) res.push(h) ;
+    return res.join(":")
+  }
+
+  /** 
+   * Fonction qui traite les temps, qui permet d'utiliser des opérations
+   */
+  static treateAsOpeOnTime(timePlus, full = FULL){
+    if ( timePlus === null ) return null;
+    timePlus = timePlus.trim()
+    if (ElementForm.IsATime(timePlus)) return TimeCalc.s2h(TimeCalc.h2s(timePlus), full);
+    timePlus = timePlus.replace(/ /g, "")
+    const [horloge, ajout] = timePlus.split("+")
+    console.info("horloge", horloge)
+    console.info("ajout", ajout)
+    const secondes = (horloge, ajout => {
+      if ( /([0-9]{1,2}([smh])){1,3}/.test(ajout) ) {
+        console.info("ajout avec lettre", ajout)
+      } else if ( ElementForm.IsATime(ajout) ) {
+        return this.h2s(horloge) + this.h2s(ajout)
+      } else {
+        console.info("ajout par secondes", ajout)
+        return this.h2s(horloge) + parseInt(ajout)
+      }
+      })(horloge, ajout)
+    return this.s2h(secondes)
+  }
+
 
 }
 
 
-
 window.Structure  = Structure;
 window.SttElement = SttElement;
+window.ElementForm = ElementForm;
+window.TimeCalc = TimeCalc;

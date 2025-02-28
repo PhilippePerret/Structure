@@ -61,6 +61,7 @@ class Structure {
     if (confirm("Veux-tu vraiment tout effacer ?")){
       this.eraseElements()
       this.current = new Structure(this.defaultDataStructure)
+      ListElement.reset()
     }
   }
 

@@ -21,6 +21,8 @@ class ListElement {
   static prepare(){
     // Le menu couleur
     FormElement.buildMenuColor(DGet('div.list-element select.elt-color'))
+    // On clone toujours la première ligne
+    this.CLONE_ELEMENT = DGet('div.list-element', this.obj).cloneNode(true);
   }
 
   // Pour afficher ou masquer la liste des éléments
@@ -64,6 +66,14 @@ class ListElement {
    */
   static reset(){
     this.build(Structure.current)
+    // Dans le cas où la structure ne contiendrait aucun élément, on
+    // en crée un, virtuel
+    if ( Structure.current.elements.length == 0 ){
+      console.info("Ajout d'un élément.")
+      this.addElement()
+    } else {
+      console.info("Nombre d'éléments dans la structure", Structure.current.elements.length)
+    }
   }
 
   /**
@@ -77,7 +87,6 @@ class ListElement {
    * Fonction pour construire le panneau
    */
   static build(structure){
-    this.modeleElement = DGet('div.list-element', this.obj).cloneNode(true);
     this.listing.innerHTML = ""
 
     var index = 0;
@@ -102,10 +111,14 @@ class ListElement {
   static addElement(refElement, after = false){
     const newElt = new ListElement()
     newElt.build()
-    const beforeElement = after ? refElement.nextSibling : refElement ;
-    this.listing.insertBefore(newElt.obj, beforeElement)
-    newElt.setLogicTime()
-    newElt.focus('time')
+    if ( refElement ) {
+      const beforeElement = after ? refElement.nextSibling : refElement ;
+      this.listing.insertBefore(newElt.obj, beforeElement)
+      newElt.setLogicTime()
+      newElt.focus('time')
+    } else {
+      this.listing.appendChild(newElt.obj)
+    }
   }
 
   static removeElement(elt){
@@ -205,7 +218,7 @@ class ListElement {
   field(prop){return DGet(`.elt-${prop}`, this.obj) }
 
   build(){
-    this.obj = ListElement.modeleElement.cloneNode(true)
+    this.obj = ListElement.CLONE_ELEMENT.cloneNode(true)
     this.obj.dataset.id = this.data.id
     ELEMENT_PROPERTIES.forEach(prop => {
       DGet(`.elt-${prop}`, this.obj).value = this.data[prop] || DEFAULT_VALUES[prop]

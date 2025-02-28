@@ -117,13 +117,14 @@ class FormElement {
    * Fonction qui construit le menu des couleurs dans le formulaire 
    * d'élément en se servant des données COLOR_LIST
    */
-  static buildMenuColor(){
+  static buildMenuColor(container){
+    container = container || this.fieldColor
     COLOR_LIST.forEach( dcolor => {
       const {id, bg, fg} = dcolor
       const opt = DCreate('OPTION', {value: id, text: id})
       opt.dataset.bg = bg
       opt.dataset.fg = fg
-      this.fieldColor.appendChild(opt)
+      container.appendChild(opt)
     })
   }
 }

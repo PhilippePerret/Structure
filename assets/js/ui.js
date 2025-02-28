@@ -21,6 +21,9 @@ class UI {
 
     // Le formulaire
     FormElement.prepare()
+
+    // Le listing
+    ListElement.prepare()
   }
 
   /**

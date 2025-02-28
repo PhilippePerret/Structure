@@ -18,6 +18,11 @@ const DEFAULT_VALUES = {
  */
 class ListElement {
 
+  static prepare(){
+    // Le menu couleur
+    FormElement.buildMenuColor(DGet('div.list-element select.elt-color'))
+  }
+
   // Pour afficher ou masquer la liste des éléments
   static toggle(){ this[this.obj.dataset.actif == 'false' ? 'show':'hide']()}
   static show(){

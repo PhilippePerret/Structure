@@ -5,7 +5,32 @@ div#listing-elements {
   width: auto;
   padding: 2em;
   box-shadow: 5px 5px 5px 5px #ccc;
-  background-color: white;
-  max-height: 800px;
+  background-color: rgb(235, 235, 235);
   opacity: 0.9;
+}
+div#listing-elements div.buttons {
+  margin-top: 4em;
+}
+div#listing-elements-listing {
+  max-height: 800px;
+  overflow: scroll;  
+}
+
+div#listing-elements-listing > div {
+  margin-top: 2px;
+}
+div#listing-elements-listing span.boutons {
+  margin-left: 2em;
+  opacity: 0.5;
+}
+div#listing-elements-listing span.boutons:hover {
+  opacity: 1;
+}
+div#listing-elements-listing span.boutons button {
+  font-size: 11pt;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  background-color: white;
+  width: 32px;
+  height:32px;
 }

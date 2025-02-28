@@ -85,6 +85,9 @@ div.buttons {
   text-align: right;
   margin-top: 1em;
 }
+div.buttons button {
+  margin-left: 1em;
+}
 
 div.bloc-form > div {
   padding:0.4em 0;

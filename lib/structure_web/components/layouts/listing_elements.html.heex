@@ -4,6 +4,8 @@
   <div id="listing-elements-listing">
 
       <div class="list-element" data-id="">
+
+        <input type="hidden" class="elt-id" />
         
         <input type="text" class="elt-time horloge">
         <input type="text" class="elt-duree horloge">
@@ -14,14 +16,21 @@
         <input type="text" class="elt-pitch" style="width:500px;">
         <select class="elt-color"></select>
         <input type="text" class="elt-tension" style="width:100px;">
+
+        <span class="boutons">
+          <button class="btn-add">＋</button>
+          <button class="btn-del">🗑️</button>
+        </span>
       
       </div>
 
   </div>
 
   <div class="buttons">
-    <button class="btn">Construire</button>  
-    <button class="btn">Enregistrer</button>  
+    <button class="btn fleft" onclick="ListElement.toggle()">Annuler</button>
+    <button class="btn" onclick="ListElement.reset()">Reset</button>
+    <button class="btn" onclick="ListElement.save()">Enregistrer</button>
+    <button class="btn" onclick="ListElement.buildStructure()">Construire</button>  
   </div>
 
 

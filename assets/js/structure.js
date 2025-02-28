@@ -19,6 +19,9 @@ class Structure {
     if (retour.ok) {
       this.current = new Structure(retour.structure)
       this.current.build()
+
+      ListElement.toggle()
+
     } else {
       Flash.error(retour.error)
     }
@@ -45,21 +48,26 @@ class Structure {
   }
 
   static reset(){
-    if (confirm("Veux-tu vraiment tout efface ?")){
+    if (confirm("Veux-tu vraiment tout effacer ?")){
       this.cadre.innerHTML = ""
       this.current = new Structure(this.defaultDataStructure)
     }
   }
 
+  static eraseElements(){
+    this.blocElements.innerHTML = ""
+  }
+  
   static get defaultDataStructure(){
     return {
-        elements: []
+      elements: []
       , metadata: {path: ''}
       , preferences: {display: 'paysage'}
     }
   }
-
+  
   static get cadre(){return this._cadre || (this._cadre = DGet('div#structure'))}
+  static get blocElements(){return this._blocelts || (this.blocelts = DGet('div#structure div#structure-elements'))}
   static masquer_cadre(){this.setCadreVisi(false)}
   static display_cadre(){setTimeout(this.setCadreVisi.bind(this, true), 100)}
   static setCadreVisi(visible){this.cadre.style.visibility = visible ? "visible" : "hidden"}
@@ -86,6 +94,12 @@ class Structure {
   get metadata(){return this.data.metadata}
   get data_elements(){return this.data.elements}
   get preferences(){return this.data.preferences}
+
+  resetWithElements(dataElements){
+    this.data.elements = dataElements
+    this.elements = []
+    this.table    = {}
+  }
 
   applyMetadata(){
     DGet("input#structure-name").value = this.metadata.path

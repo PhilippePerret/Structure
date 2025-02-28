@@ -37,7 +37,6 @@ class SttElement {
   }
   static createElement(data){
     data.id = this.getNewId(data.type)
-    console.info("Je dois apprendre à créer l'élément avec", data)
     const newElement = new SttElement(data)
     Structure.current.addElement(newElement)
     newElement.build()
@@ -89,7 +88,7 @@ class SttElement {
     data.stype && (this.setClass(data.style));
     data.color && this.setColor();
 
-    Structure.cadre.appendChild(this.obj)
+    Structure.blocElements.appendChild(this.obj)
 
     this.positionne()
     this.observe()

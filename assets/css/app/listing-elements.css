@@ -1,0 +1,11 @@
+div#listing-elements {
+  position:fixed;
+  top: 50px;
+  right: 100px;
+  width: auto;
+  padding: 2em;
+  box-shadow: 5px 5px 5px 5px #ccc;
+  background-color: white;
+  max-height: 800px;
+  opacity: 0.9;
+}

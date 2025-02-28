@@ -59,16 +59,23 @@ class SttElement {
   get tension(){return this.data.tension || ""}
   get color(){return this.data.color || ""}
 
+  get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}
+
 
   edit(ev){
     FormElement.setData(this)
   }
 
   update(newData){
+    this.reset()
     this.data = newData
     this.unobserve()
     this.obj.remove()
     this.build()
+  }
+
+  reset(){
+    delete this._realtime    
   }
 
   build(){

@@ -1,3 +1,28 @@
-<div id="listing-elements" class="hidden">
-  Ici le listing des éléments à la suite
+<div id="listing-elements" data-actif="false" class="hidden">
+  <h2>Listing des éléments</h2>
+  
+  <div id="listing-elements-listing">
+
+      <div class="list-element" data-id="">
+        
+        <input type="text" class="elt-time horloge">
+        <input type="text" class="elt-duree horloge">
+      
+        <.select_type id={nil} class={"elt-type"} />
+        <.select_ideality id={nil} class={"elt-ideality"} />
+      
+        <input type="text" class="elt-pitch" style="width:500px;">
+        <select class="elt-color"></select>
+        <input type="text" class="elt-tension" style="width:100px;">
+      
+      </div>
+
+  </div>
+
+  <div class="buttons">
+    <button class="btn">Construire</button>  
+    <button class="btn">Enregistrer</button>  
+  </div>
+
+
 </div>

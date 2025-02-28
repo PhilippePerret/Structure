@@ -6,6 +6,7 @@ import "./structure.js";
 import "./ui.js";
 import "./stt_element.js";
 import "./form_element.js";
+import "./list_element.js";
 
 const UI_COLORS = [
   "red", "blue", "green", "black", "white"

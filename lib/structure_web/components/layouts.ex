@@ -15,5 +15,30 @@ defmodule SttWeb.Layouts do
   def form_element(assigns)
 
   def listing_elements(assigns)
+
+
+
+  attr :id, :string, required: true
+  attr :class, :string, required: true
+  def select_type(assigns) do
+    ~H"""
+    <select id={@id} class={@class}>
+      <option value="scene">Scène</option>
+      <option value="seq">Séquence</option>
+    </select>
+    """
+  end
   
+  attr :id, :string, required: true
+  attr :class, :string, required: true
+  def select_ideality(assigns) do
+    ~H"""
+    <select id={@id} class={@class}>
+      <option value="none">concrète</option>
+      <option value="pfa">dans le PFA</option>
+      <option value="project">dans les plans</option>
+    </select>
+    """
+  end
+
 end

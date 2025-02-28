@@ -39,38 +39,51 @@
       <!-- Formulaire d'ajout un élément -->
       <div id="element-form">
         <input type="hidden" id="elt-id" value="" />
-        <select id="elt-type">
-          <option value="scene">Scène</option>
-          <option value="seq">Séquence</option>
-        </select>
-        <div class="iblock">
-          <label for="elt-pitch" class="block">Pitch</label>
-          <input 
-            id="elt-pitch" 
-            type="text" 
-            value="Le premier résumé" 
-            placeholder="Résumé" 
-            style="width:400px;" />
+        <div>
+          <label for="elt-type">Type</label>
+          <select id="elt-type">
+            <option value="scene">Scène</option>
+            <option value="seq">Séquence</option>
+          </select>
         </div>
-        <div class="iblock">
-          <label for="elt-time" class="block">Position</label>
-          <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
+        <div>
+
+          <div class="iblock">
+            <input 
+              id="elt-pitch" 
+              type="text" 
+              value="Le premier résumé" 
+              placeholder="Résumé" 
+              style="width:400px;" />
+          </div>
+
         </div>
-        <div class="iblock">
-          <label for="elt-duree" class="block">Durée</label>
-          <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
+
+        <div>
+
+          <div class="iblock">
+            <label for="elt-time" class="block">Position</label>
+            <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
+          </div>
+          <div class="iblock">
+            <label for="elt-duree" class="block">Durée</label>
+            <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
+          </div>
+          <div class="iblock">
+            <label for="elt-tension" class="block">Tension</label>
+            <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
+          </div>
+
         </div>
+
         <div class="iblock">
           <label for="elt-color" class="block">Couleur</label>
           <input id="elt-color" type="text" style="width:200px;" value="green;white" placeholder="back;fore" />
         </div>
-        <div class="iblock">
-          <label for="elt-tension" class="block">Tension</label>
-          <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
+        <div class="buttons">
+          <button class="btn small fleft" onclick="ElementForm.reset()">Reset</button>
+          <button class="btn small" onclick="SttElement.createOrUpdate()">Enregistrer</button>
         </div>
-
-        <button class="btn small" onclick="SttElement.createOrUpdate()">Enregistrer</button>
-        <button class="btn small" onclick="ElementForm.reset()">Reset</button>
       </div> <!-- #element-form -->
     </footer>
 

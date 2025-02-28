@@ -32,16 +32,17 @@ class Structure {
    * Sauvegarde de la structure
    */
   static save(){
+    this.current.getData()
     if ( this.current.notSavable() ) return ;
     ServerTalk.dial({
         route: "/structure/save"
-      , data:  {structure: this.current.getData()}
+      , data:  {structure: this.current.data}
       , callback: this.afterSave.bind(this)
     })
   }
   static afterSave(retour){
     if (retour.ok) {
-      console.info("Structure sauvegardée")
+      Flash.notice("Structure sauvegardée.")
     } else {
       Flash.error(retour.error)
     }
@@ -115,11 +116,13 @@ class Structure {
    * lieu pour l'enregistrer)
    */
   getData(){
-    return {
+    this.metadata.path = DGet('input#structure-name').value
+    this.data = {
         metadata: this.metadata
       , preferences: this.preferences
       , elements: this.elements.map(elt => {return elt.data})
     }
+    return this.data
   }
   /**
    * CONSTRUCTION DE LA STRUCTURE

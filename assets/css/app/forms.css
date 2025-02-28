@@ -195,13 +195,19 @@ div.input-checkbox-container > label > input[type="checkbox"] {
 
 /* Le formulaire pour éditer/créer un élément */
 div#element-form {
+  position: fixed;
+  bottom: 200px;
+  width: 400px;
+  right: 100px;
   display:inline-block;
-  background-color: #227700;
+  background-color: #6b9859;
   padding: 0.5em 1em;
   margin-left: 2em;
   vertical-align: middle;
   color:white;
+  border-radius: 0.5em;
 }
+div#element-form > div {margin: 0.5em 0}
 
 input.error {
   background-color: #FFCCCC!important;

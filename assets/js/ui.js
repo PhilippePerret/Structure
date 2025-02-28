@@ -19,6 +19,14 @@ class UI {
       })
     })
 
+    // Pour sélectionner tout le contenu dans input-text dans lequel
+    // on focus
+    DGetAll('input[type="text"]').forEach(input => {
+      input.addEventListener('focus', function(){
+        setTimeout(input.select.bind(input), 300)
+      })
+    })
+
     // Le formulaire
     FormElement.prepare()
 

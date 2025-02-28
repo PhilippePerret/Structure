@@ -4,19 +4,29 @@ window.FULL = 'FULL'
 
 class Structure {
 
+  static get fieldStructureName(){ return DGet('input#structure-name') }
   /**
    * Chargement de la structure
    */
   static load(sttName){
-    ServerTalk.dial({
-        route: "structure/load"
-      , method: "POST"
-      , data: {structure_path: "default"}
-      , callback: this.afterLoad.bind(this) 
-    })
+    try {
+      sttName = sttName || nullIfEmpty(this.fieldStructureName.value)
+      if ( ! sttName ) {
+        raise("Il faut indiquer le path de la structure", this.fieldStructureName)
+      } else {
+        Flash.notice("Chargement de la structure de " + sttName + "…")
+      }
+      ServerTalk.dial({
+          route: "structure/load"
+        , method: "POST"
+        , data: {structure_path: sttName}
+        , callback: this.afterLoad.bind(this) 
+      })
+    } catch(err) { Flash.error(err.message)}
   }
   static afterLoad(retour){
     if (retour.ok) {
+      this.initialize()
       this.current = new Structure(retour.structure)
       this.current.build()
 
@@ -49,9 +59,14 @@ class Structure {
 
   static reset(){
     if (confirm("Veux-tu vraiment tout effacer ?")){
-      this.cadre.innerHTML = ""
+      this.eraseElements()
       this.current = new Structure(this.defaultDataStructure)
     }
+  }
+
+  static initialize(){
+    this.eraseElements()
+    this.current = null
   }
 
   static eraseElements(){

@@ -104,6 +104,7 @@ class ListElement {
     newElt.build()
     const beforeElement = after ? refElement.nextSibling : refElement ;
     this.listing.insertBefore(newElt.obj, beforeElement)
+    newElt.setLogicTime()
     newElt.focus('time')
   }
 
@@ -153,6 +154,48 @@ class ListElement {
   }
 
   /**
+   * À la création de l'élément, on peut calculer son temps s'il
+   * n'est pas défini, à partir du temps de la scène d'avant et d'après
+   */
+  setLogicTime(){
+    if ( this.time ) return ;
+    this.data.time = TimeCalc.s2h(this.getTimeFromArountElements())
+    this.setPropValue('time', this.data.time)
+  }
+  getTimeFromArountElements(){
+    let prevElt, nextElt; 
+    if ( this.obj.previousSibling ) {
+      prevElt = Structure.current.getElement(this.obj.previousSibling.dataset.id)
+    }
+    if ( this.obj.nextSibling) {
+      nextElt = Structure.current.getElement(this.obj.nextSibling.dataset.id)
+    }
+    console.info("prev", prevElt)
+    console.info("next", nextElt)
+    if ( nextElt && prevElt ){
+      if ( nextElt.time == prevElt.time ) {
+        return nextElt.realTime
+      } else if (nextElt.time && nextElt.duree) {
+        return nextElt.realTime + nextElt.realDuree
+      } else if (this.SttElement.realDuree && nextElt && nextElt.time) {
+        return nextElt.realTime - this.SttElement.realDuree
+      } else if (nextElt.time && prevElt.time ) {
+        return prevElt.realTime + (nextElt.realTime - prevElt.realTime) / 2 
+      } else {
+        return prevElt.realTime || nextElt.realTime
+      }
+    } else if ( nextElt && nextElt.time ) {
+      return nextElt.realTime + 2
+    } else if (prevElt && prevElt.time > 0) {
+      return prevElt.realTime + prevElt.realDuree + 10 
+    } else if ( prevElt ) {
+      return 0
+    }
+  }
+
+  get SttElement(){return Structure.current.getElement(this.data.id)}
+
+  /**
    * Retourn le champ d'édition de la propriété fournie.
    * 
    * @param {String} prop Propriété dont il faut retourner le champ d'édition
@@ -177,7 +220,7 @@ class ListElement {
   }
 
   onChangeTime(prop, ev){
-    this.field(prop).value = TimeCalc.treate(this.field(prop).value)
+    this.field(prop).value = TimeCalc.treate(nullIfEmpty(this.field(prop).value))
     return true
   }
 

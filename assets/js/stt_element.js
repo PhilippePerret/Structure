@@ -59,7 +59,7 @@ class SttElement {
   get color(){return this.data.color || ""}
 
   get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}
-
+  get realDuree(){return this._realduree || (this._realduree = TimeCalc.h2s(this.duree))}
 
   edit(ev){
     FormElement.setData(this)
@@ -74,7 +74,8 @@ class SttElement {
   }
 
   reset(){
-    delete this._realtime    
+    delete this._realtime
+    delete this._realduree
   }
 
   build(){

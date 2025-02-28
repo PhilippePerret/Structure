@@ -1,6 +1,6 @@
 'use strict';
 
-function nullIfEmpty(value){
+window.nullIfEmpty = function(value){
   return value.trim() == "" ? null : value
 }
 

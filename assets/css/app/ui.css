@@ -48,10 +48,25 @@ body {
 .btn {
   cursor:pointer;
 }
-  .center {text-align: center}
-  .fright {float:right}
 
-  .iblock {display:inline-block}
+.center {text-align: center}
+.fright {float:right}
 
-  div.iblock > label {display:block;}
-  div.iblock > label+input{margin-left:0}
+.iblock {display:inline-block}
+
+div.iblock > label {display:block;}
+div.iblock > label+input{margin-left:0}
+
+div#flash-group {
+  position: fixed;
+  top: 40px;
+  z-index: 2000;
+  right: 4em;
+  background-color: white;
+}
+div#flash-group div.flash-message {
+  padding: 0.3em 1em;
+}
+div#flash-group div.error {
+  background-color: #FFCCCC;
+}

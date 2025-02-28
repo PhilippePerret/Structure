@@ -19,7 +19,21 @@ const TABLE_COULEURS = {
 class STT {
   static init(){
     const sttName = DGet('input#structure-name').value
-    Structure.load(sttName)
+    Structure.load(sttName);
+    this.prepare()
+  }
+  static prepare(){
+    // Des class .error ont pu être ajoutées aux champs contenant
+    // une mauvaise valeur. Il faut la supprimer dès qu'on blurre
+    // de ce champ par bienveillance. On en profite aussi pour 
+    // supprimer l'éventuel message d'erreur.
+    DGetAll('input[type="text"],textarea').forEach(domE => {
+      domE.addEventListener('blur', function(ev){
+        domE.classList.remove('error')
+        DGetAll('div.flash-message').forEach(div => div.remove())
+        return true
+      })
+    })
   }
 
   /**
@@ -53,6 +67,15 @@ class STT {
 
 window.STT = STT;
 window.STT_COLORS = STT_COLORS
+// Pour lever une erreur juste avec 'raise("message")'
+window.raise = function(message, errField){
+  if ( errField ) {
+    errField.classList.add('error')
+    errField.focus()
+    errField.select()
+  }
+  throw new Error(message)
+}
 
 window.onload = function(ev){
   STT.init()
@@ -103,7 +126,7 @@ STT.ctest = function(){
     , ["0:01:00 - 12", "0:00:48"]
   ].forEach(paire => {
     const [sujet, expected] = paire;
-    const actual = TimeCalc.treateAsOpeOnTime(sujet, false)
+    const actual = TimeCalc.treate(sujet, false)
     equal(actual, expected)
   })
 

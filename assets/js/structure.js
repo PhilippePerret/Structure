@@ -32,9 +32,10 @@ class Structure {
    * Sauvegarde de la structure
    */
   static save(){
+    if ( this.current.notSavable() ) return ;
     ServerTalk.dial({
         route: "/structure/save"
-      , data:  {structure: this.getData()}
+      , data:  {structure: this.current.getData()}
       , callback: this.afterSave.bind(this)
     })
   }
@@ -46,19 +47,34 @@ class Structure {
     }
   }
 
+  static reset(){
+    if (confirm("Veux-tu vraiment tout efface ?")){
+      this.cadre.innerHTML = ""
+      this.current = new Structure(this.defaultDataStructure)
+    }
+  }
+
+  static get defaultDataStructure(){
+    return {
+        elements: []
+      , metadata: {path: ''}
+      , preferences: {display: 'paysage'}
+    }
+  }
+
   static get cadre(){return this._cadre || (this._cadre = DGet('div#structure'))}
   static masquer_cadre(){this.setCadreVisi(false)}
   static display_cadre(){setTimeout(this.setCadreVisi.bind(this, true), 100)}
   static setCadreVisi(visible){this.cadre.style.visibility = visible ? "visible" : "hidden"}
 
-
   /**
-   * Fonction principale pour actualiser une élément de la structure
+   * Fonction qui retourne true si le pitch +pitch+ existe déjà
    */
-  static update(){
-    Structure.masquer_cadre()
-    console.log("Je dois apprendre à updater")
-
+  static pitchExists(pitch){
+    for(var elt of this.current.elements) {
+      if ( elt.pitch == pitch ) return true
+    }
+    return false
   }
 
   // =========  I N S T A N C E   S T R U C T U R E  =============
@@ -67,11 +83,44 @@ class Structure {
     this.data = data
     this.elements = []; // pour liste des instances d'élément
     this.table    = {};
+    this.applyMetadata();
+    this.applyPreferences();
   }
   get metadata(){return this.data.metadata}
   get data_elements(){return this.data.elements}
   get preferences(){return this.data.preferences}
 
+  applyMetadata(){
+    DGet("input#structure-name").value = this.metadata.path
+  }
+  applyPreferences(){
+    console.info("Je dois apprendre à appliquer les préférences")
+  }
+
+  /**
+   * Fonction qui retourne false si la structure n'est pas sauvable
+   */
+  notSavable(){
+    try {
+      this.metadata.path || raise("Il faut fournir un path pour cette structure", DGet('input#structure-name'))
+
+      return false ; // donc sauvable
+    } catch(erreur) {
+      Flash.error(erreur.message)
+      return true
+    }
+  }
+  /**
+   * Fonction qui retourne les données de la structure (en premier 
+   * lieu pour l'enregistrer)
+   */
+  getData(){
+    return {
+        metadata: this.metadata
+      , preferences: this.preferences
+      , elements: this.elements.map(elt => {return elt.data})
+    }
+  }
   /**
    * CONSTRUCTION DE LA STRUCTURE
    * ----------------------------
@@ -80,6 +129,7 @@ class Structure {
   build(){
     Structure.masquer_cadre()
     this.data.elements.forEach( delement => {
+      if ( !delement.id ) { delement.id = SttElement.getNewId(delement.type)}
       const elt = new SttElement(delement)
       this.elements.push(elt)
       Object.assign(this.table, {[elt.id]: elt})
@@ -88,6 +138,12 @@ class Structure {
     Structure.display_cadre()
   }
 
+  /**
+   * Fonction retournant l'élément d'identifiant +id+
+   */
+  getElement(id){
+    return this.table[id]
+  }
   /**
    * Fonction appelée pour ajouter l'élément
    */
@@ -127,8 +183,8 @@ class SttElement {
 
   static updateElement(data){
     const element = Structure.current.getElement(data.id)
+    console.info("element", element)
     element.update(data)
-    console.info("Je dois apprendre à updater l'élément d'id", data.id)
   }
   static createElement(data){
     data.id = this.getNewId(data.type)
@@ -142,10 +198,11 @@ class SttElement {
 
   constructor(data){
     this.data = data
+    this.editBinding = this.edit.bind(this)
   }
 
-  get id(){return this.data.id || SttElement.getNewId(this.data.type) }
-  get text(){return this.data.pitch || this.data.text}
+  get id(){return this.data.id }
+  get pitch(){return this.data.pitch || this.data.text}
   get type(){return this.data.type}
   get time(){return this.data.time || "0:00"}
   get duree(){return this.data.duree || "2:00"}
@@ -157,12 +214,19 @@ class SttElement {
     ElementForm.setData(this)
   }
 
+  update(newData){
+    this.data = newData
+    this.unobserve()
+    this.obj.remove()
+    this.build()
+  }
+
   build(){
     const data = this.data || this.getData() // à supprimer, on doit maintenant toujours envoyer les données à l'instanciation
     const eltId = `elt-${this.id}`
     const div = DCreate(data.type.toUpperCase(), {id:eltId})
     this.obj = div
-    div.appendChild(DCreate('SPAN', {text: this.text}))
+    div.appendChild(DCreate('SPAN', {text: this.pitch}))
     div.setAttribute("time", this.time);
     div.setAttribute("duree", this.duree);
     data.stype && (this.setClass(data.style));
@@ -173,13 +237,20 @@ class SttElement {
   }
 
   observe(){
-    this.obj.addEventListener('dblclick', this.edit.bind(this))
+    this.listen(this.obj, 'add', 'dblclick', this.editBinding)
   }
+  unobserve(){
+    this.listen(this.obj, 'remove', 'dblclick', this.editBinding)
+  }
+  listen(obj, ope, eventType, method){
+    obj[`${ope}EventListener`](eventType, method)
+  }
+
   positionne(){
     this.obj.style.left = `${STT.horlogeToPixels(this.data.time || "0:00")}px`
-    this.data.duree && (this.obj.style.width = `${STT.horlogeToPixels(this.data.duree)}px`);
-    this.data.top   && (this.obj.style.top = `${this.data.top}px`);
-    this.data.color && this.setColor();
+    this.duree && this.type == 'seq' && (this.obj.style.width = `${STT.horlogeToPixels(this.duree)}px`);
+    this.top   && (this.obj.style.top = `${this.top}px`);
+    this.color && this.setColor();
   }
   setClass(dClass) {
     dClass = dClass || this.data.stype;
@@ -206,19 +277,57 @@ class ElementForm {
    * ou false en cas de problème, en affichant les erreurs
    */
   static areValidData(data){
+    const isNew = data.id == null;
     try {
-      if (data.pitch === null || data.pitch.length < 10) throw new Error("Pitch trop court (> 10)");
+      if (data.pitch === null || data.pitch.length < 10) raise("Pitch trop court (< 10 caractères)", this.fieldPitch);
       // TODO Vérifier que le pitch soit unique si c'est une création
-      if (data.time === null || this.NotATime(data.time)) throw new Error("Le time doit être une horloge valide.")
-      if ( this.NotATime(data.duree) ) throw new Error("La durée doit être une horloge valide.")
-      if (data.tension !== null && this.NotATension(data.tension)) throw new Error("La tension n'est pas une tension valide.")
-      if (data.color !== null && this.NotAColor(data.color)) throw new Error("La couleur n'est pas une couleur valide.")
+      if ( isNew && Structure.pitchExists(data.pitch)) raise("Ce pitch existe déjà.", this.fieldPitch)
+      if (data.time === null || this.NotATime(data.time)) raise("Le time doit être une horloge valide.", this.fieldTime)
+      if ( this.NotATime(data.duree) ) raise("La durée doit être une horloge valide.", this.fieldDuree)
+      if (data.tension && this.NotATension(data.tension)) raise("La tension n'est pas une tension valide.", this.fieldTension)
+      if (data.color && this.NotAColor(data.color)) raise("La couleur n'est pas une couleur valide.", this.fieldColor)
       return true
     } catch(err) {
       Flash.error(err.message) + "\nImpossible d'enregistrer l'élément."
       return false
     }
   }
+
+  /**
+   * Pour réinitialiser tous les champs
+   */
+  static reset(){
+    this.setData({})
+    this.fieldType.focus()
+  }
+
+  static getData(){
+    // Traitement des temps qu'on doit évaluer
+    const time = TimeCalc.treate(nullIfEmpty(this.fieldTime.value), FULL)
+    this.fieldTime.value = time;
+    const duree = TimeCalc.treate(nullIfEmpty(this.fieldDuree.value)) || "2:00"
+    this.fieldDuree.value = duree;
+    return {
+        id:       nullIfEmpty(this.fieldId.value)
+      , type:     nullIfEmpty(this.fieldType.value)
+      , pitch:    nullIfEmpty(this.fieldPitch.value)
+      , time:     time
+      , duree:    duree
+      , color:    nullIfEmpty(this.fieldColor.value)
+      , tension:  nullIfEmpty(this.fieldTension.value)
+    }
+  }
+  static setData(data){
+    this.fieldId.value      = data.id || ""
+    this.fieldType.value    = data.type || "scene"
+    this.fieldPitch.value   = data.pitch || ""
+    this.fieldTime.value    = data.time || ""
+    this.fieldDuree.value   = data.duree || ""
+    this.fieldColor.value   = data.color || ""
+    this.fieldTension.value = data.tension || ""
+  }
+
+
 
   static NotATime(horloge){return !this.IsATime(horloge)}
   static IsATime(horloge){return this.regHorloge.test(horloge) === true}
@@ -232,7 +341,7 @@ class ElementForm {
   static IsATension(tension){return this.regTension.test(tension) === true}
   static get regTension(){
     if (undefined == this._regtension){
-      this._regtension = new RegExp("^[0-9]\;[0-9]{1,2}[\:,][0-9]{1,2}([\:,][0-9]{1,2})?$")
+      this._regtension = new RegExp("^[0-9](\;[0-9]{1,2}[\:,][0-9]{1,2}([\:,][0-9]{1,2})?)?$")
     } return this._regtension;
   }
 
@@ -245,27 +354,6 @@ class ElementForm {
     }; return this._regcolor
   }
 
-
-  static getData(){
-    return {
-        id:       nullIfEmpty(this.fieldId.value)
-      , type:     nullIfEmpty(this.fieldType.value)
-      , pitch:    nullIfEmpty(this.fieldPitch.value)
-      , time:     TimeCalc.treateAsOpeOnTime(nullIfEmpty(this.fieldTime.value), FULL)
-      , duree:    nullIfEmpty(this.fieldDuree.value)    || "2:00"
-      , color:    nullIfEmpty(this.fieldColor.value)    || "white:black"
-      , tension:  nullIfEmpty(this.fieldTension.value)
-    }
-  }
-  static setData(data){
-    this.fieldId.value      = data.id
-    this.fieldType.value    = data.type
-    this.fieldPitch.value   = data.pitch
-    this.fieldTime.value    = data.time
-    this.fieldDuree.value   = data.duree
-    this.fieldColor.value   = data.color
-    this.fieldTension.value = data.tension
-  }
   static get fieldId(){return this._fieldid || (this._fieldid = DGet('input#elt-id'))}
   static get fieldType(){return this._fieldtype || (this._fieldtype = DGet('select#elt-type'))}
   static get fieldPitch(){return this._fieldpitch || (this._fieldpitch = DGet('input#elt-pitch'))}
@@ -309,7 +397,7 @@ class TimeCalc {
   /** 
    * Fonction qui traite les temps, qui permet d'utiliser des opérations
    */
-  static treateAsOpeOnTime(timePlus, full = FULL){
+  static treate(timePlus, full = FULL){
     if ( timePlus === null ) return null;
     timePlus = timePlus.trim().replace(/ /g, "")
     let segs = timePlus.match(this.REG_HORLOGE_WITH_OPE)

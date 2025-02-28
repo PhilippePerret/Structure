@@ -123,6 +123,9 @@ div.actions {
   background-color: #EEEEEE;
   border-radius: 8px
 }
+button.btn.small {
+  font-size: 0.85em;
+}
 div.actions .btn {
   background-color: #76d276;
   color:white;
@@ -188,4 +191,18 @@ div.input-checkbox-container > label {
 }
 div.input-checkbox-container > label > input[type="checkbox"] {
   margin-right: 1em;
+}
+
+/* Le formulaire pour éditer/créer un élément */
+div#element-form {
+  display:inline-block;
+  background-color: #227700;
+  padding: 0.5em 1em;
+  margin-left: 2em;
+  vertical-align: middle;
+  color:white;
+}
+
+input.error {
+  background-color: #FFCCCC!important;
 }

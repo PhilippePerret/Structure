@@ -28,45 +28,50 @@
     <%= @inner_content %>
 
     <footer>
-      <button class="btn fright" onclick="Structure.save()">Sauver</button>
+      <div class="fright">
+        <button class="btn" onclick="Structure.reset()" style="margin-right:4em;">Reset All</button>
+        <button class="btn" onclick="Structure.save()">Sauver</button>
+      </div>
 
       <label for="film-duree">Durée du film</label>
       <input type="text" id="film-duree" value="2:00:00" placeholder="H:MM:SS" class="center horloge" />
 
       <!-- Formulaire d'ajout un élément -->
-      <input type="hidden" id="elt-id" value="" />
-      <select id="elt-type">
-        <option value="scene">Scène</option>
-        <option value="seq">Séquence</option>
-      </select>
-      <div class="iblock">
-        <label for="elt-pitch" class="block">Pitch</label>
-        <input 
-          id="elt-pitch" 
-          type="text" 
-          value="Le premier résumé" 
-          placeholder="Résumé" 
-          style="width:400px;" />
-      </div>
-      <div class="iblock">
-        <label for="elt-time" class="block">Position</label>
-        <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
-      </div>
-      <div class="iblock">
-        <label for="elt-duree" class="block">Durée</label>
-        <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
-      </div>
-      <div class="iblock">
-        <label for="elt-color" class="block">Couleur</label>
-        <input id="elt-color" type="text" style="width:200px;" value="green;white" placeholder="back;fore" />
-      </div>
-      <div class="iblock">
-        <label for="elt-tension" class="block">Tension</label>
-        <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
-      </div>
+      <div id="element-form">
+        <input type="hidden" id="elt-id" value="" />
+        <select id="elt-type">
+          <option value="scene">Scène</option>
+          <option value="seq">Séquence</option>
+        </select>
+        <div class="iblock">
+          <label for="elt-pitch" class="block">Pitch</label>
+          <input 
+            id="elt-pitch" 
+            type="text" 
+            value="Le premier résumé" 
+            placeholder="Résumé" 
+            style="width:400px;" />
+        </div>
+        <div class="iblock">
+          <label for="elt-time" class="block">Position</label>
+          <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
+        </div>
+        <div class="iblock">
+          <label for="elt-duree" class="block">Durée</label>
+          <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
+        </div>
+        <div class="iblock">
+          <label for="elt-color" class="block">Couleur</label>
+          <input id="elt-color" type="text" style="width:200px;" value="green;white" placeholder="back;fore" />
+        </div>
+        <div class="iblock">
+          <label for="elt-tension" class="block">Tension</label>
+          <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
+        </div>
 
-      <button class="btn" onclick="SttElement.createOrUpdate()">Enregistrer</button>
-
+        <button class="btn small" onclick="SttElement.createOrUpdate()">Enregistrer</button>
+        <button class="btn small" onclick="ElementForm.reset()">Reset</button>
+      </div> <!-- #element-form -->
     </footer>
 
   </body>

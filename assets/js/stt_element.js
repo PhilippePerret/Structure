@@ -18,8 +18,8 @@ class SttElement {
    * d'édition de l'élément
    */
   static createOrUpdate(){
-    const dataElement = ElementForm.getData()
-    if ( ElementForm.areValidData(dataElement) ) {
+    const dataElement = FormElement.getData()
+    if ( FormElement.areValidData(dataElement) ) {
       if ( dataElement.id ) {
         this.updateElement(dataElement)
       } else /* création */ {
@@ -52,6 +52,7 @@ class SttElement {
 
   get id(){return this.data.id }
   get pitch(){return this.data.pitch || this.data.text}
+  get ideality(){return this.data.ideality}
   get type(){return this.data.type}
   get time(){return this.data.time || "0:00"}
   get duree(){return this.data.duree || "2:00"}
@@ -60,7 +61,7 @@ class SttElement {
 
 
   edit(ev){
-    ElementForm.setData(this)
+    FormElement.setData(this)
   }
 
   update(newData){
@@ -71,7 +72,7 @@ class SttElement {
   }
 
   build(){
-    const data = this.data || this.getData() // à supprimer, on doit maintenant toujours envoyer les données à l'instanciation
+    const data = this.data
     const eltId = `elt-${this.id}`
     const div = DCreate(data.type.toUpperCase(), {id:eltId})
     this.obj = div
@@ -79,6 +80,8 @@ class SttElement {
     div.setAttribute("time", this.time);
     div.setAttribute("duree", this.duree);
     data.stype && (this.setClass(data.style));
+    data.color && this.setColor();
+
     Structure.cadre.appendChild(this.obj)
 
     this.positionne()
@@ -96,10 +99,9 @@ class SttElement {
   }
 
   positionne(){
-    this.obj.style.left = `${STT.horlogeToPixels(this.data.time || "0:00")}px`
-    this.duree && this.type == 'seq' && (this.obj.style.width = `${STT.horlogeToPixels(this.duree)}px`);
+    this.obj.style.left = `${UI.horlogeToPixels(this.data.time || "0:00")}px`
+    this.duree && this.type == 'seq' && (this.obj.style.width = `${UI.horlogeToPixels(this.duree)}px`);
     this.top   && (this.obj.style.top = `${this.top}px`);
-    this.color && this.setColor();
   }
   setClass(dClass) {
     dClass = dClass || this.data.stype;
@@ -111,9 +113,10 @@ class SttElement {
     }
     this.obj.className = css
   }
-  setColor(dColor){
-    dColor = dColor || this.data.color
-    const [bg,fg] = dColor.split(/[-,;\.]/);
+  setColor(colorId){
+    colorId = colorId || this.color || 'normal'
+    const dataColor = COLOR_TABLE[colorId] || COLOR_TABLE['normal']
+    const {bg,fg} = dataColor
     this.obj.style.backgroundColor = bg;
     this.obj.style.color = fg;
   }

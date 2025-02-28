@@ -11,4 +11,9 @@ defmodule SttWeb.Layouts do
   use SttWeb, :html
 
   embed_templates "layouts/*"
+
+  def form_element(assigns)
+
+  def listing_elements(assigns)
+  
 end

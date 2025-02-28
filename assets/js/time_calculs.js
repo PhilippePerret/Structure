@@ -56,7 +56,7 @@ class TimeCalc {
     full = this.isRequiredFullHorloge(horloge, full)
     // Dans le cas où ajout n'est pas défini et que horloge n'est pas
     // une horloge, c'est que c'est juste l'opération qui est fournie
-    if ( ajout == "" && ElementForm.NotATime(horloge) ) {
+    if ( ajout == "" && FormElement.NotATime(horloge) ) {
       [horloge, ajout] = ["0:00", horloge]
     }
     const secondes = ((horloge, ajout, operation) => {
@@ -64,7 +64,7 @@ class TimeCalc {
         ajout = [...ajout.matchAll(/[0-9]{1,3}[smh]/g)].map(res => {return res[0]}).join("+")
         ajout = ajout.replace(/m/g,"*60").replace(/s/g,"").replace(/h/g,"*3600")
         return this.makeOpe(this.h2s(horloge), eval(ajout), operation)
-      } else if ( ElementForm.IsATime(ajout) ) {
+      } else if ( FormElement.IsATime(ajout) ) {
         return this.makeOpe(this.h2s(horloge), this.h2s(ajout), operation)
       } else {
         return this.makeOpe(this.h2s(horloge), eval(ajout), operation)

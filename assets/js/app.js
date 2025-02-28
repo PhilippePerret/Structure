@@ -3,11 +3,11 @@ import "./flash.js";
 import "./server_talk.js";
 import "./time_calculs.js";
 import "./structure.js";
-import "./stt.js";
+import "./ui.js";
 import "./stt_element.js";
-import "./element_form.js";
+import "./form_element.js";
 
-const STT_COLORS = [
+const UI_COLORS = [
   "red", "blue", "green", "black", "white"
 ]
 
@@ -15,12 +15,20 @@ const STT_COLORS = [
  * Table des couleurs
  * L'user doit pouvoir les déterminer.
  */
-const TABLE_COULEURS = {
-    'red'   : 'red'
-  , 'green' : 'green'
-}
+window.COLOR_LIST = [
+    {id:  'normal'      , bg:'white'     , fg: 'black'}
+  , {id:  'rouge'       , bg:'red'       , fg: 'white'}
+  , {id:  'vert'        , bg:'green'     , fg: 'white'}
+  , {id:  'intrigue A'  , bg:'#555555'   , fg: 'white'}
+  , {id:  'intrigue B'  , bg:'#555555'   , fg: 'white'}
+  , {id:  'intrigue C'  , bg:'#555555'   , fg: 'white'}
+].map(dcolor => {
+  return Object.assign(dcolor, {data: `${dcolor.bg};${dcolor.fg}`})
+})
+window.COLOR_TABLE = {}
+COLOR_LIST.forEach(dcolor => Object.assign(COLOR_TABLE, {[dcolor.id]: dcolor}))
 
-window.STT_COLORS = STT_COLORS
+window.UI_COLORS = UI_COLORS
 // Pour lever une erreur juste avec 'raise("message")'
 window.raise = function(message, errField){
   if ( errField ) {
@@ -32,19 +40,19 @@ window.raise = function(message, errField){
 }
 
 window.onload = function(ev){
-  STT.init()
+  UI.init()
 }
 
-STT.ctest = function(){
+UI.ctest = function(){
 	if (!this.active) {
 		this.active = true
-    return active_lib_testor(STT)
+    return active_lib_testor(UI)
 	}
   /* === DÉBUT DES TESTS === */
 
-  t("--- ElementForm ---")
+  t("--- FormElement ---")
   t("- Calculs sur horloges")
-  const Fo = ElementForm;
+  const Fo = FormElement;
   [
       ["0:00", "0:00"]
     , ["0,00", "0:00"]

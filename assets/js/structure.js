@@ -1,10 +1,6 @@
 'use strict';
 
-const FULL = 'FULL'
-
-function nullIfEmpty(value){
-  return value.trim() == "" ? null : value
-}
+window.FULL = 'FULL'
 
 class Structure {
 

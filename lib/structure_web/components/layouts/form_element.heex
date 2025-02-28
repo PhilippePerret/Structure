@@ -1,0 +1,54 @@
+
+<div id="element-form">
+  <input type="hidden" id="elt-id" value="" />
+  <div>
+    <select id="elt-type">
+      <option value="scene">Scène</option>
+      <option value="seq">Séquence</option>
+    </select>
+    <select id="elt-ideality">
+      <option value="none">concrète</option>
+      <option value="pfa">dans le PFA</option>
+      <option value="project">dans les plans</option>
+    </select>
+  </div>
+  <div>
+
+    <div class="iblock">
+      <input 
+        id="elt-pitch" 
+        type="text"
+        class="bigger"
+        value="" 
+        placeholder="Résumé" 
+        style="width:400px;" />
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="iblock">
+      <label for="elt-time" class="block">Position</label>
+      <input id="elt-time" type="text" class="horloge" value="1:00:00" placeholder="H:MM:SS"/>
+    </div>
+    <div class="iblock">
+      <label for="elt-duree" class="block">Durée</label>
+      <input id="elt-duree" type="text" class="horloge" value="4:00" placeholder="H:MM:SS"/>
+    </div>
+    <div class="iblock">
+      <label for="elt-tension" class="block">Tension</label>
+      <input id="elt-tension" type="text" class="horloge" style="width:120px!important;" value="" placeholder="level;H:MM:SS" />
+    </div>
+
+  </div>
+
+  <div>
+    <label for="elt-color">Couleur</label><select id="elt-color" style="width:200px;"></select>
+  </div>
+
+  <div class="buttons">
+    <button class="btn small fleft" onclick="FormElement.reset()">Reset</button>
+    <button class="btn small" onclick="SttElement.createOrUpdate()">Enregistrer</button>
+  </div>
+</div> <!-- #element-form -->

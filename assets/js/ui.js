@@ -1,6 +1,6 @@
 'use strict';
 
-class STT {
+class UI {
   static init(){
     const sttName = DGet('input#structure-name').value
     Structure.load(sttName);
@@ -18,6 +18,9 @@ class STT {
         return true
       })
     })
+
+    // Le formulaire
+    FormElement.prepare()
   }
 
   /**
@@ -49,4 +52,4 @@ class STT {
   }
 }
 
-window.STT = STT;
+window.UI = UI;

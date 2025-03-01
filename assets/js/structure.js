@@ -8,22 +8,6 @@ class Structure {
   /**
    * Chargement de la structure
    */
-  static load(sttName){
-    try {
-      sttName = sttName || nullIfEmpty(this.fieldStructureName.value)
-      if ( ! sttName ) {
-        raise("Il faut indiquer le path de la structure", this.fieldStructureName)
-      } else {
-        Flash.notice("Chargement de la structure de " + sttName + "…")
-      }
-      ServerTalk.dial({
-          route: "structure/load"
-        , method: "POST"
-        , data: {structure_path: sttName}
-        , callback: this.afterLoad.bind(this) 
-      })
-    } catch(err) { Flash.error(err.message)}
-  }
   static afterLoad(retour){
     if (retour.ok) {
       this.initialize()

@@ -8,6 +8,15 @@ import "./stt_element.js";
 import "./form_element.js";
 import "./list_element.js";
 
+import "./STT/_MetaSTT.js";
+import "./STT/_MetaSTTElement.js";
+import "./STT/HorizontalSTT.js";
+import "./STT/HorizontalSTTElement.js";
+import "./STT/VerticalSTT.js";
+import "./STT/VerticalSTTElement.js";
+import "./STT/EditingSTT.js";
+import "./STT/EditingSTTElement.js";
+
 const UI_COLORS = [
   "red", "blue", "green", "black", "white"
 ]

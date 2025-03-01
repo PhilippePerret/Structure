@@ -1,7 +1,8 @@
 'use strict';
 
-window.nullIfEmpty = function(value){
-  return value.trim() == "" ? null : value
+window.NullIfEmpty = function(value){
+  if ( value === null ) return null ;
+  return value.trim() == "" ? null : value ;
 }
 
 class FormElement {
@@ -52,19 +53,19 @@ class FormElement {
 
   static getData(){
     // Traitement des temps qu'on doit évaluer
-    const time = TimeCalc.treate(nullIfEmpty(this.fieldTime.value), FULL)
+    const time = TimeCalc.treate(NullIfEmpty(this.fieldTime.value), FULL)
     this.fieldTime.value = time;
-    const duree = TimeCalc.treate(nullIfEmpty(this.fieldDuree.value)) || "2:00"
+    const duree = TimeCalc.treate(NullIfEmpty(this.fieldDuree.value)) || "2:00"
     this.fieldDuree.value = duree;
     return {
-        id:       nullIfEmpty(this.fieldId.value)
+        id:       NullIfEmpty(this.fieldId.value)
       , type:     this.fieldType.value
       , ideality: this.fieldIdeality.value
-      , pitch:    nullIfEmpty(this.fieldPitch.value)
+      , pitch:    NullIfEmpty(this.fieldPitch.value)
       , time:     time
       , duree:    duree
       , color:    this.fieldColor.value
-      , tension:  nullIfEmpty(this.fieldTension.value)
+      , tension:  NullIfEmpty(this.fieldTension.value)
     }
   }
   static setData(data){

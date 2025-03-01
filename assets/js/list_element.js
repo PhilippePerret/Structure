@@ -49,10 +49,8 @@ class ListElement {
       dataElements = this.getDataElements()
       if ( !dataElements ) return ; // en cas d'erreur (mauvaise donnée par exemple)
       // console.log("éléments ramassés", dataElements)
-      Structure.current.resetWithElements(dataElements)
     }
-    Structure.eraseElements()
-    Structure.current.build()
+    Structure.current.resetWithElements(dataElements)
   }
 
   /**
@@ -315,7 +313,7 @@ class ListElement {
   }
 
   onChangeTime(prop, ev){
-    this.field(prop).value = TimeCalc.treate(nullIfEmpty(this.field(prop).value))
+    this.field(prop).value = TimeCalc.treate(NullIfEmpty(this.field(prop).value))
     return true
   }
 

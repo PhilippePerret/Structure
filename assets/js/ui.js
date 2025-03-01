@@ -2,9 +2,8 @@
 
 class UI {
   static init(){
-    const sttName = DGet('input#structure-name').value
-    Structure.load(sttName);
     this.prepare()
+    MetaSTT.init()
   }
   static prepare(){
     // Des class .error ont pu être ajoutées aux champs contenant
@@ -30,8 +29,6 @@ class UI {
     // Le formulaire
     FormElement.prepare()
 
-    // Le listing
-    ListElement.prepare()
   }
 
   /**

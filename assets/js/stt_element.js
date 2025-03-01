@@ -6,6 +6,10 @@
  */
 class SttElement {
 
+  /**
+   * Fonction qui calcule et fournit un identifiant unique pour le
+   * type +type+ (scene ou seq pour le moment)
+   */
   static getNewId(type){
     const partDate = String(new Date().getTime()).replace("\.", "")
     const partAlea = String(parseInt(Math.random() * 100))
@@ -49,14 +53,18 @@ class SttElement {
     this.editBinding = this.edit.bind(this)
   }
 
+  /**
+   * Toutes les propriétés de l'élément structurel, que ce soit une
+   * scène ou une séquence (ou autre à l'avenir)
+   */
   get id(){return this.data.id }
   get pitch(){return this.data.pitch || this.data.text}
   get ideality(){return this.data.ideality}
   get type(){return this.data.type}
-  get time(){return this.data.time || "0:00"}
-  get duree(){return this.data.duree || "2:00"}
-  get tension(){return this.data.tension || ""}
-  get color(){return this.data.color || ""}
+  get time(){return this.data.time}
+  get duree(){return this.data.duree}
+  get tension(){return this.data.tension}
+  get color(){return this.data.color}
 
   get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}
   get realDuree(){return this._realduree || (this._realduree = TimeCalc.h2s(this.duree))}
@@ -78,6 +86,10 @@ class SttElement {
     delete this._realduree
   }
 
+  /**
+   * Construction de l'élément (dans toutes les représentations de la
+   * structure)
+   */
   build(){
     const data = this.data
     const eltId = `elt-${this.id}`
@@ -99,6 +111,15 @@ class SttElement {
 
     this.positionne()
     this.observe()
+  }
+  buildOnHorisontalStructure(){
+
+  }
+  buildOnVerticalStructure(){
+
+  }
+  buildOnEditingStructure(){
+
   }
 
   observe(){

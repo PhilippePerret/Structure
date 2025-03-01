@@ -46,21 +46,31 @@ scene {
   cursor: pointer;
 }
 /* Taille des scènes */
-scene {font-size: 13pt}
+scene {
+  --width: 40px; /* pour dimensionner la marque */
+  --background: green; /* pour coloriser la marque */
+  font-size: 13pt;
+}
 scene.main {font-size: 15pt; font-weight: bold}
 scene:before {
+  content: "";
   position: absolute;
-  content: "•"; 
-  font-size: 40px;
-  left: -24px;
-  top: -12px;
-}
-scene.biais {
+  left: -0px;
+  top: 0px;
+  /* Essai de longueur */
+  width: var(--width);
+  background-color: var(--background);
+  height: 12px;
   transform-origin: top left;
-  transform:rotate(-60deg) translateY(-28px);
+  transform:rotate(60deg) translateY(20px);
+  border-radius: 8px;
+}
+scene:not(.not-biais) {
+  transform-origin: top left;
+  transform:rotate(-60deg) translateY(8px);
   top: 300px;
 }
-scene:not(.biais) {
+scene.not-biais {
   top: 300px;
 }
 scene.biais:before {top: -4px;}

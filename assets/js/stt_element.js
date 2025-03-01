@@ -89,6 +89,13 @@ class SttElement {
     data.stype && (this.setClass(data.style));
     data.color && this.setColor();
 
+    // Pour définir la marque sous le pitch de l'élément scène, pour
+    // régler sa longueur et sa couleur
+    if ( this.type == 'scene' ) {
+      this.obj.style.setProperty('--background', this.safeBackgroundColor);
+      this.obj.style.setProperty('--width', `${UI.horlogeToPixels(this.duree)}px`)
+    }
+
     Structure.blocElements.appendChild(this.obj)
 
     this.positionne()
@@ -121,11 +128,23 @@ class SttElement {
     this.obj.className = css
   }
   setColor(colorId){
-    colorId = colorId || this.color || 'normal'
-    const dataColor = COLOR_TABLE[colorId] || COLOR_TABLE['normal']
-    const {bg,fg} = dataColor
+    const {bg,fg} = this.colorData(colorId)
     this.obj.style.backgroundColor = bg;
     this.obj.style.color = fg;
+  }
+
+  /**
+   * Propriété : couleur qui ne sera jamais blanche
+   */
+  get safeBackgroundColor(){
+    let bg = this.colorData().bg;
+    if ( !bg || bg == "white" || bg == "#FFFFFF" ) {bg = "black"}
+    return bg
+  }
+
+  colorData(colorId){
+    colorId = colorId || this.color || 'normal'
+    return COLOR_TABLE[colorId] || COLOR_TABLE['normal'] 
   }
 }
 

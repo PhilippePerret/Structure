@@ -207,7 +207,7 @@ class ListElement {
     ELEMENT_PROPERTIES.forEach(prop => {
       Object.assign(data, {[prop]: DGet(`.elt-${prop}`, this.obj).value})
     })
-    console.log("Data brutes relevées", data)
+    // console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
     if ( !data.id || data.id == "undefined") {
       this.id = this.obj.dataset.id = data.id = SttElement.getNewId(data.type)

@@ -55,7 +55,8 @@ class UI {
    */
   static calcCoefSeconds2Pixels(){
     const filmDuree = this.horloge2seconds(DGet('input#film-duree').value)
-    const filmWidth = Structure.cadre.getBoundingClientRect().width
+    const gabarit = DGet('div#stt-horizontalstt div#gabarit')
+    const filmWidth = gabarit.getBoundingClientRect().width
     return parseInt((filmWidth / filmDuree) * 1000) / 1000
   }
 }

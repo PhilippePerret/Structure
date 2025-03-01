@@ -6,16 +6,6 @@
  */
 class SttElement {
 
-  /**
-   * Fonction qui calcule et fournit un identifiant unique pour le
-   * type +type+ (scene ou seq pour le moment)
-   */
-  static getNewId(type){
-    const partDate = String(new Date().getTime()).replace("\.", "")
-    const partAlea = String(parseInt(Math.random() * 100))
-    const chunk4 = (partDate+partAlea).match(/.{1,4}/g)
-    return type + "-" + chunk4.join("-")
-  }
 
   /**
    * Foncton appelée par le bouton "Enregistrer" du formulaire
@@ -53,90 +43,7 @@ class SttElement {
     this.editBinding = this.edit.bind(this)
   }
 
-  /**
-   * Toutes les propriétés de l'élément structurel, que ce soit une
-   * scène ou une séquence (ou autre à l'avenir)
-   */
-  get id(){return this.data.id }
-  get pitch(){return this.data.pitch || this.data.text}
-  get ideality(){return this.data.ideality}
-  get type(){return this.data.type}
-  get time(){return this.data.time}
-  get duree(){return this.data.duree}
-  get tension(){return this.data.tension}
-  get color(){return this.data.color}
 
-  get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}
-  get realDuree(){return this._realduree || (this._realduree = TimeCalc.h2s(this.duree))}
-
-  edit(ev){
-    FormElement.setData(this)
-  }
-
-  update(newData){
-    this.reset()
-    this.data = newData
-    this.unobserve()
-    this.obj.remove()
-    this.build()
-  }
-
-  reset(){
-    delete this._realtime
-    delete this._realduree
-  }
-
-  /**
-   * Construction de l'élément (dans toutes les représentations de la
-   * structure)
-   */
-  build(){
-    const data = this.data
-    const eltId = `elt-${this.id}`
-    const div = DCreate(data.type.toUpperCase(), {id:eltId})
-    this.obj = div
-    div.appendChild(DCreate('SPAN', {text: this.pitch}))
-    div.setAttribute("time", this.time);
-    div.setAttribute("duree", this.duree);
-    data.stype && (this.setClass(data.style));
-
-    // Pour définir la marque sous le pitch de l'élément scène, pour
-    // régler sa longueur et sa couleur
-    if ( this.type == 'scene' ) {
-      this.obj.style.setProperty('--background', this.safeBackgroundColor);
-      this.obj.style.setProperty('--width', `${UI.horlogeToPixels(this.duree)}px`)
-    }
-
-    Structure.blocElements.appendChild(this.obj)
-
-    this.positionne()
-    this.observe()
-  }
-  buildOnHorisontalStructure(){
-
-  }
-  buildOnVerticalStructure(){
-
-  }
-  buildOnEditingStructure(){
-
-  }
-
-  observe(){
-    this.listen(this.obj, 'add', 'dblclick', this.editBinding)
-  }
-  unobserve(){
-    this.listen(this.obj, 'remove', 'dblclick', this.editBinding)
-  }
-  listen(obj, ope, eventType, method){
-    obj[`${ope}EventListener`](eventType, method)
-  }
-
-  positionne(){
-    this.obj.style.left = `${UI.horlogeToPixels(this.data.time || "0:00")}px`
-    this.duree && this.type == 'seq' && (this.obj.style.width = `${UI.horlogeToPixels(this.duree)}px`);
-    this.top   && (this.obj.style.top = `${this.top}px`);
-  }
   setClass(dClass) {
     dClass = dClass || this.data.stype;
     var css; 

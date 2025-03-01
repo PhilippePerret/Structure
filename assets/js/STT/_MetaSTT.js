@@ -111,6 +111,7 @@ class MetaSTT {
     if (false == retour.ok) return Flash.error(retour.error)
   }
 
+
   /**
    * Fonction qui active (affiche) la disposition de structure de nom
    * +disposition+
@@ -118,9 +119,22 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerStructure(disposition){
+    Object.keys(this.dispositions).forEach(keyDispo => {
+      const dispo = this.dispositions[keyDispo]
+      if ( disposition == keyDispo ) {
+        // console.log("-> Activer structure", keyDispo)
+        dispo.show()
+      } else {
+        // console.log("-> Désactiver structure", keyDispo)
+        dispo.hide()
+      }
+    })
     this.current_dispo = this.dispositions[disposition];
     this.current_dispo.built || this.current_dispo.build()
   }
+
+  show(){this.obj.classList.remove('hidden')}
+  hide(){this.obj.classList.add('hidden')}
 
   get dispositions(){
     return this._dispositions || (this._dispositions = this.setDispositions())
@@ -145,8 +159,8 @@ class MetaSTT {
    * structure courante (en fonction de son tèepe)
    */
   append(sttE){
-    // console.log("Je dois ajouter l'élément suivant à la structure", sttE, this)
-    this.obj.appendChild(sttE.obj)
+    // console.info("this.constructor.listing", this.constructor.listing)
+    this.constructor.listing.appendChild(sttE.obj)
   }
 
 
@@ -196,6 +210,10 @@ class MetaSTT {
       return true
     }
     return false
+  }
+
+  get obj(){
+    return this._obj || (this._obj = DGet(`#stt-${this.constructor.classname}`))
   }
 }
 

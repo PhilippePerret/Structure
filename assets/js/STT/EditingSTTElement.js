@@ -8,6 +8,12 @@ class EditingSTTElement extends MetaSTTElement {
     super(data)
   }
 
+  build(){
+    console.info("Construire la structure horizontale avec les éléments", this.elements)
+    this.built = true
+  }
+
+  get elements(){return this.metaStt.elements}
 
 }
 

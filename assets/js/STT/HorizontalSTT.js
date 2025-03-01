@@ -10,13 +10,19 @@ class HorizontalSTT extends MetaSTT {
   // ======== I N S T A N C E ==========
 
 
-  constructor(data){
-    super(data)
+  constructor(metaStt){
+    super()
+    this.metaStt = metaStt
+    this.built = false
   }
 
   build(){
     console.info("Construire la structure horizontale avec les éléments", this.elements)
+    this.built = true
   }
+
+  get elements(){return this.metaStt.elements}
+  
 }
 
 window.HorizontalSTT = HorizontalSTT;

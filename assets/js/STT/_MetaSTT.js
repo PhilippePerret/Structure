@@ -23,7 +23,6 @@ class MetaSTT {
     } else {
       console.info("Aucun nom de structure. Je ne charge rien.")
     }
-
   }
 
   /**
@@ -36,18 +35,22 @@ class MetaSTT {
       this.fieldName, this.fieldPath
     ].forEach(field => {field.value = ""})
     // Les containeurs
-    console.log("nom", this.name)
     ;[
       HorizontalSTT.listing, VerticalSTT.listing, EditingSTT.listing
-    ].forEach(field => {
-      field.innerHTML = ""
-    })
+    ].forEach(field => {field.innerHTML = ""})
   }
 
+  /**
+   * Le listing de chaque type de structure
+   */
   static get listing(){
-    return this._listing || (this._listing = DGet(`stt-${this.classname}-listing`))
+    return this._listing || (this._listing = DGet(`#stt-${this.classname}-listing`))
   }
 
+  /**
+   * Le nom de chaque type de structure (pour les noms d'éléments)
+   * Par exemple : 'verticalstt', 'editingstt' etc.
+   */
   static get classname(){
     return this._classname || (this._classname = this.name.toLowerCase())
   }
@@ -63,7 +66,6 @@ class MetaSTT {
    * Chargement de la méta-structure courante
    */
   load(){
-    console.info("-> load")
     ServerTalk.dial({
         route: "structure/load"
       , method: "POST"
@@ -85,6 +87,9 @@ class MetaSTT {
     // On reset tous les panneaux de structure
     this.constructor.reset()
     // Construction des trois structures
+    // Non, pour le moment, on va en restere à la structure affichée
+    // dernièrement.
+    this.activerStructure(this.data.preferences.disposition || 'Horizontal')
     // Application des préférences
     Preferences.apply(this, this.data.preferences)
   }
@@ -102,6 +107,28 @@ class MetaSTT {
   }
   afterSave(retour){
     if (false == retour.ok) return Flash.error(retour.error)
+  }
+
+  /**
+   * Fonction qui active (affiche) la disposition de structure de nom
+   * +disposition+
+   * 
+   * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
+   */
+  activerStructure(disposition){
+    this.current_dispo = this.dispositions[disposition];
+    this.current_dispo.built || this.current_dispo.build()
+  }
+
+  get dispositions(){
+    return this._dispositions || (this._dispositions = this.setDispositions())
+  }
+  setDispositions(){
+    return {
+        'Horizontal': new HorizontalSTT(this)
+      , 'Vertical':   new VerticalSTT(this)
+      , 'Editing':    new EditingSTT(this)
+    }
   }
 
   /**

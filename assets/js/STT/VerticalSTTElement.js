@@ -17,7 +17,10 @@ class VerticalSTTElement extends MetaSTTElement {
     const o = DCreate('DIV', {class: "stt-element vertical"})
     this.obj = o
     this.constructor.container.append(this)
+    this.built = true
   }
+
+  get elements(){return this.metaStt.elements}
 
 }
 

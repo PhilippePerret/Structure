@@ -107,6 +107,7 @@ class Structure {
     this.applyMetadata();
     this.applyPreferences();
   }
+  get path(){return this.data.metadata.path} // raccourci
   get metadata(){return this.data.metadata}
   get data_elements(){return this.data.elements}
   get preferences(){return this.data.preferences}
@@ -116,6 +117,7 @@ class Structure {
     this.elements = []
     this.table    = {}
   }
+
 
   applyMetadata(){
     DGet("input#structure-name").value = this.metadata.path

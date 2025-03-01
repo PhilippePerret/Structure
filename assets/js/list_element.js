@@ -43,6 +43,7 @@ class ListElement {
   static buildStructure(dataElements){
     if ( ! dataElements ) {
       dataElements = this.getDataElements()
+      if ( !dataElements ) return ; // en cas d'erreur (mauvaise donnée par exemple)
       // console.log("éléments ramassés", dataElements)
       Structure.current.resetWithElements(dataElements)
     }
@@ -54,10 +55,19 @@ class ListElement {
    * Fonction pour sauver les éléments courants
    */
   static save(){
-    dataElements = this.getDataElements()
-    Structure.current.resetWithElements(dataElements)
-    Structure.current.save()
-    return buildStructure(dataElements)
+    console.info("-> ListElement.save()")
+    try {
+      if ( ! Structure.current.path ) raise("Il faut sauver une première fois la nouvelle structure.");
+      console.info("Structure.current", Structure.current)
+      let dataElements = this.getDataElements()
+      if ( ! dataElements ) return ; // en cas d'erreur (mauvaise donnée par exemple)
+      Structure.current.resetWithElements(dataElements)
+      Structure.current.save()
+      return buildStructure(dataElements)
+    } catch (err) {
+      Flash.error(err.message)
+      return false
+    }
   }
 
   /**
@@ -77,10 +87,14 @@ class ListElement {
   }
 
   /**
-   * Fonction qui boucle dans la listing pour récupérer tous les éléments
+   * Fonction qui boucle dans le listing pour récupérer tous les éléments
    */
   static getDataElements(){
-    return this.elements.map(elt => {return elt.getData()})
+    try {
+      return this.elements.map(elt => {return elt.getData()})
+    } catch(err) {
+      return false
+    }
   }
 
   /**
@@ -153,6 +167,8 @@ class ListElement {
     if ( !data.id ) data.id = SttElement.getNewId(data.type)
     data.time   = this.setPropValue('time',  TimeCalc.treate(data.time, 'FULL'))
     data.duree  = this.setPropValue('duree', TimeCalc.treate(data.duree, false))
+    // On vérifie la validité des données
+    if ( false === formElement.areValidData(data) ) return false ;
     return data
   }
   setPropValue(prop, value){
@@ -223,6 +239,12 @@ class ListElement {
     ELEMENT_PROPERTIES.forEach(prop => {
       DGet(`.elt-${prop}`, this.obj).value = this.data[prop] || DEFAULT_VALUES[prop]
     })
+    // On met le résumé dans la couleur choisie
+    const pitch = this.field('pitch')
+    if ( this.color ) {
+      pitch.style.backgroundColor = this.color.bg
+      pitch.style.color = this.color.fg
+    }
     this.observe()
   }
   observe(){
@@ -248,6 +270,7 @@ class ListElement {
     ListElement.removeElement(this)
   }
 
+  get color(){return COLOR_TABLE[this.data.color]}
   get btnAdd(){return this._btnadd || (this._btnadd = DGet('button.btn-add', this.obj))}
   get btnDel(){return this._btndel || (this._btndel = DGet('button.btn-del', this.obj))}
 }

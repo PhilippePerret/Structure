@@ -62,7 +62,7 @@ class ListElement {
     console.info("-> ListElement.save()")
     try {
       if ( ! Structure.current.path ) raise("Il faut sauver une première fois la nouvelle structure.");
-      console.info("Structure.current", Structure.current)
+      // console.info("Structure.current", Structure.current)
       let dataElements = this.getDataElements()
       if ( ! dataElements ) return ; // en cas d'erreur (mauvaise donnée par exemple)
       Structure.current.resetWithElements(dataElements)

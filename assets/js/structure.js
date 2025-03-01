@@ -118,6 +118,8 @@ class Structure {
     this.data.elements = dataElements
     this.elements = []
     this.table    = {}
+    Structure.eraseElements()
+    this.build()
   }
 
 

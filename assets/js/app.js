@@ -2,6 +2,7 @@ import "phoenix_html";
 import "./flash.js";
 import "./server_talk.js";
 import "./time_calculs.js";
+import "./preferences.js";
 import "./structure.js";
 import "./ui.js";
 import "./stt_element.js";
@@ -20,6 +21,9 @@ import "./STT/EditingSTTElement.js";
 const UI_COLORS = [
   "red", "blue", "green", "black", "white"
 ]
+
+window.FULL = 'FULL'
+
 
 /**
  * Table des couleurs

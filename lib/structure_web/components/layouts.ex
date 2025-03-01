@@ -12,11 +12,12 @@ defmodule SttWeb.Layouts do
 
   embed_templates "layouts/*"
 
+  # Pour les trois formes d'affichage de la structure
+  def stt_editing(assigns)
+  def stt_vertical(assigns)
+  def stt_horizontal(assigns)
+  
   def form_element(assigns)
-
-  def listing_elements(assigns)
-
-
 
   attr :id, :string, required: true
   attr :class, :string, required: true

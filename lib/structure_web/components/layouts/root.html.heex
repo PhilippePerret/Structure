@@ -19,7 +19,8 @@
     <header>
       <div class="content">
         <a href={~p"/"}>Structure</a>
-        <input id="structure-name" type="text" value="default" style="margin-left:1em;background-color:#999;color:white;padding:0 1em;width:140px;text-align:center;" />
+        <input id="structure-name" type="text" value="default" style="margin-left:1em;background-color:inherit;border:none;color:white;padding:0 1em;width:140px;text-align:center;" />
+        <input id="structure-path" type="text" value="default" style="margin-left:1em;background-color:#999;color:white;padding:0 1em;width:140px;text-align:center;" />
         <button class="btn tiny" onclick="Structure.load()">load</button>
       </div>
     </header>
@@ -38,10 +39,12 @@
       <label for="film-duree">Durée du film</label>
       <input type="text" id="film-duree" value="2:00:00" placeholder="H:MM:SS" class="center horloge" />
 
+      
+      <.stt_editing />
+      <.stt_vertical />
+      <.stt_horizontal />
+      
       <.form_element />
-
-      <.listing_elements />
-
     </footer>
 
   </body>

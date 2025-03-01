@@ -1,45 +1,7 @@
 'use strict';
 
-window.FULL = 'FULL'
 
 class Structure {
-
-  static get fieldStructureName(){ return DGet('input#structure-name') }
-  /**
-   * Chargement de la structure
-   */
-  static afterLoad(retour){
-    if (retour.ok) {
-      this.initialize()
-      this.current = new Structure(retour.structure)
-      this.current.build()
-
-      ListElement.toggle()
-
-    } else {
-      Flash.error(retour.error)
-    }
-  }
-
-  /**
-   * Sauvegarde de la structure
-   */
-  static save(){
-    this.current.getData()
-    if ( this.current.notSavable() ) return ;
-    ServerTalk.dial({
-        route: "/structure/save"
-      , data:  {structure: this.current.data}
-      , callback: this.afterSave.bind(this)
-    })
-  }
-  static afterSave(retour){
-    if (retour.ok) {
-      Flash.notice("Structure sauvegardée.")
-    } else {
-      Flash.error(retour.error)
-    }
-  }
 
   static reset(){
     if (confirm("Veux-tu vraiment tout effacer ?")){

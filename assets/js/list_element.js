@@ -28,7 +28,7 @@ class ListElement {
   // Pour afficher ou masquer la liste des éléments
   static toggle(){ this[this.obj.dataset.actif == 'false' ? 'show':'hide']()}
   static show(){
-    this.built || this.build(Structure.current)
+    this.reset()
     this.obj.classList.remove('hidden');
     this.obj.dataset.actif = 'true'
     FormElement.hide()
@@ -86,9 +86,25 @@ class ListElement {
       console.info("Ajout d'un élément.")
       this.addElement()
     } else {
-      console.info("Nombre d'éléments dans la structure", Structure.current.elements.length)
+      // console.info("Nombre d'éléments dans la structure", Structure.current.elements.length)
     }
+    this.disableAll()
   }
+
+  /**
+   * Activer ou désactiver les boutons pour sauver, construire ou
+   * resetter la liste
+   */
+  static enableAll(){this.setButtonsState(true)}
+  static disableAll(){this.setButtonsState(false)}
+  static setButtonsState(state){
+    [this.btnReset, this.btnSave, this.btnBuild].forEach(bouton => {
+      bouton.disabled = !state
+    })
+  }
+
+  static disableReset(){this.btnReset.disabled = true}
+  static enableReset(){this.btnReset.disabled = false}
 
   /**
    * Fonction qui boucle dans le listing pour récupérer tous les éléments
@@ -119,6 +135,7 @@ class ListElement {
       this.elements.push(list_elt)
     })
     this.built = true
+    this.disableReset()
   }
   static sortElement(a, b){
     return (a.realTime < b.realTime) ? -1 : 0 ;
@@ -137,6 +154,7 @@ class ListElement {
     } else {
       this.listing.appendChild(newElt.obj)
     }
+    this.enableAll()
   }
 
   static removeElement(elt){
@@ -145,6 +163,7 @@ class ListElement {
     console.info("Nouvelle liste d'objets", this.elements)
     elt.obj.remove()
     this.updateIndexElements()
+    this.enableAll()
   }
 
   static updateIndexElements(){
@@ -153,7 +172,9 @@ class ListElement {
 
 
   static get obj(){return this._obj || (this._obj = DGet('div#listing-elements'))}
-
+  static get btnReset(){return this._btnreset || (this._btnreset = DGet('button.btn-reset'))}
+  static get btnSave(){return this._btnsave || (this._btnsave = DGet('button.btn-save'))}
+  static get btnBuild(){return this._btnbuild || (this._btnbuild = DGet('button.btn-build'))}
   static get listing(){return this._listing || (this._listing = DGet('div#listing-elements-listing'))}
 
   // === I N S T A N C E ====
@@ -256,6 +277,18 @@ class ListElement {
     this.btnDel.addEventListener('click', this.onWantToDelete.bind(this))
     this.field('time').addEventListener('blur', this.onChangeTime.bind(this, 'time'))
     this.field('duree').addEventListener('blur', this.onChangeTime.bind(this, 'duree'))
+    DGetAll('input,select, textarea', this.obj).forEach(field =>{
+      field.addEventListener('change', this.onChangeValue.bind(this))
+    })
+  }
+
+  /**
+   * Fonction générique recevant tout changement de valeur, que ce
+   * soit dans un input-text, un input-checkbox, un select ou un
+   * textarea
+   */
+  onChangeValue(ev){
+    ListElement.enableAll()
   }
 
   onChangeTime(prop, ev){

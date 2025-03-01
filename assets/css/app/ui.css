@@ -50,9 +50,10 @@ input[type="text"] {
 }
 label + input {margin-left:0.5em}
 
-.btn {
+.btn:not(disabled) {
   cursor:pointer;
 }
+.btn:disabled{cursor:not-allowed}
 
 .center {text-align: center}
 .fright {float:right}

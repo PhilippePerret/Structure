@@ -112,6 +112,8 @@ class Structure {
   get data_elements(){return this.data.elements}
   get preferences(){return this.data.preferences}
 
+  save(){Structure.save()}
+
   resetWithElements(dataElements){
     this.data.elements = dataElements
     this.elements = []

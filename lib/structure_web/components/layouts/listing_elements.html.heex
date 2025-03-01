@@ -27,10 +27,10 @@
   </div>
 
   <div class="buttons">
-    <button class="btn fleft" onclick="ListElement.toggle()">Annuler</button>
-    <button class="btn" onclick="ListElement.reset()">Reset</button>
-    <button class="btn" onclick="ListElement.save()">Enregistrer</button>
-    <button class="btn" onclick="ListElement.buildStructure()">Construire</button>  
+    <button class="btn btn-cancel fleft" onclick="ListElement.toggle()">Annuler</button>
+    <button class="btn btn-reset" onclick="ListElement.reset()" disabled>Reset</button>
+    <button class="btn btn-save" onclick="ListElement.save()">Enregistrer</button>
+    <button class="btn btn-build" onclick="ListElement.buildStructure.call(ListElement)">Construire</button>  
   </div>
 
 

@@ -125,10 +125,16 @@ div.actions {
   border: 1px solid;
   padding: 0.35em 1.5em;
   background-color: #EEEEEE;
-  border-radius: 8px
+  border-radius: 8px;
+  vertical-align: middel;
 }
 button.btn.small {
   font-size: 0.85em;
+  padding: 0.30em 1.2em;
+}
+button.btn.tiny {
+  font-size: 0.8em;
+  padding:4px 16px 3px;
 }
 div.actions .btn {
   background-color: #76d276;

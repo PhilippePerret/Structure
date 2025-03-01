@@ -20,6 +20,24 @@ header a, footer a {
   color: inherit
 }
 
+header input#structure-name {
+  margin-left: 1em;
+  background-color: inherit;
+  border: none;
+  color: white;
+  padding: 0 1em;
+  width: 140px;
+  text-align: left;
+}
+header input#structure-path {
+  margin-left: 1em;
+  background-color: #999;
+  color: white;
+  padding: 0 1em;
+  width: 140px;
+  text-align: center;
+}
+
 footer {
   position:fixed;
   bottom:0; left:0;
@@ -81,4 +99,15 @@ div#flash-group div.error {
 div#flash-group div.notice {
   color: green;
   background-color: #CCFFCC;
+}
+
+
+fieldset#fs-choix-disposition {
+  display: inline-block;
+  border: 1px solid white;
+}
+fieldset#fs-choix-disposition button.actif {
+  background-color: green;
+  color:white;
+  border-color:white;
 }

@@ -5,8 +5,9 @@ class HorizontalSTTElement extends MetaSTTElement {
 
   // ======== I N S T A N C E ==========
 
-  constructor(data){
-    super(data)
+  constructor(metaElt){
+    super()
+    this.metaElt = metaElt;
   }
 
 

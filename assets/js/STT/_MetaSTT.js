@@ -76,6 +76,8 @@ class MetaSTT {
   afterLoad(retour){
     if (false == retour.ok) return Flash.error(retour.error);
     this.data = retour.structure
+    // Réglage de l'interface
+    this.setInterface()
     // Dispatch des éléments de la structure
     this.table_elements = {}
     this.elements = this.data.elements.map(data_element => {
@@ -131,6 +133,13 @@ class MetaSTT {
     }
   }
 
+  setDisposition(dispo, boutonDispo){
+    ;(this.currentDispoButton || DGet('button#btn-dispo-H')).classList.remove('actif')
+    this.currentDispoButton = boutonDispo
+    boutonDispo.classList.add('actif')
+    console.log("Je dois apprendre à afficher la dispo ", dispo)
+  }
+
   /**
    * Ajouter l'élément structure +sttE+ dans l'affichage de la 
    * structure courante (en fonction de son tèepe)
@@ -158,6 +167,16 @@ class MetaSTT {
     } catch(err) {
       return false
     }
+  }
+
+  /**
+   * Fonction qui règle l'interface par rapport à la structure
+   * remontée
+   */
+  setInterface(){
+    MetaSTT.fieldName.value = this.data.metadata.name;
+    MetaSTT.fieldPath.value = this.data.metadata.path;
+    // Todo : activer la disposition ?
   }
 
   /**

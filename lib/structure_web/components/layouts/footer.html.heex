@@ -1,0 +1,21 @@
+<footer>
+  <div class="fright">
+
+    <fieldset id="fs-choix-disposition">
+      <legend>Structure…</legend>
+      <button class="btn small actif" id="btn-dispo-H" onclick="MetaSTT.current.setDisposition('Horizontal', this)">horizontale</button>
+      <button class="btn small" onclick="MetaSTT.current.setDisposition('Vertical', this)">verticale</button>
+      <button class="btn small" onclick="MetaSTT.current.setDisposition('Editing', this)">éditable</button>
+    </fieldset>
+
+    <button class="btn" onclick="Structure.reset()" style="margin-right:4em;">Reset All</button>
+    <button class="btn" onclick="Structure.save()">Enregistrer</button>
+  </div>
+
+  <label for="film-duree">Durée du film</label>
+  <input type="text" id="film-duree" value="2:00:00" placeholder="H:MM:SS" class="center horloge" />
+
+  
+  
+  <.form_element />
+</footer>

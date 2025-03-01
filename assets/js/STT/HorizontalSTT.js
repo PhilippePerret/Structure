@@ -18,6 +18,8 @@ class HorizontalSTT extends MetaSTT {
 
   build(){
     console.info("Construire la structure horizontale avec les éléments", this.elements)
+    
+    
     this.built = true
   }
 

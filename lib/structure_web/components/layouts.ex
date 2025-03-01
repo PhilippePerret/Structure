@@ -12,6 +12,8 @@ defmodule SttWeb.Layouts do
 
   embed_templates "layouts/*"
 
+  def footer(assigns)
+
   # Pour les trois formes d'affichage de la structure
   def stt_editing(assigns)
   def stt_vertical(assigns)

@@ -87,7 +87,6 @@ class SttElement {
     div.setAttribute("time", this.time);
     div.setAttribute("duree", this.duree);
     data.stype && (this.setClass(data.style));
-    data.color && this.setColor();
 
     // Pour définir la marque sous le pitch de l'élément scène, pour
     // régler sa longueur et sa couleur

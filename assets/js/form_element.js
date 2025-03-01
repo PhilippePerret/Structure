@@ -29,7 +29,7 @@ class FormElement {
   static areValidData(data){
     const isNew = data.id == null;
     try {
-      if (data.pitch === null || data.pitch.length < 10) raise("Pitch trop court (< 10 caractères)", this.fieldPitch);
+      if (data.pitch === null || data.pitch.length < 4) raise("Pitch trop court (< 4 caractères)", this.fieldPitch);
       // TODO Vérifier que le pitch soit unique si c'est une création
       if ( isNew && Structure.pitchExists(data.pitch)) raise("Ce pitch existe déjà.", this.fieldPitch)
       if (data.time === null || this.NotATime(data.time)) raise("Le time doit être une horloge valide.", this.fieldTime)

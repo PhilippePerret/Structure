@@ -67,7 +67,7 @@ class ListElement {
       if ( ! dataElements ) return ; // en cas d'erreur (mauvaise donnée par exemple)
       Structure.current.resetWithElements(dataElements)
       Structure.current.save()
-      return buildStructure(dataElements)
+      return this.buildStructure(dataElements)
     } catch (err) {
       Flash.error(err.message)
       return false
@@ -83,7 +83,7 @@ class ListElement {
     // Dans le cas où la structure ne contiendrait aucun élément, on
     // en crée un, virtuel
     if ( Structure.current.elements.length == 0 ){
-      console.info("Ajout d'un élément.")
+      // console.info("Ajout d'un élément.")
       this.addElement()
     } else {
       // console.info("Nombre d'éléments dans la structure", Structure.current.elements.length)
@@ -108,11 +108,30 @@ class ListElement {
 
   /**
    * Fonction qui boucle dans le listing pour récupérer tous les éléments
+   * 
+   * La méthode actualise aussi la propriété elements
+   * @return {Array} La liste des données des éléments
    */
   static getDataElements(){
+    // console.info("-> getDataElements")
     try {
-      return this.elements.map(elt => {return elt.getData()})
+      // return this.elements.map(elt => {return elt.getData()})
+      this.elements = [];
+      this.data_elements = []; // ce qui sera retourné
+      var index = 0;
+      DGetAll('div.list-element', this.listing).forEach(divElt => {
+        const newElt  = new ListElement()
+        newElt.obj    = divElt // ce qui permettra de tout récupérer
+        newElt.getData()
+        newElt.index  = index ++;
+        this.elements.push(newElt)
+        this.data_elements.push(newElt.data)
+      })
+      // console.info("<- getDataElements", this.elements)
+      return this.data_elements
     } catch(err) {
+      Flash.error("Une erreur est survenue :" + err.message)
+      console.error(err)
       return false
     }
   }
@@ -188,12 +207,16 @@ class ListElement {
     ELEMENT_PROPERTIES.forEach(prop => {
       Object.assign(data, {[prop]: DGet(`.elt-${prop}`, this.obj).value})
     })
+    console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
-    if ( !data.id ) data.id = SttElement.getNewId(data.type)
+    if ( !data.id || data.id == "undefined") {
+      this.id = this.obj.dataset.id = data.id = SttElement.getNewId(data.type)
+    }
     data.time   = this.setPropValue('time',  TimeCalc.treate(data.time, 'FULL'))
     data.duree  = this.setPropValue('duree', TimeCalc.treate(data.duree, false))
     // On vérifie la validité des données
-    if ( false === formElement.areValidData(data) ) return false ;
+    if ( false === FormElement.areValidData(data) ) return false ;
+    this.data = data
     return data
   }
   setPropValue(prop, value){
@@ -224,8 +247,8 @@ class ListElement {
     if ( this.obj.nextSibling) {
       nextElt = Structure.current.getElement(this.obj.nextSibling.dataset.id)
     }
-    console.info("prev", prevElt)
-    console.info("next", nextElt)
+    // console.info("prev", prevElt)
+    // console.info("next", nextElt)
     if ( nextElt && prevElt ){
       if ( nextElt.time == prevElt.time ) {
         return nextElt.realTime

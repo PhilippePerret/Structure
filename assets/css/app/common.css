@@ -9,7 +9,7 @@
 .very-tiny {font-size: 8pt}
 .bigger {font-size:1.5em!important}
 
-.hidden {display:none}
+.hidden {display:none!important}
 .discret {
   opacity: 0.5;
 }

@@ -31,8 +31,12 @@ class ListElement {
     this.built || this.build(Structure.current)
     this.obj.classList.remove('hidden');
     this.obj.dataset.actif = 'true'
+    FormElement.hide()
   }
-  static hide(){this.obj.classList.add('hidden');this.obj.dataset.actif = 'false'}
+  static hide(){
+    this.obj.classList.add('hidden');this.obj.dataset.actif = 'false';
+    FormElement.show()
+  }
 
   /**
    * Fonction appelée par le bouton "Construire" pour reconstruire la 

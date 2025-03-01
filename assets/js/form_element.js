@@ -10,8 +10,16 @@ class FormElement {
     this.buildMenuColor()
     this.observe()
   }
-  static observe(){
+  static observe(){}
 
+  static show(){
+    this.obj.classList.remove('hidden')
+  }
+  static hide(){
+    this.obj.classList.add('hidden')
+  }
+  static get obj(){
+    return this._obj || (this._obj = DGet('div#element-form'))
   }
 
   /**

@@ -9,7 +9,6 @@ class HorizontalSTTElement extends MetaSTTElement {
     super(metaElt.data)
     this.metaElt = metaElt;
     this.parent  = parent ; // HorizontalSTT
-    console.info("parent", parent)
   }
 
   get domId(){return this._domid || (this._domid = `${this.parent.constructor.classname}-elt-${this.id}`)}

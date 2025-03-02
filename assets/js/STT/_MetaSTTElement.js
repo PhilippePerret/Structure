@@ -70,7 +70,6 @@ class MetaSTTElement {
     console.error("Il faut apprendre à updater l'élément")
   }
 
-
   /**
    * Propriété : couleur qui ne sera jamais blanche
    */
@@ -80,7 +79,10 @@ class MetaSTTElement {
     return bg
   }
 
-  colorData(colorId){ return Color.get(colorId, 'normal')}
+  colorData(colorId){ 
+    colorId = colorId || this.color
+    return Color.get(colorId, 'normal')
+  }
 }
 
 

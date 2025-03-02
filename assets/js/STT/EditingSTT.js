@@ -53,7 +53,7 @@ class EditingSTT extends MetaSTT {
    * Fonction appelée quand on clique sur le bouton "+" au bout d'une ligne d'éléments
    */
   addElement(refElement, after = false){
-    const newElt = new EditingSTTElement({}, this) // TODO Est-ce qu'il ne faut pas plutôt faire STTElement ?
+    const newElt = new EditingSTTElement({}, this)
     newElt.build()
     if ( refElement ) {
       const beforeElement = after ? refElement.nextSibling : refElement ;
@@ -63,6 +63,7 @@ class EditingSTT extends MetaSTT {
     } else {
       this.constructor.listing.appendChild(newElt.obj)
     }
+    super.addElement(newElt)
   }
 
   removeElement(elt){

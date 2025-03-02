@@ -11,20 +11,11 @@ class Structure {
     }
   }
 
-  static initialize(){
-    this.eraseElements()
-    this.current = null
-  }
-
-  static eraseElements(){
-    this.blocElements.innerHTML = ""
-  }
-  
   static get defaultDataStructure(){
     return {
-      elements: []
+        elements: []
       , metadata: {path: ''}
-      , preferences: {display: 'paysage'}
+      , preferences: {disposition: 'Horizontal'}
     }
   }
   
@@ -70,7 +61,7 @@ class Structure {
 
 
   applyMetadata(){
-    DGet("input#structure-name").value = this.metadata.path
+    DGet("input#structure-name").value = this.metadata.name
   }
   applyPreferences(){
     console.info("Je dois apprendre à appliquer les préférences")
@@ -103,18 +94,7 @@ class Structure {
     return this.data
   }
 
-  /**
-   * Fonction retournant l'élément d'identifiant +id+
-   */
-  getElement(id){
-    return this.table[id]
-  }
-  /**
-   * Fonction appelée pour ajouter l'élément
-   */
-  addElement(element){
-    this.elements.push(element)
-  }
+
 }
 
 

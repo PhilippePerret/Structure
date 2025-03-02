@@ -161,7 +161,6 @@ class MetaSTT {
     }
   }
 
-
   /**
    * Ajouter l'élément structure +sttE+ dans l'affichage de la 
    * structure courante (en fonction de son tèepe)
@@ -171,7 +170,19 @@ class MetaSTT {
     this.constructor.listing.appendChild(sttE.obj)
   }
 
-
+  /**
+   * Fonction retournant l'élément d'identifiant +id+
+   */
+  getElement(id){
+    return this.table_elements[id]
+  }
+  /**
+   * Fonction appelée pour ajouter l'élément
+   */
+  addElement(element){
+    this.elements.push(element)
+    Object.assign(this.table_elements, {[element.id]: element})
+  }
 
   /**
    * Fonction générale qui relève les données actuelles de la 

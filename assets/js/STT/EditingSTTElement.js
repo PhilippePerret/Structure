@@ -91,7 +91,6 @@ class EditingSTTElement extends MetaSTTElement {
    * Les MÉTHODES D'ÉVÈNEMENT
    */
 
-
   /**
    * Fonction générique recevant tout changement de valeur, que ce
    * soit dans un input-text, un input-checkbox, un select ou un
@@ -117,8 +116,6 @@ class EditingSTTElement extends MetaSTTElement {
     this.parent.removeElement(this)
   }
 
-
-
   /**
    * À la création de l'élément, on peut calculer son temps s'il
    * n'est pas défini, à partir du temps de la scène d'avant et d'après
@@ -128,24 +125,43 @@ class EditingSTTElement extends MetaSTTElement {
     this.data.time = TimeCalc.s2h(this.getTimeFromArountElements())
     this.setPropValue('time', this.data.time)
   }
+
   getTimeFromArountElements(){
     let prevElt, nextElt; 
     if ( this.obj.previousSibling ) {
-      prevElt = Structure.current.getElement(this.obj.previousSibling.dataset.id)
+      prevElt = MetaSTT.current.getElement(this.obj.previousSibling.dataset.id)
     }
     if ( this.obj.nextSibling) {
-      nextElt = Structure.current.getElement(this.obj.nextSibling.dataset.id)
+      nextElt = MetaSTT.current.getElement(this.obj.nextSibling.dataset.id)
     }
     // console.info("prev", prevElt)
     // console.info("next", nextElt)
     if ( nextElt && prevElt ){
+      // S'il y a un élément avant et un après
       if ( nextElt.time == prevElt.time ) {
+        /**
+         * <= Les deux éléments autour ont le même temps
+         * => Le nouvel élément a le même temps
+         */
         return nextElt.realTime
-      } else if (nextElt.time && nextElt.duree) {
-        return nextElt.realTime + nextElt.realDuree
-      } else if (this.SttElement.realDuree && nextElt && nextElt.time) {
-        return nextElt.realTime - this.SttElement.realDuree
+      } else if (prevElt.time && prevElt.duree) {
+        /**
+         * <= L'élément d'avant définit un temps et une durée
+         * => On met le nouvel élément au bout de cet élément
+         */
+        return prevElt.realTime + prevElt.realDuree
+      } else if (this.realDuree && nextElt.time) {
+        /**
+         * <= L'élément nouveau définit une durée et le suivant un temps
+         * => On place le nouvel élément d'une durée avant
+         */
+        return nextElt.realTime - this.realDuree
       } else if (nextElt.time && prevElt.time ) {
+        /**
+         * <= Les deux éléments autour définissent leur temps (mais
+         *    pas leur durée)
+         * => On place le nouvel élément entre les deux
+         */
         return prevElt.realTime + (nextElt.realTime - prevElt.realTime) / 2 
       } else {
         return prevElt.realTime || nextElt.realTime

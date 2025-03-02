@@ -78,7 +78,7 @@ class EditingSTTElement extends MetaSTTElement {
   }
 
   observe(){
-    this.btnAdd.addEventListener('click', this.addOtherElement.bind(this))
+    this.btnAdd.addEventListener('click', this.createOtherElement.bind(this))
     this.btnDel.addEventListener('click', this.onWantToDelete.bind(this))
     this.field('time').addEventListener('blur', this.onChangeTime.bind(this, 'time'))
     this.field('duree').addEventListener('blur', this.onChangeTime.bind(this, 'duree'))
@@ -106,9 +106,9 @@ class EditingSTTElement extends MetaSTTElement {
     return true
   }
 
-  addOtherElement(ev){
+  createOtherElement(ev){
     const after = ev.metaKey == true
-    this.parent.addElement(this.obj, after)
+    this.parent.createElement(this.obj, after)
   }
   onWantToDelete(ev){
     if ( !ev.metaKey &&  !confirm("Veux-tu vraiment détruire cet élément ? (quand tu es sûr de toi tu peux cliquer ce bouton en tenant la touche Cmd appuyée.)")) {

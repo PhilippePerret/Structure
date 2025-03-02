@@ -49,11 +49,25 @@ class EditingSTT extends MetaSTT {
     this.built = true
   }
 
+  saveAndContinue(callback){
+    console.log("-> saveAndContinue")
+    console.info("Je dois apprendre à relever toutes les données")
+    const newElements = this.metaStt.data.elements // pour le moment
+    console.info("Je dois apprendre à mettre les nouvelles données")
+    this.metaStt.data.elements = newElements
+    this.metaStt.save(this.afterSave.bind(this, callback))
+  }
+  afterSave(callback){
+    console.log("-> afterSave dans EditingSTT")
+    this.metaStt.resetAll()
+    callback()
+  }
+
   /**
    * Fonction appelée quand on clique sur le bouton "+" au bout d'une ligne d'éléments
    */
-  addElement(refElement, after = false){
-    const newElt = new EditingSTTElement({}, this)
+  createElement(refElement, after = false){
+    const newElt = new EditingSTTElement({id: null}, this)
     newElt.build()
     if ( refElement ) {
       const beforeElement = after ? refElement.nextSibling : refElement ;
@@ -64,6 +78,7 @@ class EditingSTT extends MetaSTT {
       this.constructor.listing.appendChild(newElt.obj)
     }
     super.addElement(newElt)
+    this.metaStt.setModified()
   }
 
   removeElement(elt){
@@ -72,6 +87,7 @@ class EditingSTT extends MetaSTT {
     console.info("Nouvelle liste d'objets", this.elements)
     elt.obj.remove()
     this.updateIndexElements()
+    this.metaStt.setModified()
   }
 
   updateIndexElements(){

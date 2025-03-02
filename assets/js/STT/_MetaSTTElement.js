@@ -17,7 +17,7 @@ class MetaSTTElement {
   // ======== I N S T A N C E ==========
 
   constructor(data){
-    this.data = data
+    this.data = data || {}
     this.editBinding = this.edit.bind(this)
   }
 

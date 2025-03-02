@@ -9,8 +9,13 @@ class MetaSTT {
   static set current(stt){return this._current = stt}
   
   static get fieldName(){return this._namefield || (this._namefield = DGet('input#structure-name'))}
-  static get fieldPath(){return this._namefield || (this._namefield = DGet('input#structure-path'))}
+  static get fieldPath(){return this._pathfield || (this._pathfield = DGet('input#structure-path'))}
   
+  /**
+   * Appelée par le bouton général "Enregistrer"
+   */
+  static saveCurrent(){this.current.save()}
+
   /**
    * Initialisation de la méta-structure
    * (appelée à l'ouverture de l'application)
@@ -62,13 +67,10 @@ class MetaSTT {
   constructor(relPath){
     this.relPath = relPath
   }
-  
+
   setModified(modified = true){
     UI.setModified(modified)
-    if ( modified ) {
-      console.info("Parent marqué modifié")
-    } else {
-    }
+    this.modified = !!modified
   }
 
   // Surclassée par classes filles
@@ -88,6 +90,8 @@ class MetaSTT {
   afterLoad(retour){
     if (false == retour.ok) return Flash.error(retour.error);
     this.data = retour.structure
+    // On reset tous les panneaux de structure
+    this.constructor.reset()
     // Réglage de l'interface
     this.setInterface()
     // Dispatch des éléments de la structure
@@ -98,10 +102,9 @@ class MetaSTT {
       return sttE
     })
     console.info("Table des éléments", this.table_elements)
-    // On reset tous les panneaux de structure
-    this.constructor.reset()
     // On ne construit que la structure à afficher
     this.activerStructure(this.data.preferences.disposition || 'Horizontal')
+    this.setModified(false)
     // Application des préférences
     Preferences.apply(this, this.data.preferences)
   }
@@ -109,18 +112,32 @@ class MetaSTT {
   /**
    * Pour enregistrer la méta-structure
    */
-  save(){
+  save(callback){
+    console.log("-> save (MetaSTT)")
     if ( false === this.getData() ) return ;
     ServerTalk.dial({
         route: "/structure/save"
       , data:  {structure: this.data}
-      , callback: this.afterSave.bind(this)
+      , callback: this.afterSave.bind(this, callback)
     })
   }
-  afterSave(retour){
-    if (false == retour.ok) return Flash.error(retour.error)
+  afterSave(callback, retour){
+    console.log("-> afterSave (MetaSTT)", callback, retour)
+    if (retour.ok) { 
+      this.setModified(false)
+      callback() 
+    } else return raise(retour.error);
   }
 
+  /**
+   * Pour tout réinitialiser
+   * 
+   * C'est nécessaire par exemple quand on vient de procéder à  l'enregistrement de nouveaux éléments.
+   * 
+   */
+  resetAll(){
+    console.log("Je dois apprendre à tout initialiser.")
+  }
 
   /**
    * Fonction qui active (affiche) la disposition de structure de nom
@@ -129,7 +146,13 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerStructure(disposition){
-    // console.info("-> Activer structure '%s'", disposition)
+    console.info("-> Activer structure '%s'", disposition)
+    console.info("Structure actuelle", this.current_dispo)
+    if ( this.current_dispo == 'Editing' && this.modified ) {
+      console.info("La structure a été modifiée, je dois l'enregistrer avant de passer à une vision différente.")
+      this.dispositions.Editing.saveAndContinue(this.activerStructure.bind(this))
+      return
+    }
     Object.keys(this.dispositions).forEach(keyDispo => {
       const dispo = this.dispositions[keyDispo]
       if ( disposition == keyDispo ) {
@@ -140,7 +163,8 @@ class MetaSTT {
         dispo.hide()
       }
     })
-    const curdispo = this.current_dispo = this.dispositions[disposition];
+    this.current_dispo = String(disposition);
+    const curdispo = this.dispositions[disposition]
     
     curdispo.prepared || curdispo.prepare()
     curdispo.built    || curdispo.build()
@@ -188,10 +212,12 @@ class MetaSTT {
    * Fonction appelée pour ajouter l'élément
    */
   addElement(newElement){
-    if ( !newElement.id ) newElement.id = MetaSTTElement.getNewId()
-    console.info("ajout élément", newElement)
+    newElement.id || this.assignIdTo(newElement)
     this.elements.push(newElement)
-    Object.assign(this.table_elements, {[newElement.id]: newElement})
+    Object.assign(MetaSTT.current.table_elements, {[newElement.id]: newElement})
+  }
+  assignIdTo(elt){
+    elt.data.id = MetaSTTElement.getNewId()
   }
 
   /**
@@ -219,7 +245,6 @@ class MetaSTT {
   setInterface(){
     MetaSTT.fieldName.value = this.data.metadata.name;
     MetaSTT.fieldPath.value = this.data.metadata.path;
-    // Todo : activer la disposition ?
   }
 
   /**

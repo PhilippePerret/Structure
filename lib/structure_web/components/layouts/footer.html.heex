@@ -2,15 +2,16 @@
 
   <div class="fright">
 
-    <fieldset id="fs-choix-disposition">
+    <button class="btn small" onclick="MetaSTT.resetAll()" style="margin-right:4em;">Reset All</button>
+    
+    <fieldset id="fs-choix-disposition" style="margin-left: 4em;margin-right:1em;">
       <legend>Structure…</legend>
       <button class="btn small actif" id="btn-dispo-H" onclick="MetaSTT.current.activerStructure('Horizontal', this)">horizontale</button>
       <button class="btn small" id="btn-dispo-V" onclick="MetaSTT.current.activerStructure('Vertical', this)">verticale</button>
       <button class="btn small" id="btn-dispo-E" onclick="MetaSTT.current.activerStructure('Editing', this)">éditable</button>
     </fieldset>
 
-    <button class="btn" onclick="Structure.reset()" style="margin-right:4em;">Reset All</button>
-    <button class="btn" onclick="Structure.save()">Enregistrer</button>
+    <button class="btn" id="main-btn-save" onclick="MetaSTT.saveCurrent()" disabled>Enregistrer</button>
 
     <div id="mod-light"></div>
   </div>

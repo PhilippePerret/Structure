@@ -37,8 +37,10 @@ class UI {
 
   static setModified(modified = true) {
     this.mLight.classList[modified?'add':'remove']('on')
+    this.saveBtn.disabled = !modified;
   }
   static get mLight(){return this._mlight || (this._mlight = DGet('div#mod-light'))}
+  static get saveBtn(){return this._savebtn || (this._savebtn = DGet('button#main-btn-save'))}
 
   /**
    * Fonction qui calcul le coefficiant multiplication pour passer des 

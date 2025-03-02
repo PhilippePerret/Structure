@@ -21,12 +21,11 @@ header a, footer a {
 }
 
 header input#structure-name {
-  margin-left: 1em;
   background-color: inherit;
   border: none;
   color: white;
   padding: 0 1em;
-  width: 140px;
+  width: 240px;
   text-align: left;
 }
 header input#structure-path {

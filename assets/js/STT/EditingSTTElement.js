@@ -62,14 +62,19 @@ class EditingSTTElement extends MetaSTTElement {
       DGet(`.elt-${prop}`, this.obj).value = this.data[prop] || DEFAULT_VALUES[prop]
     })
     // On met le résumé dans la couleur choisie
-    const pitch = this.field('pitch')
-    if ( this.color ) {
-      pitch.style.backgroundColor = this.color.bg
-      pitch.style.color = this.color.fg
-    }
+    this.color && this.applyColor()
+
     this.observe()
 
     this.built = true
+  }
+
+  applyColor(){
+    const pitch   = this.field('pitch')
+    const dColor  = Color.get(this.color)
+    pitch.style.backgroundColor = dColor.bg
+    pitch.style.color = dColor.fg
+
   }
 
   observe(){

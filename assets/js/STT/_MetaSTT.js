@@ -36,6 +36,8 @@ class MetaSTT {
     ].forEach(field => {field.value = ""})
   }
 
+  static eraseListing(){this.listing.innerHTML = ""}
+
   /**
    * Le listing de chaque type de structure
    */

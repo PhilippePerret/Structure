@@ -14,6 +14,7 @@ class EditingSTT extends MetaSTT {
     EditingSTTElement.CLONE_ELEMENT = DGet('div.sttediting-element', this.listing).cloneNode(true);
     this.listing.style.height = `${this.calcListingHeight()}px`
   }
+
   static calcListingHeight(){
     const headerHeight = DGet('div.stt-header', this.obj).offsetHeight
     return window.innerHeight - (
@@ -37,16 +38,16 @@ class EditingSTT extends MetaSTT {
   }
 
   build(){
-    console.info("Construire la structure VERTICALE avec les éléments", this.elements)
+    this.constructor.eraseListing()
     var index = 0;
     this.sortedElements.forEach(belt => {
+      // const belt = elt.belement;
       belt.index = index ++;
       belt.build()
       this.constructor.listing.appendChild(belt.obj)
     })
     this.built = true
   }
-
 
   /**
    * Fonction appelée quand on clique sur le bouton "+" au bout d'une ligne d'éléments
@@ -56,11 +57,11 @@ class EditingSTT extends MetaSTT {
     newElt.build()
     if ( refElement ) {
       const beforeElement = after ? refElement.nextSibling : refElement ;
-      this.listing.insertBefore(newElt.obj, beforeElement)
+      this.constructor.listing.insertBefore(newElt.obj, beforeElement)
       newElt.setLogicTime()
       newElt.focus('time')
     } else {
-      this.listing.appendChild(newElt.obj)
+      this.constructor.listing.appendChild(newElt.obj)
     }
   }
 
@@ -80,17 +81,25 @@ class EditingSTT extends MetaSTT {
    * @return La liste classée des éléments de la structure
    */
   get sortedElements(){
-    return this.belements.sort(this.sortElement.bind(this))
+    return this.elements.sort(this.sortElement.bind(this))
   }
   sortElement(a, b){return (a.realTime < b.realTime) ? -1 : 0}
 
-  get elements(){return this.metaStt.elements}
-  get belements(){
-    return this._belements || (this._belements = this.elements.map(elt => {return new EditingSTTElement(elt, this)}));
+  get elements(){
+    if ( undefined == this._elements ) {
+      this._elements = this.metaStt.elements.map(elt => {
+        // elt.belement = new EditingSTTElement(elt.data, this)
+        // return elt
+        return new EditingSTTElement(elt.data, this)
+      })
+    } return this._elements;
   }
+  // Pour redonner la liste des éléments à la métastructure
+  set elements(elts){this.metaStt.elements = elts}
 
   /**
    * Fonction qui boucle dans le listing pour récupérer tous les éléments
+   * À QUOI ÇA SERT ENCORE ?
    * 
    * La méthode actualise aussi la propriété elements
    * @return {Array} La liste des données des éléments
@@ -99,18 +108,13 @@ class EditingSTT extends MetaSTT {
     // console.info("-> getDataElements")
     try {
       // return this.elements.map(elt => {return elt.getData()})
-      this.elements = [];
       this.data_elements = []; // ce qui sera retourné
       var index = 0;
-      DGetAll('div.stt-element', this.listing).forEach(divElt => {
-        const newElt  = new ListElement()
-        newElt.obj    = divElt // ce qui permettra de tout récupérer
-        newElt.getData()
-        newElt.index  = index ++;
-        this.elements.push(newElt)
-        this.data_elements.push(newElt.data)
+      this.elements.forEach(elt => {
+        elt.belement.index = index ++;
+        const data = elt.belement.getData()
+        this.data_elements.push(data)
       })
-      // console.info("<- getDataElements", this.elements)
       return this.data_elements
     } catch(err) {
       Flash.error("Une erreur est survenue :" + err.message)

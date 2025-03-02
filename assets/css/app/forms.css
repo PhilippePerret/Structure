@@ -12,6 +12,15 @@ button {
   font-family:inherit;
   font-style: inherit;
 }
+
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="number"]{
+  padding-left:8px;
+  padding-right:8px;
+}
+
 /* Checkbox */
 input[type="checkbox"] {
   transform: scale(1.4);

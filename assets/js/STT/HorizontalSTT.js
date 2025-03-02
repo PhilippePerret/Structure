@@ -11,9 +11,21 @@ class HorizontalSTT extends MetaSTT {
     this.listing.innerHTML = ""
   }
 
+  /**
+   * Fonction appelée par le formulaire autonome pour créer un nouvel
+   * élément dans la structure horizontale
+   */
+  static createElement(data){
+    const newElt = new HorizontalSTTElement(data, MetaSTT.current.dispositions.Horizontal)
+    MetaSTT.current.addElement(newElt)
+    newElt.build()
+  }
+
   static onDoubleClickOnListing(ev){
     const click = new MouseClick(ev)
     console.info("Je dois apprendre à gérer le double click sur le listing horizontal (création d'un nouvel élément).", click, click.time, click.duree)
+    FormElement.reset()
+    FormElement.show(click)
   }
 
   static observe(){

@@ -131,6 +131,7 @@ class TimeCalc {
   static get coef_h2p(){
     return this._coef_h2p || ( this._coef_h2p = UI.calcCoefSeconds2Pixels())
   }
+  static resetCoef(){ this._coef_h2p = null}
 
 }
 

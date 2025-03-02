@@ -175,6 +175,8 @@ class MetaSTT {
     })
     this.current_dispo = String(disposition);
     const curdispo = this.dispositions[disposition]
+
+    TimeCalc.resetCoef()
     
     curdispo.prepared || curdispo.prepare()
     curdispo.built    || curdispo.build()
@@ -273,6 +275,18 @@ class MetaSTT {
       return true
     }
     return false
+  }
+
+
+  /**
+   * À la création d'un élément, retourne TRUE si le pitch existe
+   * déjà.
+   */
+  pitchExists(pitch){
+    this.elements.forEach(element => {
+      if ( element.pitch == pitch ) { return element }
+    })
+    return null ;
   }
 
   get obj(){

@@ -18,6 +18,9 @@ class FormElement {
     if (position){
       this.obj.style.top  = `${position.y}px`
       this.obj.style.left = `${position.x}px`
+      // Régle le temps
+      this.fieldTime.value = position.horloge
+
     }
   }
   static hide(){
@@ -55,10 +58,9 @@ class FormElement {
    * Fonction pour création de l'élément
    */
   static createElement(data){
-    data.id = this.getNewId()
-    const newElement = new SttElement(data)
-    Structure.current.addElement(newElement)
-    newElement.build()
+    data.id = MetaSTTElement.getNewId()
+    HorizontalSTT.createElement(data)
+    this.hide()
   }
 
 
@@ -72,7 +74,7 @@ class FormElement {
   static areValidData(data, element){
     console.info("element dans are-valid", element)
     const isNew = data.id == null;
-    let field;
+    let field, otherElt;
     if ( element ) {
       const c = element
       field = {pitch: c.field('pitch'), time: c.field('time'), duree: c.field('duree'), tension: c.field('tension')}
@@ -81,8 +83,8 @@ class FormElement {
     }
     try {
       if (data.pitch === null || data.pitch.length < 4) raise("Pitch trop court (< 4 caractères)", field.pitch);
-      // TODO Vérifier que le pitch soit unique si c'est une création
-      if ( isNew && Structure.pitchExists(data.pitch)) raise("Ce pitch existe déjà.", field.pitch)
+      // Vérifier que le pitch soit unique si c'est une création
+      if ( isNew && (otherElt = MetaSTT.current.pitchExists(data.pitch))) raise(`Ce pitch existe déjà (élément ${otherElt.id} à ${otherElt.time}).`, field.pitch)
       if (data.time === null || this.NotATime(data.time)) raise("Le time doit être une horloge valide.", field.time)
       if ( this.NotATime(data.duree) ) raise("La durée doit être une horloge valide.", field.duree)
       if (data.tension && this.NotATension(data.tension)) raise("La tension n'est pas une tension valide.", field.tension)

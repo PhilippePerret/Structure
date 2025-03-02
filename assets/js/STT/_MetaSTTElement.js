@@ -34,6 +34,7 @@ class MetaSTTElement {
   get time(){return this.data.time}
   get duree(){return this.data.duree}
   get tension(){return this.data.tension}
+  get tags(){return this.data.tags}
   get color(){return this.data.color}
   // Volatile Data
   get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}

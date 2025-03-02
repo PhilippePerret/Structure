@@ -1,0 +1,23 @@
+<div id="tags-window" class="hidden">
+  <div class="header">
+    <h2>Tags</h2>
+  </div>
+  <div class="labels">
+    <label class="name">Nom</label>
+    <label class="background">Couleur fond</label>
+    <label class="color">Couleur texte</label>
+    <label class="method">Méthode</label>
+  </div>
+  <div class="listing">
+    <div class="tag">
+      <input type="text" class="name tag-name prop" />
+      <input type="text" class="background tag-background color" placeholder="Fond" />
+      <input type="text" class="color tag-foreground color" placeholder="Texte" />
+      <input type="text" class="method tag-method prop" placeholder="Méthode" />
+    </div>
+  </div>
+  <div class="buttons right">
+    <button onclick="Tag.toggle()" class="fleft">Annuler</button>
+    <button onclick="Tag.save()">Enregistrer</button>
+  </div>
+</div>

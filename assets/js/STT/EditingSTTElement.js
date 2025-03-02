@@ -9,6 +9,7 @@ const DEFAULT_VALUES = {
   , pitch: ""
   , color: "normal"
   , tension: ""
+  , tags: ""
 }
 const ELEMENT_PROPERTIES = Object.keys(DEFAULT_VALUES)
 

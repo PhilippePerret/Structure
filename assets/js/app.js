@@ -2,6 +2,7 @@ import "phoenix_html";
 import "./flash.js";
 import "./server_talk.js";
 import "./ui.js";
+import "./tag.js";
 import "./time_calculs.js";
 import "./preferences.js";
 import "./color.js";

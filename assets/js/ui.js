@@ -33,6 +33,9 @@ class UI {
     // Le formulaire
     FormElement.prepare()
 
+    // La boite d'édition des tags
+    Tag.prepare()
+
   }
 
   static setModified(modified = true) {

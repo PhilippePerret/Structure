@@ -19,6 +19,7 @@ defmodule SttWeb.Layouts do
   def stt_vertical(assigns)
   def stt_horizontal(assigns)
   
+  def tags_window(assigns)
   def form_element(assigns)
 
   attr :id, :string, required: true

@@ -5,6 +5,13 @@
 class Tag {
 
   static prepare(){
+    this.TAG_CLONE = DGet('div.tag', this.listing).cloneNode(true)
+    for (var i = 0; i < 20; ++i){
+      const clone = this.TAG_CLONE.cloneNode(true)
+      clone.id = `tag-${i}`
+      clone.dataset.index = i
+      this.listing.appendChild(clone)
+    }
     this.observe()
   }
   static observe(){
@@ -40,6 +47,7 @@ class Tag {
     console.log("Je dois apprendre à éditer les tags.")
   }
 
+  static get listing(){return this._listing||(this._listing = DGet('div.listing', this.obj))}
   static get obj(){return this._obj || (this._obj = DGet('div#tags-window'))}
 
   // ======= INSTANCE ========

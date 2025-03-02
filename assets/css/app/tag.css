@@ -5,7 +5,7 @@ div#tags-window {
   background-color: #FEFEFF;
   padding: 2em;
   width: 660px;
-  min-height: 300px;
+  height: 750px;
   box-shadow: 5px 5px 5px 5px #CCCCCC;
 }
 div#tags-window div.labels {
@@ -18,8 +18,23 @@ div#tags-window div.buttons {
   bottom:2em;
 }
 
+div#tags-window label { 
+  display: inline-block;
+  padding-left: 12px; 
+  padding-right: 12px; 
+}
+div#tags-window .name { width: 200px!important }
+div#tags-window .background,
+div#tags-window .tag-color { width: 60px!important }
+div#tags-window .method { width: 200px!important }
+
 div#tags-window div.listing {
   border:1px solid #EEEEEE;
+  max-height: 560px;
+  overflow: scroll;
+}
+div#tags-window div.listing div.tag {
+  margin-top: 4;
 }
 div#tags-window div.listing input.prop {
   width: 25%;

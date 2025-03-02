@@ -41,7 +41,7 @@ class EditingSTTElement extends MetaSTTElement {
     // console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
     if ( !data.id || data.id == "undefined") {
-      this.id = this.obj.dataset.id = data.id = SttElement.getNewId(data.type)
+      this.id = this.obj.dataset.id = data.id = MetaSTTElement.getNewId()
     }
     data.time   = this.setPropValue('time',  TimeCalc.treate(data.time, 'FULL'))
     data.duree  = this.setPropValue('duree', TimeCalc.treate(data.duree, false))

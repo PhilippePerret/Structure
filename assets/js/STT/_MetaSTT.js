@@ -179,9 +179,11 @@ class MetaSTT {
   /**
    * Fonction appelée pour ajouter l'élément
    */
-  addElement(element){
-    this.elements.push(element)
-    Object.assign(this.table_elements, {[element.id]: element})
+  addElement(newElement){
+    if ( !newElement.id ) newElement.id = MetaSTTElement.getNewId()
+    console.info("ajout élément", newElement)
+    this.elements.push(newElement)
+    Object.assign(this.table_elements, {[newElement.id]: newElement})
   }
 
   /**

@@ -27,7 +27,7 @@ class SttElement {
     element.update(data)
   }
   static createElement(data){
-    data.id = this.getNewId(data.type)
+    data.id = this.getNewId()
     const newElement = new SttElement(data)
     Structure.current.addElement(newElement)
     newElement.build()

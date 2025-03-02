@@ -6,11 +6,11 @@ class MetaSTTElement {
    * Fonction qui calcule et fournit un identifiant unique pour le
    * type +type+ (scene ou seq pour le moment)
    */
-  static getNewId(type){
+  static getNewId(){
     const partDate = String(new Date().getTime()).replace("\.", "")
     const partAlea = String(parseInt(Math.random() * 100))
     const chunk4 = (partDate + partAlea).match(/.{1,4}/g)
-    return `${type}-${chunk4.join("-")}`
+    return `sttelt-${chunk4.join("-")}`
   }
 
 

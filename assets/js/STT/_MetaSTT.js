@@ -46,6 +46,9 @@ class MetaSTT {
   static get listing(){
     return this._listing || (this._listing = DGet(`#stt-${this.classname}-listing`))
   }
+  static get obj(){
+    return this._obj || (this._obj = DGet(`div#stt-${this.classname}`))
+  }
 
   /**
    * Le nom de chaque type de structure (pour les noms d'éléments)

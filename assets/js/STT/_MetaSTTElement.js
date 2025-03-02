@@ -69,6 +69,18 @@ class MetaSTTElement {
     // TODO apprendre à updater l'élément
     console.error("Il faut apprendre à updater l'élément")
   }
+
+
+  /**
+   * Propriété : couleur qui ne sera jamais blanche
+   */
+  get safeBackgroundColor(){
+    let bg = this.colorData().bg;
+    if ( !bg || bg == "white" || bg == "#FFFFFF" ) {bg = "black"}
+    return bg
+  }
+
+  colorData(colorId){ return Color.get(colorId, 'normal')}
 }
 
 

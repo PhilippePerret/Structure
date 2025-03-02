@@ -26,27 +26,13 @@ class UI {
       })
     })
 
+    // Observation de la structure horizontale (notamment pour qu'un
+    // double-click permet de créer un élément)
+    HorizontalSTT.observe()
+
     // Le formulaire
     FormElement.prepare()
 
-  }
-
-  /**
-   * Fonction qui transforme l'horloge +horloge+ en pixel (left)
-   */
-  static horlogeToPixels(horloge){
-    return parseInt(this.horloge2seconds(horloge) * this.coef_h2p)
-  }
-  static horloge2seconds(horloge){
-    const lh = horloge.split(/[:,\-]/).reverse()
-    while (lh.length < 3) { lh.push(0) }
-    const [s, m, h] = lh.map(x => {return parseInt(x, 10)})
-    // console.info("[s, m, h]", [s, m, h])
-    return s + m * 60 + h * 3600
-  }
-
-  static get coef_h2p(){
-    return this._coef_h2p || ( this._coef_h2p = this.calcCoefSeconds2Pixels())
   }
 
   /**
@@ -54,7 +40,7 @@ class UI {
    * secondes aux pixels
    */
   static calcCoefSeconds2Pixels(){
-    const filmDuree = this.horloge2seconds(DGet('input#film-duree').value)
+    const filmDuree = TimeCalc.h2s(DGet('input#film-duree').value)
     const gabarit = DGet('div#stt-horizontalstt div#gabarit')
     const filmWidth = gabarit.getBoundingClientRect().width
     return parseInt((filmWidth / filmDuree) * 1000) / 1000

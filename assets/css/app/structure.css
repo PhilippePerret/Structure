@@ -1,6 +1,10 @@
+:root {
+  --max-width: 3000px;
+  --min-height: 800px;
+}
 div#structure {
   position: fixed;
-  width: 3000px;
+  width: var(--max-width);
   min-height: 600px;
   border: 1px solid #CCCCCC;
   user-select: none;
@@ -35,6 +39,18 @@ div#developpement-part2:before {content: "Dév - Part.2"}
 div#denouement {left:75%}
 div#denouement:before {content: "Dénouement"}
 
+div#stt-editingstt,
+div#stt-horizontalstt,
+div#stt-verticalstt {
+  position: fixed;
+  width: var(--max-width);
+  min-height: var(--min-height);
+  top:0;
+  left:0;
+}
+div#stt-horizontalstt {
+  background-color: #F4F4FF;
+}
 /* 
   === Scènes ===
 
@@ -57,7 +73,7 @@ scene:before {
   position: absolute;
   left: -0px;
   top: 0px;
-  /* Essai de longueur */
+  /* Pour régler la longueur */
   width: var(--width);
   background-color: var(--background);
   height: 12px;
@@ -68,7 +84,7 @@ scene:before {
 scene:not(.not-biais) {
   transform-origin: top left;
   transform:rotate(-60deg) translateY(8px);
-  top: 300px;
+  top: 500px;
 }
 scene.not-biais {
   top: 300px;

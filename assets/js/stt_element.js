@@ -60,19 +60,7 @@ class SttElement {
     this.obj.style.color = fg;
   }
 
-  /**
-   * Propriété : couleur qui ne sera jamais blanche
-   */
-  get safeBackgroundColor(){
-    let bg = this.colorData().bg;
-    if ( !bg || bg == "white" || bg == "#FFFFFF" ) {bg = "black"}
-    return bg
-  }
 
-  colorData(colorId){
-    colorId = colorId || this.color || 'normal'
-    return COLOR_TABLE[colorId] || COLOR_TABLE['normal'] 
-  }
 }
 
 

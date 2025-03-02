@@ -102,22 +102,6 @@ class Structure {
     }
     return this.data
   }
-  /**
-   * CONSTRUCTION DE LA STRUCTURE
-   * ----------------------------
-   * Fonction principale qui construit la structure définie
-   */
-  build(){
-    Structure.masquer_cadre()
-    this.data.elements.forEach( delement => {
-      if ( !delement.id ) { delement.id = SttElement.getNewId(delement.type)}
-      const elt = new SttElement(delement)
-      this.elements.push(elt)
-      Object.assign(this.table, {[elt.id]: elt})
-      elt.build()
-    })
-    Structure.display_cadre()
-  }
 
   /**
    * Fonction retournant l'élément d'identifiant +id+

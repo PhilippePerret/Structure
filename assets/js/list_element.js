@@ -20,7 +20,7 @@ class ListElement {
 
   static prepare(){
     // Le menu couleur
-    FormElement.buildMenuColor(DGet('div.list-element select.elt-color'))
+    Color.buildColorMenus(DGet('div.list-element select.elt-color'))
     // On clone toujours la première ligne
     this.CLONE_ELEMENT = DGet('div.list-element', this.obj).cloneNode(true);
   }

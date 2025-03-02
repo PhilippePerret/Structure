@@ -19,7 +19,6 @@ class HorizontalSTTElement extends MetaSTTElement {
     this.obj = div
     div.appendChild(DCreate('SPAN', {text: this.pitch}))
     this.stype && (this.setClass(this.style));
-    console.log("Objet créé : ", div)
     // On l'ajoute au listing
     this.parent.append(this)
     // On le dimensionne et on le positionne
@@ -34,11 +33,11 @@ class HorizontalSTTElement extends MetaSTTElement {
     // régler sa longueur et sa couleur
     if ( this.type == 'scene' ) {
       this.obj.style.setProperty('--background', this.safeBackgroundColor);
-      this.obj.style.setProperty('--width', `${UI.horlogeToPixels(this.duree)}px`)
+      this.obj.style.setProperty('--width', `${TimeCalc.horlogeToPixels(this.duree)}px`)
     }
 
-    this.obj.style.left = `${UI.horlogeToPixels(this.data.time)}px`
-    this.type == 'seq' && (this.obj.style.width = `${UI.horlogeToPixels(this.duree)}px`);
+    this.obj.style.left = `${TimeCalc.horlogeToPixels(this.data.time)}px`
+    this.type == 'seq' && (this.obj.style.width = `${TimeCalc.horlogeToPixels(this.duree)}px`);
     this.top   && (this.obj.style.top = `${this.top}px`);
   }
 

@@ -3,11 +3,13 @@ import "./flash.js";
 import "./server_talk.js";
 import "./time_calculs.js";
 import "./preferences.js";
+import "./color.js";
 import "./structure.js";
 import "./ui.js";
 import "./stt_element.js";
 import "./form_element.js";
 import "./list_element.js";
+import "./mouse_click.js";
 
 import "./STT/_MetaSTT.js";
 import "./STT/_MetaSTTElement.js";
@@ -18,31 +20,8 @@ import "./STT/VerticalSTTElement.js";
 import "./STT/EditingSTT.js";
 import "./STT/EditingSTTElement.js";
 
-const UI_COLORS = [
-  "red", "blue", "green", "black", "white"
-]
-
 window.FULL = 'FULL'
 
-
-/**
- * Table des couleurs
- * L'user doit pouvoir les déterminer.
- */
-window.COLOR_LIST = [
-    {id:  'normal'      , bg:'white'     , fg: 'black'}
-  , {id:  'rouge'       , bg:'red'       , fg: 'white'}
-  , {id:  'vert'        , bg:'green'     , fg: 'white'}
-  , {id:  'intrigue A'  , bg:'#555555'   , fg: 'white'}
-  , {id:  'intrigue B'  , bg:'#555555'   , fg: 'white'}
-  , {id:  'intrigue C'  , bg:'#555555'   , fg: 'white'}
-].map(dcolor => {
-  return Object.assign(dcolor, {data: `${dcolor.bg};${dcolor.fg}`})
-})
-window.COLOR_TABLE = {}
-COLOR_LIST.forEach(dcolor => Object.assign(COLOR_TABLE, {[dcolor.id]: dcolor}))
-
-window.UI_COLORS = UI_COLORS
 // Pour lever une erreur juste avec 'raise("message")'
 window.raise = function(message, errField){
   if ( errField ) {

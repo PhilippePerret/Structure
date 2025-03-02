@@ -3,14 +3,22 @@
 
 class TimeCalc {
 
-  static h2s(h){
+  // Fonctions raccourcies
+  static h2s(h){return this.horlogeToSeconds(h)}
+  static s2h(s,full){return this.secondsToHorloge(s,full)}
+  static h2p(h){return this.horlogeToPixels(h)}
+  static s2p(s){return this.secondsToPixels(s)}
+  static p2s(p){return this.pixelsToSeconds(p)}
+  static p2h(p,full){return this.pixelsToHorloge(p,full)}
+
+  static horlogeToSeconds(h){
     const segs = h.split(/[,:]/).reverse().map(x => {return parseInt(x)})
     let s = segs[0] || 0;
     let m = segs[1] || 0;
     h = segs[2] || 0;
     return s + m * 60 + h * 3600
   }
-  static s2h(s, full = false){
+  static secondsToHorloge(s, full = false){
     const h = parseInt(s / 3600)
     s = s - h * 3600
     let m = parseInt(s / 60)
@@ -89,6 +97,36 @@ class TimeCalc {
   static isRequiredFullHorloge(horloge, full){
     if ( full == FULL ) return full ;
     return horloge.split(/[,:]/).length == 3 ? FULL : false ;
+  }
+
+  /**
+   * Transforme des secondes en pixels en fonction de la durée du
+   * film et de la largeur de la structure
+   */
+  static secondsToPixels(s){return s * this.coef_h2p}
+  /**
+   * Fonction qui transforme l'horloge +horloge+ en pixel (left)
+   */
+  static horlogeToPixels(horloge){
+    return parseInt(this.horloge2seconds(horloge) * this.coef_h2p)
+  }
+  static horloge2seconds(horloge){
+    const lh = horloge.split(/[:,\-]/).reverse()
+    while (lh.length < 3) { lh.push(0) }
+    const [s, m, h] = lh.map(x => {return parseInt(x, 10)})
+    // console.info("[s, m, h]", [s, m, h])
+    return s + m * 60 + h * 3600
+  }
+
+  static pixelsToHorloge(p, full){
+    return this.secondsToHorloge(this.pixelsToSeconds(p), full)
+  }
+  static pixelsToSeconds(p){
+    return parseInt(p / this.coef_h2p)
+  }
+
+  static get coef_h2p(){
+    return this._coef_h2p || ( this._coef_h2p = UI.calcCoefSeconds2Pixels())
   }
 
 }

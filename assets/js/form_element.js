@@ -97,15 +97,6 @@ class FormElement {
     } return this._regtension;
   }
 
-  static NotAColor(color){return !this.IsAColor(color)}
-  static IsAColor(color){return true === this.regColor.test(color)}
-  static get regColor(){
-    if (undefined == this._regcolor) {
-      const colors = UI_COLORS.join("|")
-      this._regcolor = new RegExp("^("+colors+")\;("+colors+")$")
-    }; return this._regcolor
-  }
-
   static get fieldId(){return this._fieldid || (this._fieldid = DGet('input#elt-id'))}
   static get fieldType(){return this._fieldtype || (this._fieldtype = DGet('select#elt-type'))}
   static get fieldIdeality(){return this._fieldideality || (this._fieldideality = DGet('select#elt-ideality'))}
@@ -117,24 +108,11 @@ class FormElement {
 
 
   /**
-   * Retourne la couleur
-   */
-  static getColorById(id){
-    return COLOR_LIST[id]
-  }
-  /**
    * Fonction qui construit le menu des couleurs dans le formulaire 
    * d'élément en se servant des données COLOR_LIST
    */
   static buildMenuColor(container){
-    container = container || this.fieldColor
-    COLOR_LIST.forEach( dcolor => {
-      const {id, bg, fg} = dcolor
-      const opt = DCreate('OPTION', {value: id, text: id})
-      opt.dataset.bg = bg
-      opt.dataset.fg = fg
-      container.appendChild(opt)
-    })
+    Color.buildColorMenus(container || this.fieldColor)
   }
 }
 

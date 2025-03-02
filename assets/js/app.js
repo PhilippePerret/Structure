@@ -1,12 +1,11 @@
 import "phoenix_html";
 import "./flash.js";
 import "./server_talk.js";
+import "./ui.js";
 import "./time_calculs.js";
 import "./preferences.js";
 import "./color.js";
 import "./structure.js";
-import "./ui.js";
-import "./stt_element.js";
 import "./form_element.js";
 import "./mouse_click.js";
 

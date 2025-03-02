@@ -59,6 +59,8 @@ class MetaSTTElement {
    */
   edit(ev){
     // TODO Placer le formulaire près de la souris
+    const mclick = new MouseClick(ev)
+    FormElement.show(mclick)
     FormElement.setData(this)
   }
 
@@ -69,18 +71,10 @@ class MetaSTTElement {
   update(newData){
     Object.assign(this.data, newData)
     this.reset()
-    // TODO apprendre à updater l'élément
-    console.error("Il faut apprendre à updater l'élément")
+    // TODO apprendre à actualiser l'affichage de l'élément
+    console.error("Il faut apprendre à actualiser l'affichage de l'élément")
   }
 
-  /**
-   * Propriété : couleur qui ne sera jamais blanche
-   */
-  get safeBackgroundColor(){
-    let bg = this.bgColor;
-    if ( !bg || bg == "white" || bg == "#FFFFFF" ) {bg = "black"}
-    return bg
-  }
 }
 
 

@@ -13,8 +13,12 @@ class FormElement {
   }
   static observe(){}
 
-  static show(){
+  static show(position){
     this.obj.classList.remove('hidden')
+    if (position){
+      this.obj.style.top  = `${position.y}px`
+      this.obj.style.left = `${position.x}px`
+    }
   }
   static hide(){
     this.obj.classList.add('hidden')
@@ -22,6 +26,41 @@ class FormElement {
   static get obj(){
     return this._obj || (this._obj = DGet('div#element-form'))
   }
+
+
+  // ========= FONCTION D'ÉDITION DE L'ÉLÉMENT DE STRUCTURE =====
+
+  /**
+   * Foncton appelée par le bouton "Enregistrer"
+   */
+  static createOrUpdate(){
+    const dataElement = FormElement.getData()
+    if ( FormElement.areValidData(dataElement) ) {
+      if ( dataElement.id /* édition */) { this.updateElement(dataElement) }
+      else /* création */ { this.createElement(dataElement) }
+    } else /* Données invalides */ { return false }
+    FormElement.hide()
+  }
+
+  /**
+   * Fonction pour actualiser l'élément
+   */
+  static updateElement(data){
+    const element = MetaSTT.current.getElement(data.id)
+    console.info("element", element)
+    element.update(data)
+  }
+
+  /**
+   * Fonction pour création de l'élément
+   */
+  static createElement(data){
+    data.id = this.getNewId()
+    const newElement = new SttElement(data)
+    Structure.current.addElement(newElement)
+    newElement.build()
+  }
+
 
   /**
    * Vérifie la validité des données. Retourne true en cas de succès

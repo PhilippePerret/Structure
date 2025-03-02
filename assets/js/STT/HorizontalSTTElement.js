@@ -30,7 +30,7 @@ class HorizontalSTTElement extends MetaSTTElement {
     // Pour définir la marque sous le pitch de l'élément scène, pour
     // régler sa longueur et sa couleur
     if ( this.type == 'scene' ) {
-      this.obj.style.setProperty('--background', this.safeBackgroundColor);
+      this.obj.style.setProperty('--background', this.bgColor);
       this.obj.style.setProperty('--width', `${TimeCalc.horlogeToPixels(this.duree)}px`)
     }
 

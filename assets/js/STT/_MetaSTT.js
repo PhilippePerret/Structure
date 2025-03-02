@@ -70,7 +70,8 @@ class MetaSTT {
 
   setModified(modified = true){
     UI.setModified(modified)
-    this.modified = !!modified
+    if ( this.metaStt ) this.metaStt.setModified(modified) ;
+    this.modified = modified
   }
 
   // Surclassée par classes filles
@@ -113,8 +114,10 @@ class MetaSTT {
    * Pour enregistrer la méta-structure
    */
   save(callback){
-    console.log("-> save (MetaSTT)")
     if ( false === this.getData() ) return ;
+    if ( this.dispositions.Editing.modified && !this.dispositions.Editing.saving) {
+      return this.dispositions.Editing.saveAndContinue(callback)
+    }
     ServerTalk.dial({
         route: "/structure/save"
       , data:  {structure: this.data}
@@ -122,17 +125,17 @@ class MetaSTT {
     })
   }
   afterSave(callback, retour){
-    console.log("-> afterSave (MetaSTT)", callback, retour)
+    // console.log("-> afterSave (MetaSTT)", callback, retour)
     if (retour.ok) { 
       this.setModified(false)
-      callback() 
+      callback && callback() 
     } else return raise(retour.error);
   }
 
   /**
    * Pour tout réinitialiser
    * 
-   * C'est nécessaire par exemple quand on vient de procéder à  l'enregistrement de nouveaux éléments.
+   * C'est nécessaire par exemple quand on vient de procéder à l'enregistrement de nouveaux éléments.
    * 
    */
   resetAll(){
@@ -146,10 +149,10 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerStructure(disposition){
-    console.info("-> Activer structure '%s'", disposition)
-    console.info("Structure actuelle", this.current_dispo)
+    // console.info("-> Activer structure '%s'", disposition)
+    // console.info("Structure actuelle", this.current_dispo)
     if ( this.current_dispo == 'Editing' && this.modified ) {
-      console.info("La structure a été modifiée, je dois l'enregistrer avant de passer à une vision différente.")
+      // console.info("La structure a été modifiée, je dois l'enregistrer avant de passer à une vision différente.")
       this.dispositions.Editing.saveAndContinue(this.activerStructure.bind(this))
       return
     }
@@ -170,6 +173,7 @@ class MetaSTT {
     curdispo.built    || curdispo.build()
 
     this.setButtonDisposition(disposition)
+    this.data.preferences.disposition = disposition
   }
 
   setButtonDisposition(dispo){
@@ -228,10 +232,6 @@ class MetaSTT {
     try {
       this.data.metadata.name = NullIfEmpty(MetaSTT.fieldName.value) || raise("Il faut définir le nom de cette structure", MetaSTT.fieldName)
       this.data.metadata.path = NullIfEmpty(MetaSTT.fieldPath.value) || raise("Il faut impérativement définir le path de cette structure.", MetaSTT.fieldPath)
-      this.data.elements = this.elements.map(elt => {return elt.data})
-      this.data.preferences = {
-        disposition: this.disposition // 'horizontale', 'verticale', 'editing'
-      }
       return true
     } catch(err) {
       return false

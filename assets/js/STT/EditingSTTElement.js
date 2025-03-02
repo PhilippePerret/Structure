@@ -41,12 +41,12 @@ class EditingSTTElement extends MetaSTTElement {
     // console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
     if ( !data.id || data.id == "undefined") {
-      this.id = this.obj.dataset.id = data.id = MetaSTTElement.getNewId()
+      this.data.id = this.obj.dataset.id = data.id = MetaSTTElement.getNewId()
     }
     data.time   = this.setPropValue('time',  TimeCalc.treate(data.time, 'FULL'))
     data.duree  = this.setPropValue('duree', TimeCalc.treate(data.duree, false))
     // On vérifie la validité des données
-    if ( false === FormElement.areValidData(data) ) return false ;
+    if ( false === FormElement.areValidData(data, this) ) return false ;
     this.data = data
     return data
   }

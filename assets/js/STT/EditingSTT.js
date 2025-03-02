@@ -50,17 +50,18 @@ class EditingSTT extends MetaSTT {
   }
 
   saveAndContinue(callback){
-    console.log("-> saveAndContinue")
-    console.info("Je dois apprendre à relever toutes les données")
-    const newElements = this.metaStt.data.elements // pour le moment
-    console.info("Je dois apprendre à mettre les nouvelles données")
+    this.saving = true
+    const newElements = this.getDataElements()
+    if ( newElements === false ) { // Une erreur dans les données
+      return false
+    }
     this.metaStt.data.elements = newElements
     this.metaStt.save(this.afterSave.bind(this, callback))
   }
   afterSave(callback){
-    console.log("-> afterSave dans EditingSTT")
+    this.saving = false
     this.metaStt.resetAll()
-    callback()
+    callback && callback()
   }
 
   /**
@@ -78,7 +79,7 @@ class EditingSTT extends MetaSTT {
       this.constructor.listing.appendChild(newElt.obj)
     }
     super.addElement(newElt)
-    this.metaStt.setModified()
+    this.setModified()
   }
 
   removeElement(elt){
@@ -87,7 +88,7 @@ class EditingSTT extends MetaSTT {
     console.info("Nouvelle liste d'objets", this.elements)
     elt.obj.remove()
     this.updateIndexElements()
-    this.metaStt.setModified()
+    this.setModified()
   }
 
   updateIndexElements(){
@@ -128,8 +129,8 @@ class EditingSTT extends MetaSTT {
       this.data_elements = []; // ce qui sera retourné
       var index = 0;
       this.elements.forEach(elt => {
-        elt.belement.index = index ++;
-        const data = elt.belement.getData()
+        const data = elt.getData()
+        if ( data === false ) { raise(" merci de la corriger") }
         this.data_elements.push(data)
       })
       return this.data_elements

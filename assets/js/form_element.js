@@ -26,16 +26,27 @@ class FormElement {
   /**
    * Vérifie la validité des données. Retourne true en cas de succès
    * ou false en cas de problème, en affichant les erreurs
+   * 
+   * @param {Object} data Les données à vérifier
+   * @param {STTElement} element  L'élément édité (structure éditée) ou null pour le formulaire
    */
-  static areValidData(data){
+  static areValidData(data, element){
+    console.info("element dans are-valid", element)
     const isNew = data.id == null;
+    let field;
+    if ( element ) {
+      const c = element
+      field = {pitch: c.field('pitch'), time: c.field('time'), duree: c.field('duree'), tension: c.field('tension')}
+    } else {
+      field = {pitch: this.fieldPitch, time: this.fieldTime, duree: this.fieldDuree, tension: this.fieldTension}
+    }
     try {
-      if (data.pitch === null || data.pitch.length < 4) raise("Pitch trop court (< 4 caractères)", this.fieldPitch);
+      if (data.pitch === null || data.pitch.length < 4) raise("Pitch trop court (< 4 caractères)", field.pitch);
       // TODO Vérifier que le pitch soit unique si c'est une création
-      if ( isNew && Structure.pitchExists(data.pitch)) raise("Ce pitch existe déjà.", this.fieldPitch)
-      if (data.time === null || this.NotATime(data.time)) raise("Le time doit être une horloge valide.", this.fieldTime)
-      if ( this.NotATime(data.duree) ) raise("La durée doit être une horloge valide.", this.fieldDuree)
-      if (data.tension && this.NotATension(data.tension)) raise("La tension n'est pas une tension valide.", this.fieldTension)
+      if ( isNew && Structure.pitchExists(data.pitch)) raise("Ce pitch existe déjà.", field.pitch)
+      if (data.time === null || this.NotATime(data.time)) raise("Le time doit être une horloge valide.", field.time)
+      if ( this.NotATime(data.duree) ) raise("La durée doit être une horloge valide.", field.duree)
+      if (data.tension && this.NotATension(data.tension)) raise("La tension n'est pas une tension valide.", field.tension)
       return true
     } catch(err) {
       Flash.error(err.message) + "\nImpossible d'enregistrer l'élément."

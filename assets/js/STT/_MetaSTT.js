@@ -140,7 +140,7 @@ class MetaSTT {
 
   setButtonDisposition(dispo){
     ;['H','V','E'].forEach(suffix => {
-      const bouton = DGet(`button#btn-dispo-${suffix}`);
+      const bouton = DGet(`footer button#btn-dispo-${suffix}`);
       bouton.classList[suffix == dispo.substring(0,1)?'add':'remove']('actif')
     })
   }

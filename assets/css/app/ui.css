@@ -64,7 +64,8 @@ input[type="text"] {
   width: 80px; 
   background-color:#555;
   color:white;
-  font-family:Monospace;
+  font-family:Monospace!important;
+  font-size: 0.75em!important;
   text-align: center;
 }
 label + input {margin-left:0.5em}

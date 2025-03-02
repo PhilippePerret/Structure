@@ -8,7 +8,6 @@ import "./structure.js";
 import "./ui.js";
 import "./stt_element.js";
 import "./form_element.js";
-import "./list_element.js";
 import "./mouse_click.js";
 
 import "./STT/_MetaSTT.js";

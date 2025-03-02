@@ -30,21 +30,24 @@ class EditingSTT extends MetaSTT {
     this.metaStt  = metaStt
     this.built    = false
     this.prepared = false
+    this._elements  = null
   }
+
+  get id(){'Editing'}
 
   prepare(){
     this.constructor.prepare()
-    this.prepared = true;
+    this.prepared = true
+    this.built    = false
   }
 
   build(){
     this.constructor.eraseListing()
     var index = 0;
-    this.sortedElements.forEach(belt => {
-      // const belt = elt.belement;
-      belt.index = index ++;
-      belt.build()
-      this.constructor.listing.appendChild(belt.obj)
+    this.sortedElements.forEach(elt => {
+      elt.index = index ++;
+      elt.build()
+      this.constructor.listing.appendChild(elt.obj)
     })
     this.built = true
   }
@@ -60,6 +63,7 @@ class EditingSTT extends MetaSTT {
   }
   afterSave(callback){
     this.saving = false
+    console.info("callback", callback)
     this.metaStt.resetAll()
     callback && callback()
   }
@@ -92,7 +96,9 @@ class EditingSTT extends MetaSTT {
   }
 
   updateIndexElements(){
-    for(var i = 0, len = this.belements.length; i < len; ++i) { this.belements[i].index = i }
+    for(var i = 0, len = this.elements.length; i < len; ++i) { 
+      this.elements[i].index = i 
+    }
   }
 
   /**
@@ -103,17 +109,14 @@ class EditingSTT extends MetaSTT {
   }
   sortElement(a, b){return (a.realTime < b.realTime) ? -1 : 0}
 
-  get elements(){
-    if ( undefined == this._elements ) {
-      this._elements = this.metaStt.elements.map(elt => {
-        // elt.belement = new EditingSTTElement(elt.data, this)
-        // return elt
-        return new EditingSTTElement(elt.data, this)
-      })
-    } return this._elements;
+  get elements(){return this._elements || (this._elements = this.defineElements())}
+  defineElements(){
+    return this.metaStt.elements.map(elt => {
+      return new EditingSTTElement(elt.data, this)
+    })
   }
   // Pour redonner la liste des éléments à la métastructure
-  set elements(elts){this.metaStt.elements = elts}
+  // set elements(elts){this.metaStt.elements = elts}
 
   /**
    * Fonction qui boucle dans le listing pour récupérer tous les éléments

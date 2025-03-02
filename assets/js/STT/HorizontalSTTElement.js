@@ -5,10 +5,9 @@ class HorizontalSTTElement extends MetaSTTElement {
 
   // ======== I N S T A N C E ==========
 
-  constructor(metaElt, parent){
-    super(metaElt.data)
-    this.metaElt = metaElt;
-    this.parent  = parent ; // HorizontalSTT
+  constructor(data, stt){
+    super(data)
+    this.parent  = stt ; // HorizontalSTT
   }
 
   get domId(){return this._domid || (this._domid = `${this.parent.constructor.classname}-elt-${this.id}`)}

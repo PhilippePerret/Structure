@@ -103,7 +103,10 @@ class TimeCalc {
    * Transforme des secondes en pixels en fonction de la durée du
    * film et de la largeur de la structure
    */
-  static secondsToPixels(s){return s * this.coef_h2p}
+  static secondsToPixels(s){
+    // console.info("Pixels pour %s secondes (coef=%s): ", s, this.coef_h2p, s * this.coef_h2p)
+    return s * this.coef_h2p
+  }
   /**
    * Fonction qui transforme l'horloge +horloge+ en pixel (left)
    */

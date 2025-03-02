@@ -48,8 +48,10 @@ class UI {
    */
   static calcCoefSeconds2Pixels(){
     const filmDuree = TimeCalc.h2s(DGet('input#film-duree').value)
+    console.info("Durée film", filmDuree)
     const gabarit = DGet('div#stt-horizontalstt div#gabarit')
-    const filmWidth = gabarit.getBoundingClientRect().width
+    const filmWidth = gabarit.getBoundingClientRect().width || window.innerWidth
+    console.info("Largeur gabarit film", filmWidth)
     return parseInt((filmWidth / filmDuree) * 1000) / 1000
   }
 

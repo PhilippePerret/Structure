@@ -18,16 +18,31 @@ class VerticalSTT extends MetaSTT {
     this.metaStt = metaStt;
     this.built    = false
     this.prepared = false
+    this._elements  = null
   }
+
+  get id(){'Vertical'}
 
   prepare(){
     this.constructor.prepare()
     this.prepared = true
+    this.built    = false
   }
 
   build(){
-    console.info("Construire la structure VERTICALE avec les éléments", this.elements)
+    this.elements.forEach(elt => {
+      elt.build()
+      this.constructor.listing.appendChild(elt.obj)
+    })
     this.built = true
+  }
+
+
+  get elements(){return this._elements || (this._elements = this.defineElements())}
+  defineElements(){
+    return this.metaStt.elements.map(elt => {
+      return new VerticalSTTElement(elt.data, this)
+    })
   }
 
 }

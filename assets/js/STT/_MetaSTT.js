@@ -118,6 +118,7 @@ class MetaSTT {
     if ( this.dispositions.Editing.modified && !this.dispositions.Editing.saving) {
       return this.dispositions.Editing.saveAndContinue(callback)
     }
+    console.info("Enregistrement des informations", this.data)
     ServerTalk.dial({
         route: "/structure/save"
       , data:  {structure: this.data}
@@ -138,8 +139,13 @@ class MetaSTT {
    * C'est nécessaire par exemple quand on vient de procéder à l'enregistrement de nouveaux éléments.
    * 
    */
-  resetAll(){
-    console.log("Je dois apprendre à tout initialiser.")
+  resetAll(options = {}){
+    options.except || Object.assign(options, {except: null})
+
+    Object.values(this.dispositions).forEach(dispo => {
+      if ( dispo.id == options.except ) return ;
+      dispo.prepared = false
+    })
   }
 
   /**
@@ -149,12 +155,13 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerStructure(disposition){
-    // console.info("-> Activer structure '%s'", disposition)
+    console.info("-> Activer structure '%s'", disposition)
     // console.info("Structure actuelle", this.current_dispo)
     if ( this.current_dispo == 'Editing' && this.modified ) {
       // console.info("La structure a été modifiée, je dois l'enregistrer avant de passer à une vision différente.")
-      this.dispositions.Editing.saveAndContinue(this.activerStructure.bind(this))
-      return
+      // On indique tout de suite que les autres structures doivent être actualisées
+      this.resetAll({except: 'Editing'})
+      return this.dispositions.Editing.saveAndContinue(this.activerStructure.bind(this, disposition))
     }
     Object.keys(this.dispositions).forEach(keyDispo => {
       const dispo = this.dispositions[keyDispo]
@@ -227,6 +234,8 @@ class MetaSTT {
   /**
    * Fonction générale qui relève les données actuelles de la 
    * structure avant sauvegarde
+   * 
+   * @return {Boolean} True si OK, false dans le cas contraire.
    */
   getData(){
     try {

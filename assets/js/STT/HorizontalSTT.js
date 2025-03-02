@@ -30,9 +30,13 @@ class HorizontalSTT extends MetaSTT {
     this.prepared = false
   }
 
+  get id(){'Horizontal'}
+
   prepare(){
     this.constructor.prepare()
-    this.prepared = true
+    this.prepared   = true
+    this.built      = false
+    this._elements  = null
   }
 
   /**
@@ -43,15 +47,19 @@ class HorizontalSTT extends MetaSTT {
    */
   build(){
     console.info("Construire la structure horizontale avec les éléments", this.elements)
-    this.belements.forEach(belement => { belement.build() })
+    this.elements.forEach(element => { element.build() })
     
     this.built = true
   }
 
-  get elements(){return this.metaStt.elements}
-  get belements(){
-    return this._belements || (this._belements = this.elements.map(elt => {return new HorizontalSTTElement(elt, this)}));
+  get elements(){return this._elements || (this._elements = this.defineElements())}
+  defineElements(){
+    return this.metaStt.elements.map(elt => {
+      return new HorizontalSTTElement(elt.data, this)
+    })
   }
+  // Pour redonner la liste des éléments à la métastructure
+  // set elements(elts){this.metaStt.elements = elts}
   
 }
 

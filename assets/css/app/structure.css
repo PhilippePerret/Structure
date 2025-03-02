@@ -92,6 +92,22 @@ scene.not-biais {
 }
 scene.biais:before {top: -4px;}
 
+/* Pour la structure verticale */
+
+div.stt-element.vertical {
+  display:block;
+  position:relative;
+  padding-left:1em;
+  margin-left:2em;
+}
+div.stt-element.vertical div.left-band {
+  display:block;
+  position:absolute;
+  width: 12px;
+  top:0;
+  left:0;
+}
+
 /* === SÉQUENCES === */
 
 seq {

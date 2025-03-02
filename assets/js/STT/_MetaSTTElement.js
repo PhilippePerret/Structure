@@ -39,6 +39,9 @@ class MetaSTTElement {
   get realTime(){return this._realtime || (this._realtime = TimeCalc.h2s(this.time))}
   get realDuree(){return this._realduree || (this._realduree = TimeCalc.h2s(this.duree))}
   get TYPE(){return this._typemaj || (this._typemaj = this.type.toUpperCase())}
+  get colorData(){return Color.get(this.color)}
+  get fgColor(){return this.colorData.fg}
+  get bgColor(){return this.colorData.bg}
 
   /**
    * Forcer la réactualisation des données après un changement.
@@ -74,14 +77,9 @@ class MetaSTTElement {
    * Propriété : couleur qui ne sera jamais blanche
    */
   get safeBackgroundColor(){
-    let bg = this.colorData().bg;
+    let bg = this.bgColor;
     if ( !bg || bg == "white" || bg == "#FFFFFF" ) {bg = "black"}
     return bg
-  }
-
-  colorData(colorId){ 
-    colorId = colorId || this.color
-    return Color.get(colorId, 'normal')
   }
 }
 

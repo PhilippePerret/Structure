@@ -34,10 +34,6 @@ class MetaSTT {
     ;[
       this.fieldName, this.fieldPath
     ].forEach(field => {field.value = ""})
-    // Les containeurs
-    ;[
-      HorizontalSTT.listing, VerticalSTT.listing, EditingSTT.listing
-    ].forEach(field => {field.innerHTML = ""})
   }
 
   /**
@@ -65,6 +61,9 @@ class MetaSTT {
     this.relPath = relPath
   }
 
+  // Surclassée par classes filles
+  prepare(){}
+
   /**
    * Chargement de la méta-structure courante
    */
@@ -91,9 +90,7 @@ class MetaSTT {
     console.info("Table des éléments", this.table_elements)
     // On reset tous les panneaux de structure
     this.constructor.reset()
-    // Construction des trois structures
-    // Non, pour le moment, on va en restere à la structure affichée
-    // dernièrement.
+    // On ne construit que la structure à afficher
     this.activerStructure(this.data.preferences.disposition || 'Horizontal')
     // Application des préférences
     Preferences.apply(this, this.data.preferences)
@@ -122,6 +119,7 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerStructure(disposition){
+    // console.info("-> Activer structure '%s'", disposition)
     Object.keys(this.dispositions).forEach(keyDispo => {
       const dispo = this.dispositions[keyDispo]
       if ( disposition == keyDispo ) {
@@ -132,17 +130,28 @@ class MetaSTT {
         dispo.hide()
       }
     })
-    this.current_dispo = this.dispositions[disposition];
-    this.current_dispo.built || this.current_dispo.build()
+    const curdispo = this.current_dispo = this.dispositions[disposition];
+    
+    curdispo.prepared || curdispo.prepare()
+    curdispo.built    || curdispo.build()
+
+    this.setButtonDisposition(disposition)
+  }
+
+  setButtonDisposition(dispo){
+    ;['H','V','E'].forEach(suffix => {
+      const bouton = DGet(`button#btn-dispo-${suffix}`);
+      bouton.classList[suffix == dispo.substring(0,1)?'add':'remove']('actif')
+    })
   }
 
   show(){this.obj.classList.remove('hidden')}
   hide(){this.obj.classList.add('hidden')}
 
   get dispositions(){
-    return this._dispositions || (this._dispositions = this.setDispositions())
+    return this._dispositions || (this._dispositions = this.initDispositions())
   }
-  setDispositions(){
+  initDispositions(){
     return {
         'Horizontal': new HorizontalSTT(this)
       , 'Vertical':   new VerticalSTT(this)
@@ -150,12 +159,6 @@ class MetaSTT {
     }
   }
 
-  setDisposition(dispo, boutonDispo){
-    ;(this.currentDispoButton || DGet('button#btn-dispo-H')).classList.remove('actif')
-    this.currentDispoButton = boutonDispo
-    boutonDispo.classList.add('actif')
-    console.log("Je dois apprendre à afficher la dispo ", dispo)
-  }
 
   /**
    * Ajouter l'élément structure +sttE+ dans l'affichage de la 

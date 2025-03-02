@@ -33,6 +33,7 @@ class Color {
   }
 
   static buildColorMenus(container){
+    container || raise(`Container introuvable…`)
     COLOR_LIST.forEach( dcolor => {
       const {id, bg, fg} = dcolor
       const opt = DCreate('OPTION', {value: id, text: id})

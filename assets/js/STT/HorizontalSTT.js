@@ -7,6 +7,10 @@ class HorizontalSTT extends MetaSTT {
     return this._current || (this._current = new HorizontalSTT(MetaSTT.current) )
   }
 
+  static prepare(){
+    this.listing.innerHTML = ""
+  }
+
   static onDoubleClickOnListing(ev){
     const click = new MouseClick(ev)
     console.info("Je dois apprendre à gérer le double click sur le listing horizontal (création d'un nouvel élément).", click, click.time, click.duree)
@@ -22,7 +26,13 @@ class HorizontalSTT extends MetaSTT {
   constructor(metaStt){
     super()
     this.metaStt = metaStt
-    this.built = false
+    this.built    = false
+    this.prepared = false
+  }
+
+  prepare(){
+    this.constructor.prepare()
+    this.prepared = true
   }
 
   /**

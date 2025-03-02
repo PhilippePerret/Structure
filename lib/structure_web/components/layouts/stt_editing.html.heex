@@ -1,37 +1,26 @@
 <div id="stt-editingstt" data-actif="false" class="hidden">
-  <h2>Listing éditable des éléments</h2>
-  
+  <div class="stt-header">
+    <h2>Structure éditable</h2>
+  </div>
   <div id="stt-editingstt-listing">
 
-      <div class="list-element" data-id="">
+      <!-- Élément par défaut qui va être cloné -->
+
+      <div class="sttediting-element" data-id="">
 
         <input type="hidden" class="elt-id" />
-        
         <input type="text" class="elt-time horloge">
         <input type="text" class="elt-duree horloge">
-      
         <.select_type id={nil} class={"elt-type"} />
         <.select_ideality id={nil} class={"elt-ideality"} />
-      
         <input type="text" class="elt-pitch" style="width:500px;">
         <select class="elt-color"></select>
         <input type="text" class="elt-tension" style="width:100px;">
-
         <span class="boutons">
-          <button class="btn-add">＋</button>
-          <button class="btn-del">🗑️</button>
+          <button class="btn-add" title="Ajouter avant">＋</button>
+          <button class="btn-del" title="Supprimer l'élément">🗑️</button>
         </span>
-      
       </div>
 
   </div>
-
-  <div class="buttons">
-    <button class="btn btn-cancel fleft" onclick="ListElement.toggle()">Annuler</button>
-    <button class="btn btn-reset" onclick="ListElement.reset()" disabled>Reset</button>
-    <button class="btn btn-save" onclick="ListElement.save()">Enregistrer</button>
-    <button class="btn btn-build" onclick="ListElement.buildStructure.call(ListElement)">Construire</button>  
-  </div>
-
-
 </div>

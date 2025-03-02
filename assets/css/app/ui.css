@@ -9,7 +9,7 @@ body * {
 header {
   position:fixed;
   top:0; left:0; width: 100%;
-  height: auto;
+  height: var(--header-height);
   background-color:#555555;
   color: white;
   z-index:500;

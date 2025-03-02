@@ -3,9 +3,9 @@
 
     <fieldset id="fs-choix-disposition">
       <legend>Structure…</legend>
-      <button class="btn small actif" id="btn-dispo-H" onclick="MetaSTT.current.setDisposition('Horizontal', this)">horizontale</button>
-      <button class="btn small" onclick="MetaSTT.current.setDisposition('Vertical', this)">verticale</button>
-      <button class="btn small" onclick="MetaSTT.current.setDisposition('Editing', this)">éditable</button>
+      <button class="btn small actif" id="btn-dispo-H" onclick="MetaSTT.current.activerStructure('Horizontal', this)">horizontale</button>
+      <button class="btn small" id="btn-dispo-V" onclick="MetaSTT.current.activerStructure('Vertical', this)">verticale</button>
+      <button class="btn small" id="btn-dispo-E" onclick="MetaSTT.current.activerStructure('Editing', this)">éditable</button>
     </fieldset>
 
     <button class="btn" onclick="Structure.reset()" style="margin-right:4em;">Reset All</button>

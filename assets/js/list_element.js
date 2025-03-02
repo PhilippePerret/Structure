@@ -1,9 +1,5 @@
 'use strict';
 
-const ELEMENT_PROPERTIES = ['id', 'time','duree','type','ideality','pitch','color','tension'];
-const DEFAULT_VALUES = {
-  id: "", time: "", duree: "2:00", type: "scene", ideality: "none", pitch: "", color: "normal", tension: ""
-}
 
 /**
  * Pour la gestion de la "feuille de scènes", le panneau qui présente
@@ -20,9 +16,6 @@ class ListElement {
 
   static prepare(){
     // Le menu couleur
-    Color.buildColorMenus(DGet('div.list-element select.elt-color'))
-    // On clone toujours la première ligne
-    this.CLONE_ELEMENT = DGet('div.list-element', this.obj).cloneNode(true);
   }
 
   // Pour afficher ou masquer la liste des éléments

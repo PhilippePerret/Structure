@@ -1,7 +1,4 @@
-:root {
-  --max-width: 3000px;
-  --min-height: 800px;
-}
+
 div#structure {
   position: fixed;
   width: var(--max-width);
@@ -45,11 +42,15 @@ div#stt-verticalstt {
   position: fixed;
   width: var(--max-width);
   min-height: var(--min-height);
-  top:0;
+  top:var(--header-height);
   left:0;
 }
 div#stt-horizontalstt {
   background-color: #F4F4FF;
+}
+div#stt-editingstt {
+  background-color: #FAFFFA;
+  left: 2em;
 }
 /* 
   === Scènes ===

@@ -1,11 +1,8 @@
 'use strict';
-
-
 /**
  * Gestion de l'édition d'un élément de structure
  */
 class SttElement {
-
 
   /**
    * Foncton appelée par le bouton "Enregistrer" du formulaire
@@ -43,7 +40,6 @@ class SttElement {
     this.editBinding = this.edit.bind(this)
   }
 
-
   setClass(dClass) {
     dClass = dClass || this.data.stype;
     var css; 
@@ -59,9 +55,6 @@ class SttElement {
     this.obj.style.backgroundColor = bg;
     this.obj.style.color = fg;
   }
-
-
 }
-
 
 window.SttElement = SttElement;

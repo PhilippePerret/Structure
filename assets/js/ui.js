@@ -45,6 +45,14 @@ class UI {
     const filmWidth = gabarit.getBoundingClientRect().width
     return parseInt((filmWidth / filmDuree) * 1000) / 1000
   }
+
+
+  static get footerHeight(){
+    return DGet('footer').offsetHeight
+  }
+  static get headerHeight(){
+    return DGet('header').offsetHeight
+  }
 }
 
 window.UI = UI;

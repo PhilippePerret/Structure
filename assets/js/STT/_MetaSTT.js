@@ -62,6 +62,14 @@ class MetaSTT {
   constructor(relPath){
     this.relPath = relPath
   }
+  
+  setModified(modified = true){
+    UI.setModified(modified)
+    if ( modified ) {
+      console.info("Parent marqué modifié")
+    } else {
+    }
+  }
 
   // Surclassée par classes filles
   prepare(){}

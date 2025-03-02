@@ -35,6 +35,11 @@ class UI {
 
   }
 
+  static setModified(modified = true) {
+    this.mLight.classList[modified?'add':'remove']('on')
+  }
+  static get mLight(){return this._mlight || (this._mlight = DGet('div#mod-light'))}
+
   /**
    * Fonction qui calcul le coefficiant multiplication pour passer des 
    * secondes aux pixels

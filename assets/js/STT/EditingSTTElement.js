@@ -82,6 +82,7 @@ class EditingSTTElement extends MetaSTTElement {
     this.btnDel.addEventListener('click', this.onWantToDelete.bind(this))
     this.field('time').addEventListener('blur', this.onChangeTime.bind(this, 'time'))
     this.field('duree').addEventListener('blur', this.onChangeTime.bind(this, 'duree'))
+    // Déclencheur de changement pour tous les champs d'édition
     DGetAll('input,select, textarea', this.obj).forEach(field =>{
       field.addEventListener('change', this.onChangeValue.bind(this))
     })
@@ -97,7 +98,7 @@ class EditingSTTElement extends MetaSTTElement {
    * textarea
    */
   onChangeValue(ev){
-    ListElement.enableAll()
+    this.parent.setModified()
   }
 
   onChangeTime(prop, ev){

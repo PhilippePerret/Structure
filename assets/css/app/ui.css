@@ -49,6 +49,24 @@ footer {
   z-index: 500;
 }
 
+div#mod-light {
+  position: absolute;
+  top: 10px; 
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+}
+div#mod-light:not(.on) {
+  background-color: grey;
+}
+div#mod-light.on {
+  background: radial-gradient(circle at 70% 29%, white, red, darkmagenta);
+  border-color: rgb(204, 11, 11);
+}
+
 /* Pour footer et header */
 div.content {
   padding: 12px 1em;

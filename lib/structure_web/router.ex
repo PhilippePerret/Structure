@@ -19,6 +19,12 @@ defmodule SttWeb.Router do
     post "/load", StructureController, :load
     post "/save", StructureController, :save
   end
+  
+  scope "/app", SttWeb do
+    pipe_through :browser
+    post "/save_state", AppController, :save_state
+    post "/get_state", AppController, :get
+  end
 
   scope "/", SttWeb do
     pipe_through :browser

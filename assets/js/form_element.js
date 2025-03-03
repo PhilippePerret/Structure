@@ -49,7 +49,9 @@ class FormElement {
    * Fonction pour actualiser l'élément
    */
   static updateElement(data){
-    const element = MetaSTT.current.getElement(data.id)
+    console.info("MetaSTT.current_dispo", MetaSTT.current_dispo)
+    console.info("MetaSTT.current", MetaSTT.current)
+    const element = MetaSTT.current.disposition.getElement(data.id)
     console.info("element", element)
     element.update(data)
   }

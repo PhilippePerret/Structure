@@ -50,7 +50,7 @@ class HorizontalSTT extends MetaSTT {
     this.built      = false
     this._elements  = null
   }
-
+  
   /**
    * Construction de cette structure.
    * 

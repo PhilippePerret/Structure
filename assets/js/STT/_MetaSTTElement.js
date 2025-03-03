@@ -18,7 +18,6 @@ class MetaSTTElement {
 
   constructor(data){
     this.data = data || {}
-    this.editBinding = this.edit.bind(this)
   }
 
   /**
@@ -48,32 +47,10 @@ class MetaSTTElement {
    * Forcer la réactualisation des données après un changement.
    */
   reset(){
+    this.built = false
     delete this._realtime
     delete this._realduree
     delete this._typemaj
-  }
-
-  /**
-   * Fonction pour éditer l'élément (seulement utile pour les
-   * structure verticales et horizontales). l'édition se fait
-   * dans le formulaire flottant
-   */
-  edit(ev){
-    // TODO Placer le formulaire près de la souris
-    const mclick = new MouseClick(ev)
-    FormElement.show(mclick)
-    FormElement.setData(this)
-  }
-
-  /**
-   * Fonction pour actualiser l'élément à partir des données
-   * transmises
-   */
-  update(newData){
-    Object.assign(this.data, newData)
-    this.reset()
-    // TODO apprendre à actualiser l'affichage de l'élément
-    console.error("Il faut apprendre à actualiser l'affichage de l'élément")
   }
 
 }

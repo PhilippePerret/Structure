@@ -30,6 +30,14 @@ class MetaSTT {
     }
   }
 
+  static load(){
+    this.init()
+  }
+
+  static resetAll(){
+    Flash.error("Pour le moment, la réinitialisation générale ne fonctionne pas.<br/>Pour créer une nouvelle structure, créer le fichier dans le dossier 'structure'.")
+  }
+
   /**
    * Pour tout ressetter par exemple avant le chargement d'une autre
    * structure ou la création d'une nouvelle.
@@ -185,6 +193,7 @@ class MetaSTT {
     })
     this.current_dispo = String(disposition);
     const curdispo = this.dispositions[disposition]
+    this.disposition = curdispo
 
     TimeCalc.resetCoef()
     
@@ -229,7 +238,11 @@ class MetaSTT {
    * Fonction retournant l'élément d'identifiant +id+
    */
   getElement(id){
-    return this.table_elements[id]
+    if ( this.table_elements ) {
+      return this.table_elements[id]
+    } else {
+      return super.getElement(id)
+    }
   }
   /**
    * Fonction appelée pour ajouter l'élément

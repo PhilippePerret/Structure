@@ -8,6 +8,7 @@ class HorizontalSTTElement extends MetaSTTElement {
   constructor(data, stt){
     super(data)
     this.parent  = stt ; // HorizontalSTT
+    this.editBinding = this.edit.bind(this)
   }
 
   get domId(){return this._domid || (this._domid = `${this.parent.constructor.classname}-elt-${this.id}`)}
@@ -23,6 +24,35 @@ class HorizontalSTTElement extends MetaSTTElement {
     this.dimEtPositionne()
     this.observe()
 
+  }
+
+  /**
+   * Fonction pour éditer l'élément (seulement utile pour les
+   * structure verticales et horizontales). l'édition se fait
+   * dans le formulaire flottant
+   */
+  edit(ev){
+    Flash.error("Pour le moment, l'édition de cette manière ne fonctionne pas.utiliser la version “editing” de la structure.")
+    ev.stopPropagation()
+    return false
+    const mclick = new MouseClick(ev)
+    FormElement.show(mclick)
+    FormElement.setData(this)
+    return false
+  }
+
+  update(newData){
+    console.log("-> update de l'horizontal")
+    // super.update(newData)
+    Object.assign(this.data, newData)
+    setTimeout(this.rebuild.bind(this), 2000)
+  }
+
+  rebuild(){
+    console.log("-> rebuild de l'horizontal")
+    this.reset()
+    this.obj.remove()
+    this.build()
   }
 
   dimEtPositionne(){

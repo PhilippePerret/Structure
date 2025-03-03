@@ -1,10 +1,7 @@
 <div id="tags-window" class="hidden">
   <div class="header">
     <h2>Tags</h2>
-    <div style="margin-bottom:1em;">
-      <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
-      <input id="tag-filter" type="text" style="width:300px;" />
-    </div>
+    <.filtre id={"tag-filter"} />
   </div>
   <div class="labels">
     <label class="name">Nom</label>
@@ -16,8 +13,8 @@
     <div id="tag-1" class="tag" data-index="1">
       <input type="text" class="name tag-name" />
       <input type="text" class="color background tag-background" placeholder="Fond" />
-      <input type="text" class="tag-color color tag-foreground" placeholder="Texte" />
-      <input type="text" class="method tag-method prop" placeholder="" />
+      <input type="text" class="color tag-foreground" placeholder="Texte" />
+      <input type="text" class="method tag-method" placeholder="" />
       <span class="buttons">
         <button class="tiny btn-del">🗑️</button>
       </span>

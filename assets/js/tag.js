@@ -35,10 +35,11 @@ class Tag {
   static save(){
     Flash.notice("Enregistrement des tags…")
     MetaSTT.current.setTags(this.getTagData())
+    this.hide()
   }
 
   static getTagData(){
-    this.tags.map(tag => {return tag.getData()})
+    return this.tags.map(tag => {return tag.getData()})
   }
 
   static addTag(data){
@@ -102,14 +103,16 @@ class Tag {
    */
   getData(){
     const data = {};
-    Object.keys(TAG_PROPERTIES).forEach(prop => {Object.assign(data, {[prop]: this[prop]})})
+    Object.keys(TAG_PROPERTIES).forEach(prop => {
+      Object.assign(data, {[prop]: this[prop]})
+    })
     return data
   }
 
   build(){
     this.obj.id = `tag-${this.index}`
     Object.keys(TAG_PROPERTIES).forEach(prop => {
-      DGet(`.${prop}`, this.obj).value = this.data[prop] || TAG_PROPERTIES[prop].default
+      this[prop] = this.data[prop] || TAG_PROPERTIES[prop].default
     })
     this.constructor.listing.appendChild(this.obj)
     this.observe()
@@ -135,21 +138,21 @@ class Tag {
   set display(value){this.obj.style.display = value ? 'block' : 'none'}
 
   get id(){return this._id || (this._id = `tag-${this.index}`)}
-  get name(){return this.nameField.value}
+  get name(){return NullIfEmpty(this.nameField.value)}
   set name(v){return this.nameField.value = v}
-  get color(){return this.colorField.value}
+  get color(){return NullIfEmpty(this.colorField.value)}
   set color(v){return this.colorField.value = v}
-  get background(){return this.backgroundField.value}
+  get background(){return NullIfEmpty(this.backgroundField.value)}
   set background(v){return this.backgroundField.value = v}
-  get method(){return this.methodField.value}
+  get method(){return NullIfEmpty(this.methodField.value)}
   set method(v){return this.methodField.value = v}
   
   get index(){return this.data.index || this.obj.dataset.index}
 
   get nameField(){return this._namef || (this._namef = DGet('.tag-name', this.obj))}
+  get colorField(){return this._colorf || (this._colorf = DGet('.tag-foreground', this.obj))}
+  get backgroundField(){return this._bckgf || (this._bckgf = DGet('.tag-background', this.obj))}
   get methodField(){return this._methodf || (this._methodf = DGet('.tag-method', this.obj))}
-  get colorField(){return this._colorf || (this._colorf = DGet('.tag-color'), this.obj)}
-  get backgroundField(){return this._bckgf || (this._bckgf = DGet('.tag-background'), this.obj)}
   get obj(){return this._obj || (this._obj = this.data.obj || DGet(`#tag-${this.index}`))}
 }
 

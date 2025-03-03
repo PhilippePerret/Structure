@@ -23,6 +23,18 @@ defmodule SttWeb.Layouts do
   def form_element(assigns)
 
   attr :id, :string, required: true
+
+  def filtre(assigns) do
+    ~H"""
+    <div class="filter-container" style="margin-bottom:1em;">
+      <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
+      <input id={@id} type="text" style="width:300px;" />
+    </div>
+
+    """
+  end
+
+  attr :id, :string, required: true
   attr :class, :string, required: true
   def select_type(assigns) do
     ~H"""

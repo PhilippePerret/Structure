@@ -45,6 +45,20 @@ class Color {
     })
   }
 
+  /**
+   * Permet de mettre le fond ou la police du champ d'édition de la
+   * couleur définie dans le champ d'édition.
+   * 
+   * @param {DomElement} input L'élément DOM, un input-text définissant une couleur
+   * @param {Boolean} forBackground Si true, on colorise le fond, sinon la police
+   */
+  static onChangeColorIn(input, forBackground = true){
+    const color = input.value;
+    input.value = color;
+    input.style.color = this.isDark(color) ? 'white' : 'black';
+    input.style.backgroundColor = `#${color}`
+  }
+
   static isDark(couleur){
     return this.luminescenceOf(couleur) < SEUIL_DARKNESS ;
   }

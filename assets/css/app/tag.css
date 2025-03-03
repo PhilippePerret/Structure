@@ -1,7 +1,7 @@
 div#tags-window {
   position:fixed;
   top: 300px;
-  left: 300px;
+  right: 300px;
   background-color: #FEFEFF;
   padding: 2em;
   width: 660px;
@@ -30,7 +30,7 @@ div#tags-window .method { width: 200px!important }
 
 div#tags-window div.listing {
   border:1px solid #EEEEEE;
-  max-height: 560px;
+  max-height: 510px;
   overflow: scroll;
 }
 div#tags-window div.listing div.tag {

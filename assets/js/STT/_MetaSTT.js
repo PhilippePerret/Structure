@@ -256,6 +256,7 @@ class MetaSTT {
   setInterface(){
     MetaSTT.fieldName.value = this.data.metadata.name;
     MetaSTT.fieldPath.value = this.data.metadata.path;
+    Tag.feeds.call(Tag, this.data.metadata.tags || [])
   }
 
   /**
@@ -288,6 +289,8 @@ class MetaSTT {
     })
     return null ;
   }
+
+  get metadata(){return this.data.metadata}
 
   get obj(){
     return this._obj || (this._obj = DGet(`#stt-${this.constructor.classname}`))

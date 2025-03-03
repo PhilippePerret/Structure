@@ -1,6 +1,10 @@
 <div id="tags-window" class="hidden">
   <div class="header">
     <h2>Tags</h2>
+    <div style="margin-bottom:1em;" class="right">
+      <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
+      <input id="tag-filter" type="text" style="width:200px;" />
+    </div>
   </div>
   <div class="labels">
     <label class="name">Nom</label>
@@ -9,14 +13,17 @@
     <label class="method">Méthode</label>
   </div>
   <div class="listing">
-    <div class="tag">
+    <div id="tag-1" class="tag" data-index="1">
       <input type="text" class="name tag-name" />
       <input type="text" class="color background tag-background" placeholder="Fond" />
       <input type="text" class="tag-color color tag-foreground" placeholder="Texte" />
       <input type="text" class="method tag-method prop" placeholder="Méthode" />
     </div>
   </div>
-  <div class="buttons right">
+  <div class="left" style="margin-top:0.5em;">
+    <button onclick="Tag.addTag.call(Tag)">➕</button>
+  </div>
+  <div class="buttons">
     <button onclick="Tag.toggle()" class="fleft">Annuler</button>
     <button onclick="Tag.save()">Enregistrer</button>
   </div>

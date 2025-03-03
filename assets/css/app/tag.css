@@ -14,7 +14,7 @@ div#tags-window div.labels {
 }
 div#tags-window div.buttons {
   position:absolute;
-  left:0;
+  right:2em;
   bottom:2em;
 }
 
@@ -23,10 +23,10 @@ div#tags-window label {
   padding-left: 12px; 
   padding-right: 12px; 
 }
-div#tags-window .name { width: 200px!important }
+div#tags-window .name { width: 180px!important }
 div#tags-window .background,
-div#tags-window .tag-color { width: 60px!important }
-div#tags-window .method { width: 200px!important }
+div#tags-window .tag-color { width: 80px!important }
+div#tags-window .method { width: 160px!important }
 
 div#tags-window div.listing {
   border:1px solid #EEEEEE;

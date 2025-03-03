@@ -42,6 +42,12 @@ class Tag {
     this.tags.push(newTag)
     Object.assign(this.table, {[newTag.id]: newTag})
   }
+  static onRemoveTag(tag, ev){
+    tag.obj.remove()
+    delete this.table[tag.id]
+    this.tags = this.tags.filter(t => {t.id != tag.id})
+  }
+
   static observe(){
     this.filterField.addEventListener('input', this.onChangeFilter.bind(this))
   }
@@ -95,9 +101,10 @@ class Tag {
     DGetAll('input.color', this.obj).forEach(input => {
       input.addEventListener('change', function(ev){
         input.value = input.value.toUpperCase();
-        Color.onChangeColorIn.bind(Color, input)
+        Color.onChangeColorIn.call(Color, input)
       })
     })
+    DGet('.btn-del', this.obj).addEventListener('click', Tag.onRemoveTag.bind(Tag, this))
   }
 
   /**

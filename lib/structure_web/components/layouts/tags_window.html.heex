@@ -1,23 +1,26 @@
 <div id="tags-window" class="hidden">
   <div class="header">
     <h2>Tags</h2>
-    <div style="margin-bottom:1em;" class="right">
+    <div style="margin-bottom:1em;">
       <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
-      <input id="tag-filter" type="text" style="width:200px;" />
+      <input id="tag-filter" type="text" style="width:300px;" />
     </div>
   </div>
   <div class="labels">
     <label class="name">Nom</label>
     <label class="background">Couleur fond</label>
     <label class="tag-color">Couleur texte</label>
-    <label class="method">Méthode</label>
+    <label class="method" title="Une méthode JavaScript à appeler lorsqu'un élément est marqué de ce tag.">Méthode</label>
   </div>
   <div class="listing">
     <div id="tag-1" class="tag" data-index="1">
       <input type="text" class="name tag-name" />
       <input type="text" class="color background tag-background" placeholder="Fond" />
       <input type="text" class="tag-color color tag-foreground" placeholder="Texte" />
-      <input type="text" class="method tag-method prop" placeholder="Méthode" />
+      <input type="text" class="method tag-method prop" placeholder="" />
+      <span class="buttons">
+        <button class="tiny btn-del">🗑️</button>
+      </span>
     </div>
   </div>
   <div class="left" style="margin-top:0.5em;">

@@ -29,8 +29,16 @@ class Tag {
     dataTags.forEach(dataTag => this.addTag(dataTag))
   }
 
+  /**
+   * Pour enregistrer les tags de la structure
+   */
+  static save(){
+    Flash.notice("Enregistrement des tags…")
+    MetaSTT.current.setTags(this.getTagData())
+  }
+
   static getTagData(){
-    this.tags
+    this.tags.map(tag => {return tag.getData()})
   }
 
   static addTag(data){
@@ -87,6 +95,15 @@ class Tag {
   constructor(data){
     data.index || data.obj || raise("Il faut fournir soit l'index soit l'objet…")
     this.data = data;
+  }
+
+  /**
+   * Retourne les données du tags, prises dans les champs
+   */
+  getData(){
+    const data = {};
+    Object.keys(TAG_PROPERTIES).forEach(prop => {Object.assign(data, {[prop]: this[prop]})})
+    return data
   }
 
   build(){

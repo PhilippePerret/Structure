@@ -74,6 +74,11 @@ class MetaSTT {
     this.modified = modified
   }
 
+  setTags(dataTags){
+    this.data.metadata.tags = dataTags
+    this.setModified()
+  }
+
   // Surclassée par classes filles
   prepare(){}
 

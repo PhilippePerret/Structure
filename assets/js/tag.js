@@ -85,8 +85,30 @@ class Tag {
   }
   static hide(){
     this.obj.classList.add('hidden')
+    this.setCurrentTagField(null)
   }
 
+  /**
+   * Appelée par le bouton "Assigner", cette fonction ajoute tous les
+   * tags cochés au champ courant.
+   * Note : il faut qu'un champ soit sélectionné pour pouvoir utili-
+   * ser ce bouton.
+   */
+  static assign(){
+    if ( !this.currentTagField ) raise("Il faut se trouver dans un champ de tag, pour pouvoir utiliser cette fonction.");
+    else {
+      const tagNames = this.tags.filter(tag => {return tag.checked}).map(tag => {return tag.name})
+      this.currentTagField.value = this.currentTagField.value + " " + tagNames.join(", ")
+      MetaSTT.current.setModified()
+    }
+  }
+
+  static setCurrentTagField(tagField){
+    this.assignButton.disabled = tagField === null
+    this.currentTagField = tagField
+  }
+
+  static get assignButton(){return this._assignbtn || (this._assignbtn = DGet('.btn-assign', this.obj))}
   static get filterField(){return this._filterfield || (this._filterfield = DGet('input#tag-filter', this.obj))}
   static get listing(){return this._listing||(this._listing = DGet('div.listing', this.obj))}
   static get obj(){return this._obj || (this._obj = DGet('div#tags-window'))}
@@ -127,6 +149,11 @@ class Tag {
     DGet('.btn-del', this.obj).addEventListener('click', Tag.onRemoveTag.bind(Tag, this))
   }
 
+  /** 
+   * @return True si le tag est coché
+   */
+  get checked(){return this.checkboxField.checked == true}
+
   /**
    * Retourne true si le tag contient le pattern
    */
@@ -149,6 +176,7 @@ class Tag {
   
   get index(){return this.data.index || this.obj.dataset.index}
 
+  get checkboxField(){return this._cbfield || (this._cbfield = DGet('input[type="checkbox"]', this.obj))}
   get nameField(){return this._namef || (this._namef = DGet('.tag-name', this.obj))}
   get colorField(){return this._colorf || (this._colorf = DGet('.tag-foreground', this.obj))}
   get backgroundField(){return this._bckgf || (this._bckgf = DGet('.tag-background', this.obj))}

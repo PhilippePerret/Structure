@@ -87,6 +87,9 @@ class EditingSTTElement extends MetaSTTElement {
     DGetAll('input,select, textarea', this.obj).forEach(field =>{
       field.addEventListener('change', this.onChangeValue.bind(this))
     })
+    // Pour affecter les tags grâce à la fenêtre
+    const tagsField = this.field('tags')
+    tagsField.addEventListener('focus', ev => {Tag.setCurrentTagField(tagsField)})
   }
 
   /**

@@ -11,6 +11,7 @@
   </div>
   <div class="listing">
     <div id="tag-1" class="tag" data-index="1">
+      <input type="checkbox">
       <input type="text" class="name tag-name" />
       <input type="text" class="color background tag-background" placeholder="Fond" />
       <input type="text" class="color tag-foreground" placeholder="Texte" />
@@ -25,6 +26,7 @@
   </div>
   <div class="buttons">
     <button onclick="Tag.toggle()" class="fleft">Fermer</button>
+    <button class="btn-assign" onclick="Tag.assign()" disabled>Assigner</button>
     <button onclick="Tag.save()">Enregistrer</button>
   </div>
 </div>

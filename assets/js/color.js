@@ -19,8 +19,10 @@ const COLOR_LIST = [
 , {id:  'intrigue B'  , bg:'#555555'   , fg: 'white'}
 , {id:  'intrigue C'  , bg:'#555555'   , fg: 'white'}
 ].map(dcolor => {
-return Object.assign(dcolor, {data: `${dcolor.bg};${dcolor.fg}`})
+  // On ajoute la donnée :data à la table ci-dessus
+  return Object.assign(dcolor, {data: `${dcolor.bg};${dcolor.fg}`})
 })
+
 const COLOR_TABLE = {}
 COLOR_LIST.forEach(dcolor => Object.assign(COLOR_TABLE, {[dcolor.id]: dcolor}))
 
@@ -55,12 +57,16 @@ class Color {
   static onChangeColorIn(input, forBackground = true){
     const color = input.value;
     input.value = color;
-    input.style.color = this.isDark(color) ? 'white' : 'black';
+    input.style.color = this.contreCouleur(color)
     input.style.backgroundColor = `#${color}`
   }
 
   static isDark(couleur){
     return this.luminescenceOf(couleur) < SEUIL_DARKNESS ;
+  }
+
+  static contreCouleur(couleur){
+    return this.isDark(couleur) ? 'white' : 'black'
   }
 
   /**
@@ -77,6 +83,39 @@ class Color {
 
     return L
   }
+
+  // ==== POUR LA PARTIE ÉDITION DES COULEURS =====
+
+  static edit(){
+    this.panelEdition.classList.remove('hidden')
+    this.colorField.value = COLOR_LIST
+      .map(dc => {return `${dc.id}, ${dc.bg}, ${dc.fg}`})
+      .join("\n")
+  }
+  // Enregistrement des couleurs définies
+  static save(){
+    const data = this.colorField
+                  .value.split("\n")
+                  .replace("\r", "")
+                  .filter(line => {return !line.startsWith('#')})
+                  .map(line => {
+                    const s = line.split(/[,;]/)
+                    const bg = s[1]
+                    const fb = s[2] || this.contreCouleur(bg)
+                    return {id: s[0], bg: bg, fg: fg}
+                  })
+    // On affecte les couleurs à la structure courante
+    MetaSTT.current.setColors(data)
+    // On actualise les couleurs courantes
+    // On ferme la fenêtre
+    this.hide()
+  }
+  static hide(){
+    this.panelEdition.classList.add('hidden')
+  }
+
+  static get colorField(){return this._colorfield || (this._colorfield = DGet('textarea#color-editor', this.panelEdition))}
+  static get panelEdition(){return this._paneledit || (this._paneledit = DGet('div#color-edition-panel'))}
 }
 
 window.Color = Color;

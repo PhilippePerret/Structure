@@ -129,3 +129,18 @@ fieldset#fs-choix-disposition button.actif {
   color:white;
   border-color:white;
 }
+
+div#color-edition-panel {
+  width: 420px;
+  position: absolute;
+  right: 4em;
+  bottom: 4em;
+  background-color: white;
+  border: 1px solid grey;
+  padding: 2em;
+}
+div#color-edition-panel textarea {
+  resize: none;
+  height: 300px!important;
+  font-size: 19pt !important;
+}

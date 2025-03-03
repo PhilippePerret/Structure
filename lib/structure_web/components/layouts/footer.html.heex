@@ -1,10 +1,20 @@
 <footer>
 
+  <div id="color-edition-panel" class="hidden">
+    <h2>Édition des couleurs</h2>
+    <textarea id="color-editor"></textarea>
+    <div class="buttons">
+      <button class="btn small fleft" onclick="Color.hide()">Fermer</button>
+      <button class="btn small" onclick="Color.save.call(Color)">Enregistrer</button>
+    </div>
+  </div>
+
   <div class="fright">
 
     <button class="btn small" onclick="MetaSTT.resetAll()" style="margin-right:4em;">Reset All</button>
     
     <button class="btn small" onclick="Tag.toggle()" style="margin-left:1em;">Tags</button>
+    <button class="btn small" onclick="Color.edit.call(Color)" style="margin-left:0.5em;">Couleurs</button>
     
     <fieldset id="fs-choix-disposition" style="margin-left: 4em;margin-right:1em;">
       <legend>Structure…</legend>

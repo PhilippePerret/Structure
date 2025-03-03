@@ -22,6 +22,10 @@ input[type="number"]{
   outline: none;
 }
 
+textarea {
+  outline: none;
+}
+
 /* Checkbox */
 input[type="checkbox"] {
   transform: scale(1.4);

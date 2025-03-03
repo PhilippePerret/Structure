@@ -78,6 +78,11 @@ class MetaSTT {
     this.data.metadata.tags = dataTags
     this.setModified()
   }
+  
+  setColors(dataColors){
+    Object.assign(this.data.preferences, {colors: dataColors})
+    this.setModified()
+  }
 
   // Surclassée par classes filles
   prepare(){}

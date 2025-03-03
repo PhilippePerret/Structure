@@ -119,3 +119,14 @@ seq {
   cursor: pointer;
 }
 seq.meta { top: 460px; }
+
+/* === L I G N E   D E   T E N S I O N === */
+
+div#tension-line {
+  position:fixed;
+  bottom: 415px;
+  width: var(--max-width);
+  height:20px;
+  background-color: black;
+  z-index: 100;
+}

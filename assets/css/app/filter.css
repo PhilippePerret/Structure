@@ -1,0 +1,18 @@
+/* Pour les boites de filtre */
+
+div.filter-form-container {
+  position:fixed;
+  right:4em;
+  bottom:6em;
+  box-shadow: 5px 5px 5px 5px #CCCCCC;
+  width: 680px;
+  height: auto;
+  background-color:white;
+  z-index: 150;
+  padding: 1em;
+}
+
+div.filter-form-container div.filter-tag {
+  display: inline-block;
+  width: 30%;
+}

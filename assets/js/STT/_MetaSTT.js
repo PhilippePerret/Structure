@@ -322,6 +322,7 @@ class MetaSTT {
     return false
   }
 
+  
 
   /**
    * À la création d'un élément, retourne TRUE si le pitch existe
@@ -334,6 +335,9 @@ class MetaSTT {
     return null ;
   }
 
+  get tags(){return this.metadata.tags}
+
+  get filter(){return this._filter || (this._filter = new EFilter(this))}
   get tensionLine(){return this._tensionline || (this._tensionline = new TensionLine(this))}
   get metadata(){return this.data.metadata}
 

@@ -21,10 +21,12 @@ defmodule SttWeb.Layouts do
   
   def tags_window(assigns)
   def form_element(assigns)
+
+  attr :id, :string, required: true
+  attr :stttype, :string
   def filter_form(assigns)
 
   attr :id, :string, required: true
-
   def filtre(assigns) do
     ~H"""
     <div class="filter-container" style="margin-bottom:1em;">

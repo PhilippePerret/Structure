@@ -1,3 +1,20 @@
-<div class="filter-container hidden">
-  [Le filtre]
+<% method = "EFilter.openFilter('#{@stttype}')" %>
+<div class="left">
+  <button onclick={method}>Filtre</button>
+</div>
+<div id={@id} class="filter-form-container hidden">
+
+  <div class="text-filter-container">
+    <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
+    <input class="filter-text" type="text" style="width:300px;" />
+  </div>
+  
+  <div class="filter-tags">
+    <!-- ici seront ajoutés les tags -->
+  </div>
+
+  <div class="buttons">
+    <button class="btn-filter">Filtrer…</button>
+  </div>
+
 </div>

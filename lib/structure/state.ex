@@ -10,12 +10,29 @@ defmodule Stt.State do
     File.write!(@file_path, Jason.encode!(data))
   end
   
-  def get(key) when is_atom(key) do
-    retour = %{ok: true, state: whole_data()[key]}
+  @doc """
+  @return {String} La dernière structure, soit chargée soit sauvée
+  """
+  def get_last_structure do
+    state = whole_data()
+    IO.inspect(state, label: "STATE")
+    case state[:last_op] do
+    :save -> state[:last_saved]
+    :load -> state[:last_load]
+    _ -> "default"
+    end
   end
-  
+
+  @doc """
+  @return {Map} La table des propriétés ou de la propriété state à
+  obtenir.
+  """
+  def get(key) when is_atom(key) do
+    %{ok: true, state: %{key: whole_data()[key]}}
+  end
+  def get(key) when is_binary(key), do: get(String.to_atom(key))
   def get(mapped_keys) when is_map(mapped_keys) do
-    mapped_keys = Map.intersect(whole_data(), mapped_keys)
+    Map.intersect(whole_data(), mapped_keys)
   end
 
   defp whole_data do

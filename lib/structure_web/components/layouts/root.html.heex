@@ -19,8 +19,8 @@
     <header>
       <div class="content">
         <a href={~p"/"}>Structure</a>
-        <input id="structure-name" type="text" value="default" />
-        <input id="structure-path" type="text" value="default" />
+        <input id="structure-name" type="text" value="" />
+        <input id="structure-path" type="text" value={@path} />
         <button class="btn tiny" onclick="MetaSTT.load.call(MetaSTT)">load</button>
       </div>
     </header>

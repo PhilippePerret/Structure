@@ -1,17 +1,20 @@
 'use strict';
 
-window.NullIfEmpty = function(value){
-  if ( value === null || value === undefined ) return null ;
-  return value.trim() === "" ? null : value ;
-}
-
 class FormElement {
 
   static prepare(){
     this.buildMenuColor()
     this.observe()
   }
-  static observe(){}
+  static observe(){
+    // Corriger les temps "en direct"
+    this.fieldTime.addEventListener('change', this.onChangeATime.bind(this, this.fieldTime))
+    this.fieldDuree.addEventListener('change', this.onChangeATime.bind(this, this.fieldDuree))
+  }
+
+  static onChangeATime(field, ev){
+    field.value = TimeCalc.treate(field.value)
+  }
 
   static show(position){
     this.obj.classList.remove('hidden')

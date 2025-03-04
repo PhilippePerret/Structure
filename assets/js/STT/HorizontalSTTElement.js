@@ -32,9 +32,9 @@ class HorizontalSTTElement extends MetaSTTElement {
    * dans le formulaire flottant
    */
   edit(ev){
-    Flash.error("Pour le moment, l'édition de cette manière ne fonctionne pas.utiliser la version “editing” de la structure.")
+    // Flash.error("Pour le moment, l'édition de cette manière ne fonctionne pas.utiliser la version “editing” de la structure.")
     ev.stopPropagation()
-    return false
+    // return false
     const mclick = new MouseClick(ev)
     FormElement.show(mclick)
     FormElement.setData(this)

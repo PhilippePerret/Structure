@@ -32,6 +32,11 @@ window.raise = function(message, errField){
   throw new Error(message)
 }
 
+window.NullIfEmpty = function(value){
+  if ( value === null || value === undefined ) return null ;
+  return value.trim() === "" ? null : value ;
+}
+
 window.isNullish = function(v){
   return v === null || v === undefined ;
 }

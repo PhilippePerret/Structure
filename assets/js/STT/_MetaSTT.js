@@ -35,9 +35,24 @@ class MetaSTT {
   }
 
   static resetAll(){
-    Flash.error("Pour le moment, la réinitialisation générale ne fonctionne pas.<br/>Pour créer une nouvelle structure, créer le fichier dans le dossier 'structure'.")
-  }
+    if (confirm("Voulez-vous vraiment tout effacer ?")){
+      if ( this.current ) {
+        this.eraseElements()
+        this.current.tensionLine.refresh()
+      }
+      this.current = new MetaSTT(this.defaultDataStructure.path)
+      this.current.afterLoad({structure: this.defaultDataStructure, disposition:'Editing'})
+    }
 
+  }
+  static get defaultDataStructure(){
+    return {
+        elements: []
+      , metadata: {name: 'Structure sans nom', path: 'new-structure'}
+      , preferences: {}
+    }
+  }
+  
   /**
    * Pour tout ressetter par exemple avant le chargement d'une autre
    * structure ou la création d'une nouvelle.
@@ -69,6 +84,17 @@ class MetaSTT {
     return this._classname || (this._classname = this.name.toLowerCase())
   }
 
+  /**
+   * Fonction qui retourne true si le pitch +pitch+ existe déjà
+   * 
+   * @param {String} pitch Le pitch à tester
+   */
+  static pitchExists(pitch){
+    for(var elt of this.current.elements) {
+      if ( elt.pitch == pitch ) return true
+    }
+    return false
+  }
 
   // ======== I N S T A N C E ==========
 

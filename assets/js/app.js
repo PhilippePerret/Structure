@@ -7,7 +7,6 @@ import "./tag.js";
 import "./time_calculs.js";
 import "./preferences.js";
 import "./color.js";
-import "./structure.js";
 import "./form_element.js";
 import "./mouse_click.js";
 import "./tension_line.js";

@@ -6,6 +6,7 @@ import "./state.js";
 import "./tag.js";
 import "./time_calculs.js";
 import "./preferences.js";
+import "./filter.js";
 import "./color.js";
 import "./form_element.js";
 import "./mouse_click.js";

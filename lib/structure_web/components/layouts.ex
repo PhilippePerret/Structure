@@ -21,6 +21,7 @@ defmodule SttWeb.Layouts do
   
   def tags_window(assigns)
   def form_element(assigns)
+  def filter_form(assigns)
 
   attr :id, :string, required: true
 

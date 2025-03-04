@@ -35,20 +35,17 @@ class MetaSTT {
   }
 
   static resetAll(){
-    if (confirm("Voulez-vous vraiment tout effacer ?")){
-      if ( this.current ) {
-        this.eraseElements()
-        this.current.tensionLine.refresh()
-      }
-      this.current = new MetaSTT(this.defaultDataStructure.path)
-      this.current.afterLoad({structure: this.defaultDataStructure, disposition:'Editing'})
-    }
-
+    if ( this.current && this.current.modified ) {
+      if ( !confirm("La structure courante n'est pas sauvée. Voulez-vous vraiment tout ré-initialiser ?") ) return false;
+    } else if ( ! confirm("Voulez-vous vraiment tout effacer ?")){ return false }
+    this.current = new MetaSTT(this.defaultDataStructure.path)
+    this.current.afterLoad({structure: this.defaultDataStructure, disposition:'Editing'})
   }
+
   static get defaultDataStructure(){
     return {
-        elements: []
-      , metadata: {name: 'Structure sans nom', path: 'new-structure'}
+        elements: [MetaSTTElement.defaultElement]
+      , metadata: {name: 'Structure sans nom', path: ''}
       , preferences: {}
     }
   }

@@ -13,6 +13,19 @@ class MetaSTTElement {
     return `sttelt-${chunk4.join("-")}`
   }
 
+  static get defaultElement(){
+    return {
+        id: this.getNewId()
+      , pitch: "Pitch de l'élément"
+      , ideality: "none"
+      , type: 'scene'
+      , time: '0:00:00'
+      , duree: '2:00'
+      , tension: ''
+      , tags: []
+      , color: ''
+    }
+  }
 
   // ======== I N S T A N C E ==========
 

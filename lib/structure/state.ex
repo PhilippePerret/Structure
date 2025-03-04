@@ -28,7 +28,7 @@ defmodule Stt.State do
   obtenir.
   """
   def get(key) when is_atom(key) do
-    %{ok: true, state: %{key: whole_data()[key]}}
+    whole_data()[key]
   end
   def get(key) when is_binary(key), do: get(String.to_atom(key))
   def get(mapped_keys) when is_map(mapped_keys) do

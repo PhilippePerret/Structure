@@ -1,6 +1,8 @@
 defmodule SttWeb.StructureController do
   use SttWeb, :controller
 
+  alias Stt.State
+  
   @folder Path.absname(Path.join([".", "structures"]))
   # IO.puts "@folder = #{inspect @folder}"
 
@@ -12,7 +14,8 @@ defmodule SttWeb.StructureController do
     retour = %{
       ok: true,
       error: nil,
-      structure: structure
+      structure: structure,
+      disposition: State.get(:last_disposition)
     }
     conn |> json(retour) |> halt()
   end

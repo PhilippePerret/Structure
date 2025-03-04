@@ -15,12 +15,11 @@ class Structure {
     return {
         elements: []
       , metadata: {path: ''}
-      , preferences: {disposition: 'Horizontal'}
+      , preferences: {}
     }
   }
   
   static get cadre(){return this._cadre || (this._cadre = DGet('div#structure'))}
-  static get blocElements(){return this._blocelts || (this.blocelts = DGet('div#structure div#structure-elements'))}
   static masquer_cadre(){this.setCadreVisi(false)}
   static display_cadre(){setTimeout(this.setCadreVisi.bind(this, true), 100)}
   static setCadreVisi(visible){this.cadre.style.visibility = visible ? "visible" : "hidden"}

@@ -122,7 +122,7 @@ class MetaSTT {
     })
     console.info("Table des éléments", this.table_elements)
     // On ne construit que la structure à afficher
-    this.activerStructure(this.data.preferences.disposition || 'Horizontal')
+    this.activerDisposition(retour.disposition || 'Horizontal')
     this.setModified(false)
     // Application des préférences
     Preferences.apply(this, this.data.preferences)
@@ -172,24 +172,16 @@ class MetaSTT {
    * 
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
-  activerStructure(disposition){
-    console.info("-> Activer structure '%s'", disposition)
-    // console.info("Structure actuelle", this.current_dispo)
+  activerDisposition(disposition){
+    // console.info("-> activerDisposition() avec", disposition)
     if ( this.current_dispo == 'Editing' && this.modified ) {
-      // console.info("La structure a été modifiée, je dois l'enregistrer avant de passer à une vision différente.")
       // On indique tout de suite que les autres structures doivent être actualisées
       this.resetAll({except: 'Editing'})
-      return this.dispositions.Editing.saveAndContinue(this.activerStructure.bind(this, disposition))
+      return this.dispositions.Editing.saveAndContinue(this.activerDisposition.bind(this, disposition))
     }
     Object.keys(this.dispositions).forEach(keyDispo => {
       const dispo = this.dispositions[keyDispo]
-      if ( disposition == keyDispo ) {
-        // console.log("-> Activer structure", keyDispo)
-        dispo.show()
-      } else {
-        // console.log("-> Désactiver structure", keyDispo)
-        dispo.hide()
-      }
+      dispo[(disposition == keyDispo)?'show':'hide']()
     })
     this.current_dispo = String(disposition);
     const curdispo = this.dispositions[disposition]
@@ -201,7 +193,7 @@ class MetaSTT {
     curdispo.built    || curdispo.build()
 
     this.setButtonDisposition(disposition)
-    this.data.preferences.disposition = disposition
+    AppState.save({last_disposition: disposition}) // sauvé tout de suite
   }
 
   setButtonDisposition(dispo){

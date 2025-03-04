@@ -51,6 +51,12 @@ class EditingSTTElement extends MetaSTTElement {
     this.data = data
     return data
   }
+
+  /**
+   * Remplit les champs avec leur valeur
+   * @param {String} prop La propriété de l'élément
+   * @param {String} value La valeur à lui donner
+   */
   setPropValue(prop, value){
     this.field(prop).value = value
     return value // chainage
@@ -81,11 +87,9 @@ class EditingSTTElement extends MetaSTTElement {
   observe(){
     this.btnAdd.addEventListener('click', this.createOtherElement.bind(this))
     this.btnDel.addEventListener('click', this.onWantToDelete.bind(this))
-    this.field('time').addEventListener('blur', this.onChangeTime.bind(this, 'time'))
-    this.field('duree').addEventListener('blur', this.onChangeTime.bind(this, 'duree'))
     // Déclencheur de changement pour tous les champs d'édition
     DGetAll('input,select, textarea', this.obj).forEach(field =>{
-      field.addEventListener('change', this.onChangeValue.bind(this))
+      field.addEventListener('change', this.onChangeValue.bind(this, field.dataset.prop))
     })
     // Pour affecter les tags grâce à la fenêtre
     const tagsField = this.field('tags')
@@ -96,19 +100,14 @@ class EditingSTTElement extends MetaSTTElement {
    * Les MÉTHODES D'ÉVÈNEMENT
    */
 
-  /**
-   * Fonction générique recevant tout changement de valeur, que ce
-   * soit dans un input-text, un input-checkbox, un select ou un
-   * textarea
-   */
-  onChangeValue(ev){
-    this.parent.setModified()
-  }
-
-  onChangeTime(prop, ev){
+  onChangeTime(prop){
     this.field(prop).value = TimeCalc.treate(NullIfEmpty(this.field(prop).value))
     return true
   }
+  // onChangeTime(prop, ev){
+  //   this.field(prop).value = TimeCalc.treate(NullIfEmpty(this.field(prop).value))
+  //   return true
+  // }
 
   createOtherElement(ev){
     const after = ev.metaKey == true

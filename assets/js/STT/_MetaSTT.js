@@ -120,7 +120,7 @@ class MetaSTT {
       Object.assign(this.table_elements, {[sttE.id]: sttE})
       return sttE
     })
-    console.info("Table des éléments", this.table_elements)
+    // console.info("Table des éléments", this.table_elements)
     // On ne construit que la structure à afficher
     this.activerDisposition(retour.disposition || 'Horizontal')
     this.setModified(false)
@@ -136,7 +136,7 @@ class MetaSTT {
     if ( this.dispositions.Editing.modified && !this.dispositions.Editing.saving) {
       return this.dispositions.Editing.saveAndContinue(callback)
     }
-    console.info("Enregistrement des informations", this.data)
+    // console.info("Enregistrement des informations", this.data)
     ServerTalk.dial({
         route: "/structure/save"
       , data:  {structure: this.data}
@@ -164,6 +164,7 @@ class MetaSTT {
       if ( dispo.id == options.except ) return ;
       dispo.prepared = false
     })
+    this.tensionLine.refresh()
   }
 
   /**
@@ -191,6 +192,7 @@ class MetaSTT {
     
     curdispo.prepared || curdispo.prepare()
     curdispo.built    || curdispo.build()
+    if (this.current_dispo == 'Horizontal') this.tensionLine.refresh()
 
     this.setButtonDisposition(disposition)
     AppState.save({last_disposition: disposition}) // sauvé tout de suite
@@ -305,6 +307,7 @@ class MetaSTT {
     return null ;
   }
 
+  get tensionLine(){return this._tensionline || (this._tensionline = new TensionLine(this))}
   get metadata(){return this.data.metadata}
 
   get obj(){

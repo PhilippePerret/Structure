@@ -10,6 +10,7 @@ import "./color.js";
 import "./structure.js";
 import "./form_element.js";
 import "./mouse_click.js";
+import "./tension_line.js";
 
 import "./STT/_MetaSTT.js";
 import "./STT/_MetaSTTElement.js";
@@ -30,6 +31,10 @@ window.raise = function(message, errField){
     errField.select()
   }
   throw new Error(message)
+}
+
+window.isNullish = function(v){
+  return v === null || v === undefined ;
 }
 
 window.onload = function(ev){

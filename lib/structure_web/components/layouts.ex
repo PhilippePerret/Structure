@@ -38,7 +38,7 @@ defmodule SttWeb.Layouts do
   attr :class, :string, required: true
   def select_type(assigns) do
     ~H"""
-    <select id={@id} class={@class}>
+    <select id={@id} class={@class} data-prop="type">
       <option value="scene">Scène</option>
       <option value="seq">Séquence</option>
     </select>
@@ -49,7 +49,7 @@ defmodule SttWeb.Layouts do
   attr :class, :string, required: true
   def select_ideality(assigns) do
     ~H"""
-    <select id={@id} class={@class}>
+    <select id={@id} class={@class} data-prop="ideality">
       <option value="none">concrète</option>
       <option value="pfa">dans le PFA</option>
       <option value="project">dans les plans</option>

@@ -1,8 +1,8 @@
 'use strict';
 
 window.NullIfEmpty = function(value){
-  if ( value === null ) return null ;
-  return value.trim() == "" ? null : value ;
+  if ( value === null || value === undefined ) return null ;
+  return value.trim() === "" ? null : value ;
 }
 
 class FormElement {
@@ -147,7 +147,7 @@ class FormElement {
   static IsATension(tension){return this.regTension.test(tension) === true}
   static get regTension(){
     if (undefined == this._regtension){
-      this._regtension = new RegExp("^[0-9](\;[0-9]{1,2}[\:,][0-9]{1,2}([\:,][0-9]{1,2})?)?$")
+      this._regtension = new RegExp("^-?[0-9](\;[0-9\:hms\+\-]+)?$")
     } return this._regtension;
   }
 

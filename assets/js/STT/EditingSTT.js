@@ -83,6 +83,7 @@ class EditingSTT extends MetaSTT {
       this.constructor.listing.appendChild(newElt.obj)
     }
     super.addElement(newElt)
+    this.refresh()
     this.setModified()
   }
 
@@ -91,8 +92,13 @@ class EditingSTT extends MetaSTT {
     this.elements.splice(elt.index, 1)
     console.info("Nouvelle liste d'objets", this.elements)
     elt.obj.remove()
-    this.updateIndexElements()
+    this.refresh()
     this.setModified()
+  }
+
+  refresh(){
+    this.updateIndexElements()
+    this.tensionLine.refresh()
   }
 
   updateIndexElements(){

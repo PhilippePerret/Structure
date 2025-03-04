@@ -127,6 +127,17 @@ div#tension-line {
   bottom: 415px;
   width: var(--max-width);
   height:20px;
-  background-color: black;
+  background-color: #CCCCCC;
   z-index: 100;
 }
+div#tension-line div.tension {
+  position: absolute;
+  height: 100%;
+}
+div#tension-line div.tension.positive {
+  background-color: red;
+}
+div#tension-line div.tension.negative {
+  background-color: blue;
+}
+

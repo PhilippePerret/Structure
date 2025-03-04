@@ -9,15 +9,15 @@
 
       <div class="sttediting-element" data-id="">
 
-        <input type="hidden" class="elt-id" />
-        <input type="text" class="elt-time horloge">
-        <input type="text" class="elt-duree horloge">
+        <input type="hidden" data-prop="id" class="elt-id" />
+        <input type="text" data-prop="text" class="elt-time horloge">
+        <input type="text" data-prop="duree" class="elt-duree horloge">
         <.select_type id="" class={"elt-type"} />
         <.select_ideality id="" class={"elt-ideality"} />
-        <input type="text" class="elt-pitch" style="width:500px;">
-        <select class="elt-color"></select>
-        <input type="text" class="elt-tension" title="Indication de la tension de la scène. Peut être un simple chiffre (de -9 à +9) suivi ou non d'un temps DANS LA SCÈNE (x;h:mm:ss)" style="width:100px;">
-        <input type="text" class="elt-tags" title="Liste des tags de l'élément, séparés par des virgules" style="width:300px;" value="" placeholder="tag1, tag2, tag3">
+        <input type="text" data-prop="pitch" class="elt-pitch" style="width:500px;">
+        <select class="elt-color" data-prop="color"></select>
+        <input type="text" data-prop="tension" class="elt-tension" title="Indication de la tension de la scène. Peut être un simple chiffre (de -9 à +9) suivi ou non d'un temps DANS LA SCÈNE (x;h:mm:ss)" style="width:100px;">
+        <input type="text" data-prop="tags" class="elt-tags" title="Liste des tags de l'élément, séparés par des virgules" style="width:300px;" value="" placeholder="tag1, tag2, tag3">
         <span class="boutons">
           <button class="btn-add" title="Ajouter avant (+ meta => après)">＋</button>
           <button class="btn-del" title="Supprimer l'élément">🗑️</button>

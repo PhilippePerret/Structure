@@ -42,8 +42,12 @@ class TimeCalc {
 
   /** 
    * Fonction qui traite les temps, qui permet d'utiliser des opérations
+   * 
+   * @param {String} timePlus Une formule temporelle, avec addition et soustraction (ou pas, car ça peut être simplement des secondes)
+   * @param {String} full Si 'FULL' on doit retourner une horloge complète
+   * @param {String} format Le format de retour. 'horloge' => une horloge, 'seconds' => des secondes
    */
-  static treate(timePlus, full = FULL){
+  static treate(timePlus, full = FULL, format = 'horloge'){
     if ( timePlus === null ) return null;
     timePlus = timePlus.trim().replace(/ /g, "")
     let segs = timePlus.match(this.REG_HORLOGE_WITH_OPE)
@@ -78,7 +82,11 @@ class TimeCalc {
         return this.makeOpe(this.h2s(horloge), eval(ajout), operation)
       }
       })(horloge, ajout, operation)
-    return this.s2h(secondes, full)
+    if ( format != 'horloge' ) {
+      return secondes
+    } else {
+      return this.s2h(secondes, full)
+    }
   }
 
   static makeOpe(term1, term2, ope){

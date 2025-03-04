@@ -15,7 +15,7 @@ class AppState {
   }
   static afterSave(retour){
     if (retour.ok){
-      console.info("État (state) sauvé")
+      // console.info("État (state) sauvé")
     } else { raise(retour.error) }
   }
 

@@ -25,6 +25,12 @@ class UI {
         setTimeout(input.select.bind(input), 300)
       })
     })
+
+    // Observation des champs pour définir le nom et le path de la
+    // structure pour pouvoir enregistrer la structure
+    ;['input#structure-name', 'input#structure-path'].forEach(field_sel => {
+      DGet(field_sel).addEventListener('change', MetaSTT.setCurrentModified.bind(MetaSTT))
+    })
     // Observation de la structure horizontale (notamment pour qu'un
     // double-click permet de créer un élément)
     HorizontalSTT.observe()

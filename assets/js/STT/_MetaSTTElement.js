@@ -1,5 +1,30 @@
 'use strict';
 
+window.ELEMENT_PROPERTIES_DATA = {
+    id:       {default: null    , afterGet: null, beforeSet: null}
+  , time:     {default: null    , afterGet: TimeCalc.treate.bind(TimeCalc)}
+  , pitch:    {default: null}
+  , duree:    {default: '2:00'  , afterGet: TimeCalc.treate.bind(TimeCalc)}
+  , type:     {default: 'scene' , afterGet: null, beforeSet: null}
+  , ideality: {default: 'none'}
+  , color:    {default: 'normal'}
+  , tension:  {default: null}
+  , tags:     {default: []}
+}
+window.DEFAULT_VALUES = {
+  id: ""
+, time: ""
+, duree: "2:00"
+, type: "scene"
+, ideality: "none"
+, pitch: ""
+, color: "normal"
+, tension: ""
+, tags: ""
+}
+window.ELEMENT_PROPERTIES = Object.keys(DEFAULT_VALUES)
+
+
 class MetaSTTElement {
 
   /**

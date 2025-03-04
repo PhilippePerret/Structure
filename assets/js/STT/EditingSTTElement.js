@@ -1,17 +1,5 @@
 'use strict';
 
-const DEFAULT_VALUES = {
-    id: ""
-  , time: ""
-  , duree: "2:00"
-  , type: "scene"
-  , ideality: "none"
-  , pitch: ""
-  , color: "normal"
-  , tension: ""
-  , tags: ""
-}
-const ELEMENT_PROPERTIES = Object.keys(DEFAULT_VALUES)
 
 class EditingSTTElement extends MetaSTTElement {
 

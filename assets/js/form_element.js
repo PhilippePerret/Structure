@@ -16,6 +16,17 @@ class FormElement {
     field.value = TimeCalc.treate(field.value)
   }
 
+  /**
+   * Pour ouvrir le formulaire, mais en édition avec l'élément donné.
+   * 
+   * @param {Element} element Un élément structurel
+   * @param {Object} position La position du click, pour placer la fenêtre au bon endroit.
+   */
+  static openWith(element, position){
+    this.element = element
+    this.show(position)
+  }
+
   static show(position){
     this.obj.classList.remove('hidden')
     if (position){
@@ -52,11 +63,8 @@ class FormElement {
    * Fonction pour actualiser l'élément
    */
   static updateElement(data){
-    console.info("MetaSTT.current_dispo", MetaSTT.current_dispo)
-    console.info("MetaSTT.current", MetaSTT.current)
-    const element = MetaSTT.current.disposition.getElement(data.id)
-    console.info("element", element)
-    element.update(data)
+    console.info("element", this.element)
+    this.element.update(data)
   }
 
   /**
@@ -84,7 +92,7 @@ class FormElement {
       const c = element
       field = {pitch: c.field('pitch'), time: c.field('time'), duree: c.field('duree'), tension: c.field('tension')}
     } else {
-      field = {pitch: this.fieldPitch, time: this.fieldTime, duree: this.fieldDuree, tension: this.fieldTension}
+      field = {pitch: this.field('pitch'), time: this.fieldTime, duree: this.fieldDuree, tension: this.field('tension')}
     }
     try {
       if (data.pitch === null || data.pitch.length < 4) raise("Pitch trop court (< 4 caractères)", field.pitch);
@@ -105,37 +113,38 @@ class FormElement {
    */
   static reset(){
     this.setData({})
-    this.fieldType.focus()
+    this.field('pitch').focus()
+  }
+
+  /**
+   * Renseigne le formulaire avec les données fournies.
+   * 
+   * @param {Object|HorizontalSTTElement} data Soit l'élément édité (HorizontalSTTElement) soir les données sous forme de table.
+   */
+  static setData(data){
+    ELEMENT_PROPERTIES.forEach(prop => this.field(prop).value = data[prop]||DEFAULT_VALUES[prop])
   }
 
   static getData(){
-    // Traitement des temps qu'on doit évaluer
-    const time = TimeCalc.treate(NullIfEmpty(this.fieldTime.value), FULL)
-    this.fieldTime.value = time;
-    const duree = TimeCalc.treate(NullIfEmpty(this.fieldDuree.value)) || "2:00"
-    this.fieldDuree.value = duree;
-    return {
-        id:       NullIfEmpty(this.fieldId.value)
-      , type:     this.fieldType.value
-      , ideality: this.fieldIdeality.value
-      , pitch:    NullIfEmpty(this.fieldPitch.value)
-      , time:     time
-      , duree:    duree
-      , color:    this.fieldColor.value
-      , tension:  NullIfEmpty(this.fieldTension.value)
-    }
-  }
-  static setData(data){
-    this.fieldId.value        = data.id || ""
-    this.fieldType.value      = data.type || "scene"
-    this.fieldIdeality.value  = data.ideality || "none"
-    this.fieldPitch.value     = data.pitch || ""
-    this.fieldTime.value      = data.time || ""
-    this.fieldDuree.value     = data.duree || ""
-    this.fieldColor.value     = data.color || ""
-    this.fieldTension.value   = data.tension || ""
+    const data = {}
+    ELEMENT_PROPERTIES.forEach(prop => {
+      let value = NullIfEmpty(this.field(prop).value)
+      if ( ELEMENT_PROPERTIES_DATA[prop].afterGet ) {
+        value = ELEMENT_PROPERTIES_DATA[prop].afterGet(value)
+      }
+      Object.assign(data, {[prop]: value})
+    })
+    return data
   }
 
+  /**
+   * Retourne le champ de la propriété +prop+
+   * 
+   * @param {String} prop Propriété de l'élément
+   */
+  static field(prop){
+    return DGet(`#elt-${prop}`, this.obj)
+  }
 
 
   static NotATime(horloge){return !this.IsATime(horloge)}
@@ -154,22 +163,15 @@ class FormElement {
     } return this._regtension;
   }
 
-  static get fieldId(){return this._fieldid || (this._fieldid = DGet('input#elt-id'))}
-  static get fieldType(){return this._fieldtype || (this._fieldtype = DGet('select#elt-type'))}
-  static get fieldIdeality(){return this._fieldideality || (this._fieldideality = DGet('select#elt-ideality'))}
-  static get fieldPitch(){return this._fieldpitch || (this._fieldpitch = DGet('input#elt-pitch'))}
   static get fieldTime(){return this._fieldtime || (this._fieldtime = DGet('input#elt-time'))}
   static get fieldDuree(){return this._fielduree || (this._fielduree = DGet('input#elt-duree'))}
-  static get fieldColor(){return this._fieldcolor || (this._fieldcolor = DGet('select#elt-color'))}
-  static get fieldTension(){return this._fieldtension || (this._fieldtension = DGet('input#elt-tension'))}
-
 
   /**
    * Fonction qui construit le menu des couleurs dans le formulaire 
    * d'élément en se servant des données COLOR_LIST
    */
   static buildMenuColor(container){
-    Color.buildColorMenus(container || this.fieldColor)
+    Color.buildColorMenus(container || this.field('color'))
   }
 }
 

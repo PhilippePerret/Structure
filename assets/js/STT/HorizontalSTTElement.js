@@ -36,7 +36,7 @@ class HorizontalSTTElement extends MetaSTTElement {
     ev.stopPropagation()
     // return false
     const mclick = new MouseClick(ev)
-    FormElement.show(mclick)
+    FormElement.openWith(this, mclick)
     FormElement.setData(this)
     return false
   }
@@ -45,7 +45,7 @@ class HorizontalSTTElement extends MetaSTTElement {
     console.log("-> update de l'horizontal")
     // super.update(newData)
     Object.assign(this.data, newData)
-    setTimeout(this.rebuild.bind(this), 2000)
+    setTimeout(this.rebuild.bind(this), 200)
   }
 
   rebuild(){

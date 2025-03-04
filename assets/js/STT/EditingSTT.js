@@ -88,6 +88,9 @@ class EditingSTT extends MetaSTT {
   }
 
   removeElement(elt){
+    if ( this.elements.length == 1 ) {
+      return Flash.error("Impossible de supprimer tous les éléments. Il faut en garder au moins un.")
+    }
     console.log("Suppression de l'élément d'index %s dans", elt.index, this.elements)
     this.elements.splice(elt.index, 1)
     console.info("Nouvelle liste d'objets", this.elements)

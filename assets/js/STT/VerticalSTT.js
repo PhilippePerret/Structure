@@ -9,6 +9,7 @@ class VerticalSTT extends MetaSTT {
 
   static prepare(){
     this.listing.innerHTML = ""
+    this.prepared = true
   }
 
   // ======== I N S T A N C E ==========

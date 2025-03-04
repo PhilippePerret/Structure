@@ -12,7 +12,8 @@ class EditingSTT extends MetaSTT {
     Color.buildColorMenus(DGet('div.sttediting-element select.elt-color', this.listing))
     // On clone toujours la première ligne
     EditingSTTElement.CLONE_ELEMENT = DGet('div.sttediting-element', this.listing).cloneNode(true);
-    this.listing.style.height = `${this.calcListingHeight()}px`
+    this.listing.style.height = `${this.calcListingHeight()}px`;
+    this.prepared = true
   }
 
   static calcListingHeight(){

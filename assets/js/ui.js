@@ -25,7 +25,6 @@ class UI {
         setTimeout(input.select.bind(input), 300)
       })
     })
-
     // Observation de la structure horizontale (notamment pour qu'un
     // double-click permet de créer un élément)
     HorizontalSTT.observe()

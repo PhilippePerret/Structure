@@ -9,6 +9,7 @@ class HorizontalSTT extends MetaSTT {
 
   static prepare(){
     this.listing.innerHTML = ""
+    this.prepared = true
   }
 
   /**

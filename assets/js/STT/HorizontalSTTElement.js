@@ -61,11 +61,11 @@ class HorizontalSTTElement extends MetaSTTElement {
     // régler sa longueur et sa couleur
     if ( this.type == 'scene' ) {
       this.obj.style.setProperty('--background', this.bgColor);
-      this.obj.style.setProperty('--width', `${TimeCalc.horlogeToPixels(this.duree)}px`)
+      this.obj.style.setProperty('--width', this.width)
     }
 
-    this.obj.style.left = `${TimeCalc.horlogeToPixels(this.data.time)}px`
-    this.type == 'seq' && (this.obj.style.width = `${TimeCalc.horlogeToPixels(this.duree)}px`);
+    this.obj.style.left = this.left;
+    this.type == 'seq' && (this.obj.style.width = this.width);
     this.top   && (this.obj.style.top = `${this.top}px`);
   }
 

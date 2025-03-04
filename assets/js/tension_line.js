@@ -26,7 +26,7 @@ class TensionLine {
 
 
   refresh(element){
-    console.log("Je dois apprendre à rafraichir la ligne de tension.")
+    this.obj.innerHTML = ""
     if ( element ) {
       // Il faut rafraichir seulement l'élément
       this.refreshElement(element)

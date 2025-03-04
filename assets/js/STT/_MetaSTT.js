@@ -174,7 +174,7 @@ class MetaSTT {
    * @param {String} disposition 'Horizontal', 'Vertical' ou 'Editing'. Permet de reconstituer le nom de la classe à invoquer.
    */
   activerDisposition(disposition){
-    // console.info("-> activerDisposition() avec", disposition)
+    console.info("-> activerDisposition(%s)", disposition)
     if ( this.current_dispo == 'Editing' && this.modified ) {
       // On indique tout de suite que les autres structures doivent être actualisées
       this.resetAll({except: 'Editing'})

@@ -17,8 +17,8 @@ defmodule Stt.State do
     state = whole_data()
     IO.inspect(state, label: "STATE")
     case state["last_op"] do
-    "save" -> state[:last_saved]
-    "load" -> state[:last_load]
+    "save" -> state["last_saved"]
+    "load" -> state["last_loaded"]
     _ -> "default"
     end
   end

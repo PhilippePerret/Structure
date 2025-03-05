@@ -37,7 +37,7 @@ class TensionLine {
   }
 
   refreshElement(element){
-    if ( null === element.tension ) return ;
+    if ( null === element.tension || element.type != 'scene' ) return ;
     // console.info("La tension de l'élément est définie", element, element.tension, element.tensionData)
     const {level, time} = element.tensionData
     const classPolarity = level < 0 ? 'negative' : 'positive';

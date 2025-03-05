@@ -15,7 +15,6 @@ defmodule Stt.State do
   """
   def get_last_structure do
     state = whole_data()
-    IO.inspect(state, label: "STATE")
     case state["last_op"] do
     "save" -> state["last_saved"]
     "load" -> state["last_loaded"]

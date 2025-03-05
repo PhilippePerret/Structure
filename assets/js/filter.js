@@ -82,6 +82,9 @@ class EFilter {
   filterByType(type, elt){
     return elt.type == type
   }
+  filterByColor(methodComp, elt){
+    return methodComp(elt.color)
+  }
   filterByTension(methodComp, elt){
     return elt.tension && methodComp(elt.tensionData.level)
   }
@@ -152,9 +155,20 @@ class EFilter {
       filter.push(this.filterByTension.bind(this, method))
     }
     
-    
-    // const parColor = Array.from(this.colorField.selectedOptions).map(option => option.value);
-    // parColor.length && filter.push({color: parColor})
+    // --- Filtre par couleur ---
+    const colors = {}
+    DGetAll('input[type="checkbox"]', this.colorsField).map(cb => {
+      if ( cb.checked ) Object.assign(colors, {[cb.dataset.id]: true})
+    })
+    if ( Object.keys(colors).length ) {
+      const method = (cond => {
+        switch(cond){
+          case 'in': return this.hasColorIn.bind(this, colors);
+          case 'out': return this.hasNotColorIn.bind(this, colors)
+        }
+      })(this.colorCondField.value)
+      filter.push(this.filterByColor.bind(this, method))
+    }
 
     if (filter.length) {
       return filter
@@ -166,27 +180,20 @@ class EFilter {
   
   // Méthodes de condition
 
-  isSup(ref, comp){
-    console.info("ref = %s, comp = %s, res : ", ref, comp, comp > ref)
-    return comp > ref 
-  }
+  isSup(ref, comp){return comp > ref }
   isSupOrEqual(ref, comp){return comp >= ref}
-  isInf(ref, comp){
-     return comp < ref 
-    }
+  isInf(ref, comp){ return comp < ref }
   isInfOrEqual(ref, comp){return comp <= ref}
   isDiff(ref, comp){return comp != ref}
   isEqual(ref, comp){return comp == ref}
 
   containsAnyAmong(tags, comp){
-    for( const tag of tags ) {
-      if ( comp[tag] === true ) return false;
-    }
+    for( const tag of tags ) { if ( comp[tag] === true ) return false; }
     return true
   }
   notContainsAllTags(tags, comp){
     for(var tag of Object.keys(comp)){
-      if ( !tags.includes(tag) ) return true
+      if ( !tags.includes(tag) ) return true;
     }
     return false
   }
@@ -201,6 +208,12 @@ class EFilter {
       if ( !comp[tag] ) return false
     }
     return true
+  }
+  hasColorIn(colors, color){
+    return colors[color] == true
+  }
+  hasNotColorIn(colors, color){
+    return !this.hasColorIn(colors, color)
   }
 
 
@@ -219,7 +232,7 @@ class EFilter {
     // Construire la boite des tags
     this.buildTagsPanel(o)
     // Construire le menu des couleurs
-    Color.buildColorMenus(this.colorField)
+    Color.buildColorCbs(this.colorsField)
     // On observe les champs et boutons qui doivent l'être
     this.observe()
     return o ; // pour _obj
@@ -285,7 +298,8 @@ class EFilter {
   get tagCondField(){return DGet('select.filter-tags-condition', this.obj)}
   get tensionField(){return DGet('input.filter-tension', this.obj)}
   get tensionOpField(){return DGet('select.filter-tension-operand', this.obj)}
-  get colorField(){return DGet('select.filter-color', this.obj)}
+  get colorCondField(){return DGet('select.filter-color-condition', this.obj)}
+  get colorsField(){return DGet('div.color-cbs', this.obj)}
   get btnFilter(){return DGet('button.btn-filter', this.obj)}
   get btnReset(){return DGet('button.btn-reset', this.obj)}
   get btnMemo(){return DGet('button.btn-memo', this.obj)}

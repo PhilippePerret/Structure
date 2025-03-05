@@ -29,13 +29,13 @@ class MetaSTTElement {
 
   /**
    * Fonction qui calcule et fournit un identifiant unique pour le
-   * type +type+ (scene ou seq pour le moment)
+   * type +pref+ (scene, seq, cb, etc.)
    */
-  static getNewId(){
+  static getNewId(pref = 'sttelt'){
     const partDate = String(new Date().getTime()).replace("\.", "")
     const partAlea = String(parseInt(Math.random() * 100))
     const chunk4 = (partDate + partAlea).match(/.{1,4}/g)
-    return `sttelt-${chunk4.join("-")}`
+    return `${pref}-${chunk4.join("-")}`
   }
 
   static get defaultElement(){
@@ -138,6 +138,11 @@ class MetaSTTElement {
    */
   getTagsAsMap(){
     const map = {}
+    console.info("tags", this.tags)
+    if ('string' == typeof this.tags) {
+      this.data.tags = this.tags.split(",").map(tag => {return tag.trim()})
+      MetaSTT.current.setModified()
+    }
     ;(this.tags||[]).forEach(tag => Object.assign(map, {[tag]: true}))
     return map
   }

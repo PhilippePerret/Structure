@@ -48,6 +48,35 @@ class Color {
   }
 
   /**
+   * Construit les couleurs sous forme de cases à cocher et les place
+   * dans le container +container+
+   * 
+   * On fait :
+   *    cb.dataset.id pour obtenir l'identifiant
+   *    cb.dataset.bg pour obtenir la couleur de fond et 
+   *    cb.dataset.fg pour obtenir la couleur de premier plan.
+   * 
+   * @param {DOMElement} container Un Element DOM valide (div)
+   */
+  static buildColorCbs(container){
+    container || raise(`Container introuvable…`)
+    COLOR_LIST.forEach( dcolor => {
+      const {id, bg, fg} = dcolor
+      const cbId = MetaSTTElement.getNewId('cbcolor')
+      const div = DCreate('DIV', {style: "display:inline-block;width:30%;"})
+      const cb = DCreate('INPUT', {type: 'checkbox', id: cbId})
+      const lab = DCreate('LABEL', {text: id})
+      lab.setAttribute('for', cbId)
+      cb.dataset.bg = bg
+      cb.dataset.fg = fg
+      cb.dataset.id = id
+      div.appendChild(cb)
+      div.appendChild(lab)
+      container.appendChild(div)
+    })
+  }
+
+  /**
    * Permet de mettre le fond ou la police du champ d'édition de la
    * couleur définie dans le champ d'édition.
    * 

@@ -53,9 +53,12 @@
   </div>
 
   <div class="filter-row">
-    <span class="top">La couleur de l'élément est </span>
-    <select class="filter-color" multiple></select>
-    <span class="top small">(Cmd + click pour sélectionner)</span>
+    <span class="top">La couleur de l'élément </span>
+    <select class="filter-color-condition">
+      <option value="in">se trouve parmi</option>
+      <option value="out">ne se trouve pas</option>
+    </select>
+    <div class="color-cbs"></div>
   </div>
 
   <div class="buttons">

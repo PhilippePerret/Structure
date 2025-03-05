@@ -130,7 +130,8 @@ class EditingSTT extends MetaSTT {
 
   /**
    * Fonction qui boucle dans le listing pour récupérer tous les éléments
-   * À QUOI ÇA SERT ENCORE ?
+   * Sert quand on clique sur le bouton Enregistrer avec la structure
+   * en mode d'édition.
    * 
    * La méthode actualise aussi la propriété elements
    * @return {Array} La liste des données des éléments

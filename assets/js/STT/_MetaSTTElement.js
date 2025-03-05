@@ -4,12 +4,16 @@ window.ELEMENT_PROPERTIES_DATA = {
     id:       {default: null    , afterGet: null, beforeSet: null}
   , time:     {default: null    , afterGet: TimeCalc.treate.bind(TimeCalc)}
   , pitch:    {default: null}
-  , duree:    {default: '2:00'  , afterGet: TimeCalc.treate.bind(TimeCalc)}
+  , duree:    {default: '2:00'  , afterGet: TimeCalc.treateDuree.bind(TimeCalc)}
   , type:     {default: 'scene' , afterGet: null, beforeSet: null}
   , ideality: {default: 'none'}
   , color:    {default: 'normal'}
   , tension:  {default: null}
-  , tags:     {default: []}
+  , tags:     {
+        default: []
+      , beforeSet: function(tags){return tags.join(", ")}
+      , afterGet:  function(tags){return tags.split(",").map(tag => {return tag.trim()})}
+    }
 }
 window.DEFAULT_VALUES = {
   id: ""
@@ -31,13 +35,16 @@ class MetaSTTElement {
    * Fonction qui calcule et fournit un identifiant unique pour le
    * type +pref+ (scene, seq, cb, etc.)
    */
-  static getNewId(pref = 'sttelt'){
+  static getNewId(prefix = 'sttelt'){
     const partDate = String(new Date().getTime()).replace("\.", "")
     const partAlea = String(parseInt(Math.random() * 100))
     const chunk4 = (partDate + partAlea).match(/.{1,4}/g)
-    return `${pref}-${chunk4.join("-")}`
+    return `${prefix}-${chunk4.join("-")}`
   }
 
+  /**
+   * Un élément par défaut
+   */
   static get defaultElement(){
     return {
         id: this.getNewId()

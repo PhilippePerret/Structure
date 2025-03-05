@@ -21,19 +21,22 @@ class EditingSTTElement extends MetaSTTElement {
     field.select()
   }
 
+  /**
+   * Récupération des valeurs de l'élément (quand on est en mode
+   * structure editing et qu'on choisit d'enregistrer)
+   */
   getData(){
     const data = {}
     for ( const prop in ELEMENT_PROPERTIES_DATA ){
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
-      const value = DGet(`.elt-${prop}`, this.obj).value
+      let value = DGet(`.elt-${prop}`, this.obj).value
       if ( dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
       console.info("Valeur finale de `%s'", prop, value)
       Object.assign(data, {[prop]: value})
     }
-    // console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
     if ( !data.id || data.id == "undefined") {
-      this.data.id = this.obj.dataset.id = data.id = MetaSTTElement.getNewId()
+      data.id = this.data.id = this.obj.dataset.id = MetaSTTElement.getNewId()
     }
     data.time   = this.setPropValue('time',  data.time)
     data.duree  = this.setPropValue('duree', data.duree)
@@ -53,18 +56,17 @@ class EditingSTTElement extends MetaSTTElement {
     return value // chainage
   }
 
+
   build(){
     this.obj = this.constructor.CLONE_ELEMENT.cloneNode(true)
     this.obj.dataset.id = this.id
-    for(const prop in ELEMENT_PROPERTIES_DATA){
+    for ( const prop in ELEMENT_PROPERTIES_DATA ){
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
-      const value = this.data[prop] || dprop.default
+      let value = this.data[prop] || dprop.default
       if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
+      // console.info("Valeur inscrite de `%s'", prop, value)
       DGet(`.elt-${prop}`, this.obj).value = value
     }
-    Object.values(ELEMENT_PROPERTIES_DATA).forEach(dprop => {
-      const prop = dprop.prop
-    })
     // On met le résumé dans la couleur choisie
     this.color && this.applyColor()
 
@@ -101,10 +103,6 @@ class EditingSTTElement extends MetaSTTElement {
     this.field(prop).value = TimeCalc.treate(NullIfEmpty(this.field(prop).value))
     return true
   }
-  // onChangeTime(prop, ev){
-  //   this.field(prop).value = TimeCalc.treate(NullIfEmpty(this.field(prop).value))
-  //   return true
-  // }
 
   createOtherElement(ev){
     const after = ev.metaKey == true

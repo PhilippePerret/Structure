@@ -1,5 +1,5 @@
 <% method = "EFilter.openFilter('#{@stttype}')" %>
-<div class="left">
+<div class="right" style="width:1000px;">
   <button onclick={method}>Filtre</button>
 </div>
 <div id={@id} class="filter-form-container hidden">
@@ -75,7 +75,8 @@
   </div>
 
   <div class="buttons">
-    <button class="btn-reset fleft">Reset listing</button>
+    <button class="btn-hide fleft">Fermer</button>
+    <button class="btn-reset fleft">Reset liste</button>
     <button class="btn-memo fleft">Mémoriser…</button>
     <select class="filtres-memo" style="width:200px;"></select>
     <button class="btn-filter">Filtrer</button>

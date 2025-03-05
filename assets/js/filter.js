@@ -248,7 +248,7 @@ class EFilter {
       }
     }
     
-    
+
     // --- Filtre par couleur ---
     if ( this.filtreOn('color') ){
       const colors = {}
@@ -416,6 +416,7 @@ class EFilter {
   observe(){
     this.btnFilter.addEventListener('click', this.apply.bind(this))
     this.btnReset.addEventListener('click', this.reset.bind(this))
+    this.btnHide.addEventListener('click', this.hide.bind(this))
     this.btnMemo.addEventListener('click', this.memorize.bind(this))
     this.menuFiltres.addEventListener('change', this.onChooseFilter.bind(this))
   }
@@ -453,6 +454,7 @@ class EFilter {
   get btnFilter(){return DGet('button.btn-filter', this.obj)}
   get btnReset(){return DGet('button.btn-reset', this.obj)}
   get btnMemo(){return DGet('button.btn-memo', this.obj)}
+  get btnHide(){return DGet('button.btn-hide', this.obj)}
 
 }
 

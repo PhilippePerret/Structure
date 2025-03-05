@@ -16,9 +16,17 @@ class EFilter {
 
   /**
    * Pour ouvrir un bloc de réglage d'une condition (text, couleur, etc.)
+   * 
+   * @param {DomElement} cb Le checkbox principal de la propriété de filtre
+   * @param {Boolean} force True/False, la valeur à forcer, quel que soit l'état
    */
-  static openPropSetting(cb){
-    const isOpen = cb.dataset.open == 'true'
+  static openPropSetting(cb, force){
+    let isOpen ;
+    if ( force === undefined ) {
+      isOpen = cb.dataset.open == 'true'
+    } else {
+      isOpen = !force
+    }
     cb.nextSibling.nextSibling.classList[isOpen?'add':'remove']('invisible')
     cb.dataset.open = isOpen ? 'false' : 'true'
   }
@@ -27,6 +35,14 @@ class EFilter {
     const cb = span.previousSibling
     cb.checked = !cb.checked;
     this.openPropSetting(cb)
+  }
+
+  static addFilter(name, data){
+    const prefs = MetaSTT.current.preferences
+    const filters = MetaSTT.current.preferences.filters || {}
+    Object.assign(filters, {[name]: data})
+    MetaSTT.current.preferences.filters = filters
+    MetaSTT.current.setModified()
   }
 
   // ========= I N S T A N C E   E F I L T E R ==========
@@ -48,7 +64,16 @@ class EFilter {
    * Mémoriser le filtre courant
    */
   memorize(){
-    console.log("Je dois apprendre à mémoriser le filtre courant.")
+    const fName = prompt("Quel nom donner à ce filtre ?")
+    if ( fName ) {
+      if ( this.stt.preferences.filters && this.stt.preferences.filters[fName]){
+        if (!confirm("Voulez-vous vraiment remplacer le filtre existant ?")) return false;
+      }
+      // On met les valeurs dans this.data
+      this.getFilterValue()
+      this.constructor.addFilter(fName, this.data)
+      this.buildMenuFiltres()
+    }
   }
 
   /**
@@ -107,6 +132,32 @@ class EFilter {
   }
 
   /**
+   * Applique les valeurs d'un filtre mémorisé
+   */
+  setFilterValues(data){
+    ;['text','type','tags','tension','color'].forEach(fprop => {
+      const cb = DGet(`input[type="checkbox"].cb-filtre-on-${fprop}`, this.obj)
+      const dataProp = data[fprop]
+      if ( dataProp ) {
+        cb.checked = true
+        switch(fprop){
+          case 'type':
+            this.typeField.value = dataProp.value
+          case 'text':
+            this.textCondField.value = dataProp.condition;
+            this.textField.value = dataProp.text
+            break;
+          default:
+            console.log("Je dois apprendre à régler", dataProp)
+        }
+      } else {
+        // Il faut désactiver ce filtre
+        cb.checked = false
+      }
+      this.constructor.openPropSetting(cb, cb.checked)
+    })
+  }
+  /**
    * Retourne la table du filtre choisi
    * 
    * @return {Object} Une table avec les clés :text, :color, :tension, 
@@ -115,13 +166,20 @@ class EFilter {
    */
   getFilterValue(){
     const filter  = []
+    const filterData = {} // pour mémorisation
+    
     // --- Filtre par type ---
-    const parType = NullIfEmpty(this.typeField.value)
-    parType && filter.push(this.filterByType.bind(this, parType))
+    if ( this.filtreOn('type') ) {
+      const parType = this.typeField.value
+      filter.push(this.filterByType.bind(this, parType))
+      Object.assign(filterData, {type: {value: parType}})
+    }
+
     // --- Filtre par texte ---
     const text = this.filtreOn('text') && NullIfEmpty(this.textField.value.trim())
     if ( text ) {
       const parText = {condition: this.textCondField.value, text: text}
+      Object.assign(filterData, {text: parText})
       switch(parText.condition){
         case 'all words':
           Object.assign(parText, {words: text.split(' ')})
@@ -142,6 +200,8 @@ class EFilter {
       const allTags = []
       this.forEachTag(tag => { tag.checked && allTags.push(tag.name)})
       if ( allTags.length ) {
+        const condTags = this.tagCondField.value
+        Object.assign(filterData, {tags: {condition: condTags, tags: allTags}})
         const method = (cond => {
           switch(cond){
             case 'all': return this.containsAllTags.bind(this, allTags);
@@ -149,7 +209,7 @@ class EFilter {
             case 'none': return this.notContainsAllTags.bind(this, allTags);
             case 'no-one': return this.containsAnyAmong.bind(this, allTags);
           }
-        })(this.tagCondField.value)
+        })(condTags)
         filter.push(this.filterByTags.bind(this, method))
       }
     }
@@ -159,6 +219,7 @@ class EFilter {
       const tensOperand = NullIfEmpty(this.tensionOpField.value)
       const tensValue   = NullIfEmpty(this.tensionField.value)
       if ( tensOperand && tensValue ) {
+        Object.assign(filterData, {tension: {operand: tensOperand, value: tensValue}})
         const method = (op => {
           switch(op){
             case 'sup' : return this.isSup.bind(this, tensValue);
@@ -180,15 +241,19 @@ class EFilter {
         if ( cb.checked ) Object.assign(colors, {[cb.dataset.id]: true})
       })
       if ( Object.keys(colors).length ) {
+        const condColor = this.colorCondField.value
+        Object.assign(filterData, {color: {condition: condColor, colors: colors}})
         const method = (cond => {
           switch(cond){
             case 'in': return this.hasColorIn.bind(this, colors);
             case 'out': return this.hasNotColorIn.bind(this, colors)
           }
-        })(this.colorCondField.value)
+        })(condColor)
         filter.push(this.filterByColor.bind(this, method))
       }
     }
+
+    this.data = filterData
 
     if (filter.length) {
       return filter
@@ -260,9 +325,26 @@ class EFilter {
     this.buildTagsPanel(o)
     // Construire le menu des couleurs
     Color.buildColorCbs(this.colorsField)
+    // S'il y a des filtres enregistrés
+    if (this.stt.preferences.filters) this.buildMenuFiltres() ;
     // On observe les champs et boutons qui doivent l'être
     this.observe()
     return o ; // pour _obj
+  }
+
+  onChooseFilter(ev){
+    const menu = this.menuFiltres
+    const filterName = menu.value;
+    const dataFilter = this.stt.preferences.filters[filterName]
+    this.setFilterValues(dataFilter)
+    menu.selectedIndex = 0
+  }
+  buildMenuFiltres(){
+    this.menuFiltres.innerHTML = ""
+    this.menuFiltres.appendChild(DCreate('OPTION', {value: "", text:"Filtre…"}))
+    for (const fName in this.stt.preferences.filters) {
+      this.menuFiltres.appendChild(DCreate('OPTION', {value: fName, text: fName}))
+    }
   }
 
 
@@ -296,6 +378,7 @@ class EFilter {
     this.btnFilter.addEventListener('click', this.apply.bind(this))
     this.btnReset.addEventListener('click', this.reset.bind(this))
     this.btnMemo.addEventListener('click', this.memorize.bind(this))
+    this.menuFiltres.addEventListener('change', this.onChooseFilter.bind(this))
   }
 
   /**
@@ -327,11 +410,14 @@ class EFilter {
   get tensionOpField(){return DGet('select.filter-tension-operand', this.obj)}
   get colorCondField(){return DGet('select.filter-color-condition', this.obj)}
   get colorsField(){return DGet('div.color-cbs', this.obj)}
+  get menuFiltres(){return DGet('select.filtres-memo', this.obj)}
   get btnFilter(){return DGet('button.btn-filter', this.obj)}
   get btnReset(){return DGet('button.btn-reset', this.obj)}
   get btnMemo(){return DGet('button.btn-memo', this.obj)}
 
 }
+
+
 
 class FilterTag {
   constructor(data){

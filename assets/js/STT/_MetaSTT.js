@@ -153,6 +153,7 @@ class MetaSTT {
     this.activerDisposition(retour.disposition || 'Horizontal')
     this.setModified(false)
     // Application des préférences
+    this.preferences = this.data.preferences
     Preferences.apply(this, this.data.preferences)
   }
 

@@ -4,65 +4,78 @@
 </div>
 <div id={@id} class="filter-form-container hidden">
   <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
+  <label>FILTRE DES ÉLÉMENTS</label>
 
   <div class="filter-row text-filter-container">
-    <span>Le texte contient </span>
-    <select class="filter-text-condition">
-      <option value="all words">tous les mots</option>
-      <option value="one word">un mot parmi</option>
-      <option value="sentence">la phrase</option>
-    </select>
-    <input class="filter-text" type="text" style="width:300px;" />
+    <input type="checkbox" class="cb-filtre-on-text" onchange="EFilter.openPropSetting(this)"
+     /><label onclick="EFilter.togglePreviousCb(this)">Le texte contient 
+     </label><div class="inline invisible">
+      <select class="filter-text-condition">
+        <option value="all words">tous les mots</option>
+        <option value="one word">un mot parmi</option>
+        <option value="sentence">la phrase</option>
+      </select>
+      <input class="filter-text" type="text" style="width:300px;" />
+    </div>
   </div>
   
   <div class="filter-row">
-    <span>L'élément </span>
-    <select class="filter-tags-condition">
-      <option value="one">contient au moins un tag parmi…</option>
-      <option value="all">contient tous les tags</option>
-      <option value="none">ne contient pas tous les tags</option>
-      <option value="no-one">ne contient pas un des tags…</option>
-    </select>
-    <div class="filter-tags">
-      <!-- ici seront ajoutés les tags -->
+    <input type="checkbox" class="cb-filtre-on-tags" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">Les tags</label><div class="inline invisible">
+      <select class="filter-tags-condition">
+        <option value="one">contiennent au moins un des…</option>
+        <option value="all">contiennent tous les…</option>
+        <option value="none">ne contiennent pas tous les…</option>
+        <option value="no-one">ne contiennent pas un des…</option>
+      </select>
+      <div class="filter-tags">
+        <!-- ici seront ajoutés les tags -->
+      </div>
     </div>
   </div>
 
   <div class="filter-row">
-    <span>L'élément est de type </span>
-    <select class="filter-type">
-      <option value="">…</option>
-      <option value="scene">Scène</option>
-      <option value="seq">Séquence</option>
-    </select>
+    <input type="checkbox" class="cb-filtre-on-type" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">Le type doit être</label><div class="inline invisible">
+      <select class="filter-type">
+        <option value="">…</option>
+        <option value="scene">Scène</option>
+        <option value="seq">Séquence</option>
+      </select>
+    </div>
   </div>
 
   <div class="filter-row">
-    <span>La tension est </span>
-    <select class="filter-tension-operand">
-      <option value="">…</option>
-      <option value="sup">&gt;</option>
-      <option value="sup-or-equal">&gt;=</option>
-      <option value="inf">&lt;</option>
-      <option value="inf-or-equal">&lt;=</option>
-      <option value="equal">=</option>
-      <option value="diff">≠</option>
-    </select>
-    <span> à </span>
-    <input class="filter-tension" type="number" min="0" max="9" style="width:40px;">
+    <input type="checkbox" class="cb-filtre-on-tension" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">La tension doit être</label><div class="inline invisible">
+      <select class="filter-tension-operand">
+        <option value="">…</option>
+        <option value="sup">&gt;</option>
+        <option value="sup-or-equal">&gt;=</option>
+        <option value="inf">&lt;</option>
+        <option value="inf-or-equal">&lt;=</option>
+        <option value="equal">=</option>
+        <option value="diff">≠</option>
+      </select>
+      <span> à </span>
+      <input class="filter-tension" type="number" min="0" max="9" style="width:40px;">
+    </div>
   </div>
 
   <div class="filter-row">
-    <span class="top">La couleur de l'élément </span>
-    <select class="filter-color-condition">
-      <option value="in">se trouve parmi</option>
-      <option value="out">ne se trouve pas</option>
-    </select>
-    <div class="color-cbs"></div>
+    <input type="checkbox" class="cb-filtre-on-color" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">La couleur doit être
+    </label><div class="inline invisible">
+      <select class="filter-color-condition">
+        <option value="in">se trouve parmi</option>
+        <option value="out">ne se trouve pas</option>
+      </select>
+      <div class="color-cbs"></div>
+    </div>
   </div>
 
   <div class="buttons">
-    <button class="btn-reset fleft">Reset</button>
+    <button class="btn-reset fleft">Reset listing</button>
     <button class="btn-memo fleft">Mémoriser…</button>
     <button class="btn-filter">Filtrer</button>
   </div>

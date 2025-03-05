@@ -5,7 +5,6 @@
  * Chaque type de structure a son propre filtre (on peut demander à 
  * ce qu'ils soient synchronisés)
  */
-
 class EFilter {
 
   static get PANEL_CLONE(){return DGet('div.filter-form-container')}
@@ -13,6 +12,21 @@ class EFilter {
   static openFilter(name){
     const filter = new EFilter(MetaSTT.current)
     filter.show()
+  }
+
+  /**
+   * Pour ouvrir un bloc de réglage d'une condition (text, couleur, etc.)
+   */
+  static openPropSetting(cb){
+    const isOpen = cb.dataset.open == 'true'
+    cb.nextSibling.nextSibling.classList[isOpen?'add':'remove']('invisible')
+    cb.dataset.open = isOpen ? 'false' : 'true'
+  }
+
+  static togglePreviousCb(span){
+    const cb = span.previousSibling
+    cb.checked = !cb.checked;
+    this.openPropSetting(cb)
   }
 
   // ========= I N S T A N C E   E F I L T E R ==========
@@ -105,7 +119,7 @@ class EFilter {
     const parType = NullIfEmpty(this.typeField.value)
     parType && filter.push(this.filterByType.bind(this, parType))
     // --- Filtre par texte ---
-    const text = NullIfEmpty(this.textField.value.trim())
+    const text = this.filtreOn('text') && NullIfEmpty(this.textField.value.trim())
     if ( text ) {
       const parText = {condition: this.textCondField.value, text: text}
       switch(parText.condition){
@@ -124,57 +138,70 @@ class EFilter {
     }
 
     // --- Filtre par Tags ---
-    const allTags = []
-    this.forEachTag(tag => { tag.checked && allTags.push(tag.name)})
-    if ( allTags.length ) {
-      const method = (cond => {
-        switch(cond){
-          case 'all': return this.containsAllTags.bind(this, allTags);
-          case 'one': return this.containsOneTagAmong.bind(this, allTags);
-          case 'none': return this.notContainsAllTags.bind(this, allTags);
-          case 'no-one': return this.containsAnyAmong.bind(this, allTags);
-        }
-      })(this.tagCondField.value)
-      filter.push(this.filterByTags.bind(this, method))
+    if ( this.filtreOn('tags') ){
+      const allTags = []
+      this.forEachTag(tag => { tag.checked && allTags.push(tag.name)})
+      if ( allTags.length ) {
+        const method = (cond => {
+          switch(cond){
+            case 'all': return this.containsAllTags.bind(this, allTags);
+            case 'one': return this.containsOneTagAmong.bind(this, allTags);
+            case 'none': return this.notContainsAllTags.bind(this, allTags);
+            case 'no-one': return this.containsAnyAmong.bind(this, allTags);
+          }
+        })(this.tagCondField.value)
+        filter.push(this.filterByTags.bind(this, method))
+      }
     }
 
     // --- Filtre par tension ---
-    const tensOperand = NullIfEmpty(this.tensionOpField.value)
-    const tensValue   = NullIfEmpty(this.tensionField.value)
-    if ( tensOperand && tensValue ) {
-      const method = (op => {
-        switch(op){
-          case 'sup' : return this.isSup.bind(this, tensValue);
-          case 'inf' : return this.isInf.bind(this, tensValue);
-          case 'sup-or-equal': return this.isSupOrEqual.bind(this, tensValue);
-          case 'inf-or-equal': return this.isInfOrEqual.bind(this, tensValue);
-          case 'equal': return this.isEqual.bind(this, tensValue);
-          case 'diff': return this.isDiff.bind(this, tensValue);
-        }
-      })(tensOperand)
-      filter.push(this.filterByTension.bind(this, method))
+    if ( this.filtreOn('tension') ){
+      const tensOperand = NullIfEmpty(this.tensionOpField.value)
+      const tensValue   = NullIfEmpty(this.tensionField.value)
+      if ( tensOperand && tensValue ) {
+        const method = (op => {
+          switch(op){
+            case 'sup' : return this.isSup.bind(this, tensValue);
+            case 'inf' : return this.isInf.bind(this, tensValue);
+            case 'sup-or-equal': return this.isSupOrEqual.bind(this, tensValue);
+            case 'inf-or-equal': return this.isInfOrEqual.bind(this, tensValue);
+            case 'equal': return this.isEqual.bind(this, tensValue);
+            case 'diff': return this.isDiff.bind(this, tensValue);
+          }
+        })(tensOperand)
+        filter.push(this.filterByTension.bind(this, method))
+      }
     }
     
     // --- Filtre par couleur ---
-    const colors = {}
-    DGetAll('input[type="checkbox"]', this.colorsField).map(cb => {
-      if ( cb.checked ) Object.assign(colors, {[cb.dataset.id]: true})
-    })
-    if ( Object.keys(colors).length ) {
-      const method = (cond => {
-        switch(cond){
-          case 'in': return this.hasColorIn.bind(this, colors);
-          case 'out': return this.hasNotColorIn.bind(this, colors)
-        }
-      })(this.colorCondField.value)
-      filter.push(this.filterByColor.bind(this, method))
+    if ( this.filtreOn('color') ){
+      const colors = {}
+      DGetAll('input[type="checkbox"]', this.colorsField).map(cb => {
+        if ( cb.checked ) Object.assign(colors, {[cb.dataset.id]: true})
+      })
+      if ( Object.keys(colors).length ) {
+        const method = (cond => {
+          switch(cond){
+            case 'in': return this.hasColorIn.bind(this, colors);
+            case 'out': return this.hasNotColorIn.bind(this, colors)
+          }
+        })(this.colorCondField.value)
+        filter.push(this.filterByColor.bind(this, method))
+      }
     }
 
     if (filter.length) {
       return filter
     } else {
-      Flash.notice("Aucun filtre n'est à appliquer.")
+      Flash.notice("Aucun filtre n'est défini.")
     }
+  }
+
+  /**
+   * @return True si le filtre de type +type+ est activé
+   */
+  filtreOn(type){
+    return DGet(`input.cb-filtre-on-${type}`, this.obj).checked
   }
 
   

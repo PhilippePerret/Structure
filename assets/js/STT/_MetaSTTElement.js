@@ -58,6 +58,9 @@ class MetaSTTElement {
     this.data = data || {}
   }
 
+  show(){this.obj.classList.remove('hidden')}
+  hide(){this.obj.classList.add('hidden')}
+
   /**
    * Toutes les propriétés de l'élément structurel, que ce soit une
    * scène ou une séquence (ou autre à l'avenir)
@@ -83,7 +86,7 @@ class MetaSTTElement {
   get fgColor(){return this.colorData.fg}
   get bgColor(){return this.colorData.bg}
   get tensionData(){return this._tensiondata || (this._tensiondata = this.defineTensionData())}
-
+  get tagsAsMap(){return this._tagsasmap || (this._tagsasmap = this.getTagsAsMap())}
   /**
    * Forcer la réactualisation des données après un changement.
    */
@@ -95,8 +98,15 @@ class MetaSTTElement {
     delete this._tensiondata
     delete this._left
     delete this._width
+    delete this._tagsasmap
   }
 
+  /**
+   * @return True si l'élément contient le tag +tag+
+   */
+  hasTag(tag){
+    return this.tagsAsMap[tag] === true
+  }
 
   /**
    * Fonction générique recevant tout changement de valeur, que ce
@@ -121,7 +131,16 @@ class MetaSTTElement {
     }
   }
 
-
+  /**
+   * Construit et retourne une table avec en clé les tags de 
+   * l'élément et en valeur True. Cela permet d'accélerer le
+   * filtrage par tag (cf. le filtre)
+   */
+  getTagsAsMap(){
+    const map = {}
+    ;(this.tags||[]).forEach(tag => Object.assign(map, {[tag]: true}))
+    return map
+  }
 
   defineTensionData(){
     const tension = NullIfEmpty(this.tension)

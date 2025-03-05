@@ -3,18 +3,65 @@
   <button onclick={method}>Filtre</button>
 </div>
 <div id={@id} class="filter-form-container hidden">
+  <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
 
-  <div class="text-filter-container">
-    <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
+  <div class="filter-row text-filter-container">
+    <span>Le texte contient </span>
+    <select class="filter-text-condition">
+      <option value="all words">tous les mots</option>
+      <option value="one word">un mot parmi</option>
+      <option value="sentence">la phrase</option>
+    </select>
     <input class="filter-text" type="text" style="width:300px;" />
   </div>
   
-  <div class="filter-tags">
-    <!-- ici seront ajoutés les tags -->
+  <div class="filter-row">
+    <span>L'élément </span>
+    <select class="filter-tags-condition">
+      <option value="one">contient au moins un tag parmi…</option>
+      <option value="all">contient tous les tags</option>
+      <option value="none">ne contient pas tous les tags</option>
+      <option value="no-one">ne contient pas un des tags…</option>
+    </select>
+    <div class="filter-tags">
+      <!-- ici seront ajoutés les tags -->
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <span>L'élément est de type </span>
+    <select class="filter-type">
+      <option value="">…</option>
+      <option value="scene">Scène</option>
+      <option value="seq">Séquence</option>
+    </select>
+  </div>
+
+  <div class="filter-row">
+    <span>La tension est </span>
+    <select class="filter-tension-operand">
+      <option value="">…</option>
+      <option value="sup">&gt;</option>
+      <option value="sup-or-equal">&gt;=</option>
+      <option value="inf">&lt;</option>
+      <option value="inf-or-equal">&lt;=</option>
+      <option value="equal">=</option>
+      <option value="diff">≠</option>
+    </select>
+    <span> à </span>
+    <input class="filter-tension" type="number" min="0" max="9" style="width:40px;">
+  </div>
+
+  <div class="filter-row">
+    <span class="top">La couleur de l'élément est </span>
+    <select class="filter-color" multiple></select>
+    <span class="top small">(Cmd + click pour sélectionner)</span>
   </div>
 
   <div class="buttons">
-    <button class="btn-filter">Filtrer…</button>
+    <button class="btn-reset fleft">Reset</button>
+    <button class="btn-memo fleft">Mémoriser…</button>
+    <button class="btn-filter">Filtrer</button>
   </div>
 
 </div>

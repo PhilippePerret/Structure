@@ -12,6 +12,10 @@ div.filter-form-container {
   padding: 1em;
 }
 
+div.filter-form-container div.filter-row {
+  margin: 1em 0;
+}
+
 div.filter-form-container div.filter-tag {
   display: inline-block;
   width: 30%;

@@ -1,6 +1,7 @@
 .block {display:block!important}
 .right {text-align: right;}
 .left {text-align: left}
+.top {vertical-align: top}
 .fleft {float: left}
 .error {color: red}
 

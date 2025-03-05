@@ -29,8 +29,8 @@ class EditingSTTElement extends MetaSTTElement {
     const data = {}
     for ( const prop in ELEMENT_PROPERTIES_DATA ){
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
-      let value = DGet(`.elt-${prop}`, this.obj).value
-      if ( dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
+      let value = NullIfEmpty(DGet(`.elt-${prop}`, this.obj).value)
+      if ( value && dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
       console.info("Valeur finale de `%s'", prop, value)
       Object.assign(data, {[prop]: value})
     }
@@ -47,6 +47,19 @@ class EditingSTTElement extends MetaSTTElement {
   }
 
   /**
+   * Applique les valeurs, en les traitant si nécessaire.
+   */
+  setData(){
+    for ( const prop in ELEMENT_PROPERTIES_DATA ){
+      const dprop = ELEMENT_PROPERTIES_DATA[prop]
+      let value = this.data[prop] || dprop.default
+      if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
+      // console.info("Valeur inscrite de `%s'", prop, value)
+      DGet(`.elt-${prop}`, this.obj).value = value
+    }
+  }
+
+  /**
    * Remplit les champs avec leur valeur
    * @param {String} prop La propriété de l'élément
    * @param {String} value La valeur à lui donner
@@ -60,13 +73,7 @@ class EditingSTTElement extends MetaSTTElement {
   build(){
     this.obj = this.constructor.CLONE_ELEMENT.cloneNode(true)
     this.obj.dataset.id = this.id
-    for ( const prop in ELEMENT_PROPERTIES_DATA ){
-      const dprop = ELEMENT_PROPERTIES_DATA[prop]
-      let value = this.data[prop] || dprop.default
-      if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
-      // console.info("Valeur inscrite de `%s'", prop, value)
-      DGet(`.elt-${prop}`, this.obj).value = value
-    }
+    this.setData()
     // On met le résumé dans la couleur choisie
     this.color && this.applyColor()
 

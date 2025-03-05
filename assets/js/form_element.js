@@ -122,18 +122,24 @@ class FormElement {
    * @param {Object|HorizontalSTTElement} data Soit l'élément édité (HorizontalSTTElement) soir les données sous forme de table.
    */
   static setData(data){
-    ELEMENT_PROPERTIES.forEach(prop => this.field(prop).value = data[prop]||DEFAULT_VALUES[prop])
+    for ( const prop in ELEMENT_PROPERTIES_DATA ){
+      const dprop = ELEMENT_PROPERTIES_DATA[prop]
+      let value = data[prop] || dprop.default
+      if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
+      // console.info("Valeur inscrite de `%s'", prop, value)
+      this.field(prop).value = value
+    }
   }
 
   static getData(){
     const data = {}
-    ELEMENT_PROPERTIES.forEach(prop => {
+    for ( const prop in ELEMENT_PROPERTIES_DATA ){
+      const dprop = ELEMENT_PROPERTIES_DATA[prop]
       let value = NullIfEmpty(this.field(prop).value)
-      if ( ELEMENT_PROPERTIES_DATA[prop].afterGet ) {
-        value = ELEMENT_PROPERTIES_DATA[prop].afterGet(value)
-      }
+      if ( value && dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
+      console.info("Valeur finale de `%s'", prop, value)
       Object.assign(data, {[prop]: value})
-    })
+    }
     return data
   }
 

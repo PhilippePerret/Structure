@@ -10,6 +10,7 @@ class MetaSTT {
   
   static get fieldName(){return this._namefield || (this._namefield = DGet('input#structure-name'))}
   static get fieldPath(){return this._pathfield || (this._pathfield = DGet('input#structure-path'))}
+  static get fieldDuree(){return this._dureefield || (this._dureefield = DGet('input#film-duree'))}
   
   /**
    * Appelée par le bouton général "Enregistrer"
@@ -49,7 +50,7 @@ class MetaSTT {
   static get defaultDataStructure(){
     return {
         elements: [MetaSTTElement.defaultElement]
-      , metadata: {name: 'Structure sans nom', path: ''}
+      , metadata: {name: 'Structure sans nom', path: '', duree: '2:00:00'}
       , preferences: {}
     }
   }
@@ -61,7 +62,7 @@ class MetaSTT {
   static reset(){
     // Les champs à valeur
     ;[
-      this.fieldName, this.fieldPath
+      this.fieldName, this.fieldPath, this.fieldDuree
     ].forEach(field => {field.value = ""})
   }
 
@@ -285,8 +286,9 @@ class MetaSTT {
    */
   getData(){
     try {
-      this.data.metadata.name = NullIfEmpty(MetaSTT.fieldName.value) || raise("Il faut définir le nom de cette structure", MetaSTT.fieldName)
-      this.data.metadata.path = NullIfEmpty(MetaSTT.fieldPath.value) || raise("Il faut impérativement définir le path de cette structure.", MetaSTT.fieldPath)
+      this.data.metadata.name   = NullIfEmpty(MetaSTT.fieldName.value)  || raise("Il faut définir le nom de cette structure", MetaSTT.fieldName)
+      this.data.metadata.path   = NullIfEmpty(MetaSTT.fieldPath.value)  || raise("Il faut impérativement définir le path de cette structure.", MetaSTT.fieldPath)
+      this.data.metadata.duree  = NullIfEmpty(MetaSTT.fieldDuree.value) || raise("Il faut impérativement définir la durée du film/livre", MetaSTT.fieldDuree)
       return true
     } catch(err) {
       return false
@@ -298,8 +300,9 @@ class MetaSTT {
    * remontée
    */
   setInterface(){
-    MetaSTT.fieldName.value = this.data.metadata.name;
-    MetaSTT.fieldPath.value = this.data.metadata.path;
+    MetaSTT.fieldName.value   = this.data.metadata.name;
+    MetaSTT.fieldPath.value   = this.data.metadata.path;
+    MetaSTT.fieldDuree.value  =  this.data.metadata.duree;
     Tag.feeds.call(Tag, this.data.metadata.tags || [])
   }
 

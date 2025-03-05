@@ -28,7 +28,7 @@ class UI {
 
     // Observation des champs pour définir le nom et le path de la
     // structure pour pouvoir enregistrer la structure
-    ;['input#structure-name', 'input#structure-path'].forEach(field_sel => {
+    ;['input#structure-name', 'input#structure-path', 'input#film-duree'].forEach(field_sel => {
       DGet(field_sel).addEventListener('change', MetaSTT.setCurrentModified.bind(MetaSTT))
     })
     // Observation de la structure horizontale (notamment pour qu'un

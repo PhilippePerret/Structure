@@ -143,10 +143,23 @@ class EFilter {
         switch(fprop){
           case 'type':
             this.typeField.value = dataProp.value
+            break;
           case 'text':
             this.textCondField.value = dataProp.condition;
             this.textField.value = dataProp.text
             break;
+          case 'tags':
+            this.tagCondField.value = dataProp.condition
+            this.cocheTags(dataProp.tags)
+            break
+          case 'tension':
+            this.tensionOpField.value = dataProp.operand
+            this.tensionField.value   = dataProp.value
+            break
+          case 'color':
+            this.colorCondField.value = dataProp.condition
+            this.cocheColors(dataProp.colors)
+            break
           default:
             console.log("Je dois apprendre à régler", dataProp)
         }
@@ -168,18 +181,12 @@ class EFilter {
     const filter  = []
     const filterData = {} // pour mémorisation
     
-    // --- Filtre par type ---
-    if ( this.filtreOn('type') ) {
-      const parType = this.typeField.value
-      filter.push(this.filterByType.bind(this, parType))
-      Object.assign(filterData, {type: {value: parType}})
-    }
 
     // --- Filtre par texte ---
     const text = this.filtreOn('text') && NullIfEmpty(this.textField.value.trim())
     if ( text ) {
       const parText = {condition: this.textCondField.value, text: text}
-      Object.assign(filterData, {text: parText})
+      Object.assign(filterData, {text: {condition: parText.condition, text: text}})
       switch(parText.condition){
         case 'all words':
           Object.assign(parText, {words: text.split(' ')})
@@ -193,6 +200,13 @@ class EFilter {
           break
       }
       filter.push(this.filterByText.bind(this, parText))
+    }
+
+    // --- Filtre par type ---
+    if ( this.filtreOn('type') ) {
+      const parType = this.typeField.value
+      filter.push(this.filterByType.bind(this, parType))
+      Object.assign(filterData, {type: {value: parType}})
     }
 
     // --- Filtre par Tags ---
@@ -234,6 +248,7 @@ class EFilter {
       }
     }
     
+    
     // --- Filtre par couleur ---
     if ( this.filtreOn('color') ){
       const colors = {}
@@ -242,7 +257,7 @@ class EFilter {
       })
       if ( Object.keys(colors).length ) {
         const condColor = this.colorCondField.value
-        Object.assign(filterData, {color: {condition: condColor, colors: colors}})
+        Object.assign(filterData, {color: {condition: condColor, colors: Object.keys(colors)}})
         const method = (cond => {
           switch(cond){
             case 'in': return this.hasColorIn.bind(this, colors);
@@ -365,6 +380,18 @@ class EFilter {
   }
 
   /**
+   * Fonction utilisée par les filtres mémorisés pour sélectionner
+   * les tags
+   */
+  cocheTags(tags){
+    this.stt.tags.forEach(dtag => {
+      const checked = tags.includes(dtag.name)
+      const cbtagid = `${this.stt.classname}-cb-tag-${dtag.name.replace(" ", "")}`
+      DGet(`input#${cbtagid}`, this.obj).checked = checked
+    })
+  }
+
+  /**
    * Boucle la méthode method sur chaque instance Tag
    * 
    * Rappel : les instances (this.tags) sont instanciées lors de la
@@ -372,6 +399,18 @@ class EFilter {
    */
   forEachTag(method){
     this.tags.forEach(tag => method.call(null, tag))
+  }
+
+  /**
+   * Fonction appelée par le filtre mémorisé pour cocher les 
+   * couleurs du filtre
+   */
+  cocheColors(colors){
+    Color.each(dcolor => {
+      const checked = colors.includes(dcolor.id)
+      const cb = DGet(`input[type="checkbox"][data-id="${dcolor.id}"]`, this.obj)
+      cb.checked = checked
+    })
   }
 
   observe(){

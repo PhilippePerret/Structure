@@ -36,6 +36,15 @@ class Color {
     return COLOR_TABLE[colorId] || COLOR_TABLE[defaultId] 
   }
 
+  /**
+   * Boucle sur chaque couleur définie
+   * 
+   * @param {Function} method La fonction recevant en premier argument les données de la couleur.
+   */
+  static each(method){
+    COLOR_LIST.forEach( dcolor => method(dcolor))
+  }
+
   static buildColorMenus(container){
     container || raise(`Container introuvable…`)
     COLOR_LIST.forEach( dcolor => {

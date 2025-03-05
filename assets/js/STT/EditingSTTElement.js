@@ -21,19 +21,22 @@ class EditingSTTElement extends MetaSTTElement {
     field.select()
   }
 
-
   getData(){
     const data = {}
-    ELEMENT_PROPERTIES.forEach(prop => {
-      Object.assign(data, {[prop]: DGet(`.elt-${prop}`, this.obj).value})
-    })
+    for ( const prop in ELEMENT_PROPERTIES_DATA ){
+      const dprop = ELEMENT_PROPERTIES_DATA[prop]
+      const value = DGet(`.elt-${prop}`, this.obj).value
+      if ( dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
+      console.info("Valeur finale de `%s'", prop, value)
+      Object.assign(data, {[prop]: value})
+    }
     // console.log("Data brutes relevées", data)
     // Transformation de certaines valeurs
     if ( !data.id || data.id == "undefined") {
       this.data.id = this.obj.dataset.id = data.id = MetaSTTElement.getNewId()
     }
-    data.time   = this.setPropValue('time',  TimeCalc.treate(data.time, 'FULL'))
-    data.duree  = this.setPropValue('duree', TimeCalc.treate(data.duree, false))
+    data.time   = this.setPropValue('time',  data.time)
+    data.duree  = this.setPropValue('duree', data.duree)
     // On vérifie la validité des données
     if ( false === FormElement.areValidData(data, this) ) return false ;
     this.data = data
@@ -53,8 +56,14 @@ class EditingSTTElement extends MetaSTTElement {
   build(){
     this.obj = this.constructor.CLONE_ELEMENT.cloneNode(true)
     this.obj.dataset.id = this.id
-    ELEMENT_PROPERTIES.forEach(prop => {
-      DGet(`.elt-${prop}`, this.obj).value = this.data[prop] || DEFAULT_VALUES[prop]
+    for(const prop in ELEMENT_PROPERTIES_DATA){
+      const dprop = ELEMENT_PROPERTIES_DATA[prop]
+      const value = this.data[prop] || dprop.default
+      if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
+      DGet(`.elt-${prop}`, this.obj).value = value
+    }
+    Object.values(ELEMENT_PROPERTIES_DATA).forEach(dprop => {
+      const prop = dprop.prop
     })
     // On met le résumé dans la couleur choisie
     this.color && this.applyColor()

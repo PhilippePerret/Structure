@@ -85,7 +85,7 @@ class FormElement {
    * @param {STTElement} element  L'élément édité (structure éditée) ou null pour le formulaire
    */
   static areValidData(data, element){
-    console.info("element dans are-valid", element)
+    // console.info("element dans are-valid", element)
     const isNew = data.id == null;
     let field, otherElt;
     if ( element ) {

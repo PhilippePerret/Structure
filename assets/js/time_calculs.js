@@ -89,6 +89,10 @@ class TimeCalc {
     }
   }
 
+  static treateDuree(dureePlus){
+    return this.treate(dureePlus, false)
+  }
+
   static makeOpe(term1, term2, ope){
     if (ope == "+") {
       return term1 + term2

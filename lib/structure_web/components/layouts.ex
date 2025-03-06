@@ -50,6 +50,21 @@ defmodule SttWeb.Layouts do
   
   attr :id, :string, required: true
   attr :class, :string, required: true
+  def select_state(assigns) do
+    ~H"""
+    <select id={@id} class={@class} data-prop="state">
+      <option value="">---</option>
+      <option value="start">Ébauche</option>
+      <option value="todev">À développer</option>
+      <option value="current">En cours</option>
+      <option value="toread">À relire</option>
+      <option value="completed">Achevé</option>
+    </select>
+    """
+  end
+
+  attr :id, :string
+  attr :class, :string, required: true
   def select_ideality(assigns) do
     ~H"""
     <select id={@id} class={@class} data-prop="ideality">

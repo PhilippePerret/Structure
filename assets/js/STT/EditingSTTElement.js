@@ -31,7 +31,7 @@ class EditingSTTElement extends MetaSTTElement {
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
       let value = NullIfEmpty(DGet(`.elt-${prop}`, this.obj).value)
       if ( value && dprop.afterGet ) value = dprop.afterGet.call(null, value) ;
-      console.info("Valeur finale de `%s'", prop, value)
+      // console.info("Valeur finale de `%s'", prop, value)
       Object.assign(data, {[prop]: value})
     }
     // Transformation de certaines valeurs
@@ -54,7 +54,6 @@ class EditingSTTElement extends MetaSTTElement {
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
       let value = this.data[prop] || dprop.default
       if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
-      // console.info("Valeur inscrite de `%s'", prop, value)
       DGet(`.elt-${prop}`, this.obj).value = value
     }
   }

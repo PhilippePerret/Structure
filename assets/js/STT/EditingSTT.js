@@ -64,7 +64,6 @@ class EditingSTT extends MetaSTT {
   }
   afterSave(callback){
     this.saving = false
-    console.info("callback", callback)
     this.metaStt.resetAll()
     callback && callback()
   }

@@ -6,6 +6,7 @@ window.ELEMENT_PROPERTIES_DATA = {
   , pitch:    {default: null}
   , duree:    {default: '2:00'  , afterGet: TimeCalc.treateDuree.bind(TimeCalc)}
   , type:     {default: 'scene' , afterGet: null, beforeSet: null}
+  , state:    {default: null}
   , ideality: {default: 'none'}
   , color:    {default: 'normal'}
   , tension:  {default: null}
@@ -15,19 +16,6 @@ window.ELEMENT_PROPERTIES_DATA = {
       , afterGet:  function(tags){return tags.split(",").map(tag => {return tag.trim()})}
     }
 }
-window.DEFAULT_VALUES = {
-  id: ""
-, time: ""
-, duree: "2:00"
-, type: "scene"
-, ideality: "none"
-, pitch: ""
-, color: "normal"
-, tension: ""
-, tags: ""
-}
-window.ELEMENT_PROPERTIES = Object.keys(DEFAULT_VALUES)
-
 
 class MetaSTTElement {
 

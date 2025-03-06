@@ -126,7 +126,6 @@ class FormElement {
       const dprop = ELEMENT_PROPERTIES_DATA[prop]
       let value = data[prop] || dprop.default
       if ( dprop.beforeSet ) value = dprop.beforeSet.call(null, value) ;
-      // console.info("Valeur inscrite de `%s'", prop, value)
       this.field(prop).value = value
     }
   }

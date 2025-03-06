@@ -145,7 +145,6 @@ class MetaSTTElement {
    */
   getTagsAsMap(){
     const map = {}
-    console.info("tags", this.tags)
     if ('string' == typeof this.tags) {
       this.data.tags = this.tags.split(",").map(tag => {return tag.trim()})
       MetaSTT.current.setModified()

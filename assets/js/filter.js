@@ -64,29 +64,6 @@ class EFilter {
   }
 
   /**
-   * Supprimer l'application du filtre (remontre tous les éléments)
-   */
-  reset(){
-    this.stt.elements.forEach(elt => this.divOf(elt).classList.remove('hidden'))
-  }
-
-  /**
-   * Mémoriser le filtre courant
-   */
-  memorize(){
-    const fName = prompt("Quel nom donner à ce filtre ?")
-    if ( fName ) {
-      if ( this.stt.preferences.filters && this.stt.preferences.filters[fName]){
-        if (!confirm("Voulez-vous vraiment remplacer le filtre existant ?")) return false;
-      }
-      // On met les valeurs dans this.data
-      this.getFilterValue()
-      this.constructor.addFilter(fName, this.data)
-      this.buildMenuFiltres()
-    }
-  }
-
-  /**
    * Méthode principale pour appliquer le filtre à la liste qui lui
    * est associée. Appelé par le bouton "Filtrer" ou à tout 
    * changement peut-être
@@ -110,6 +87,31 @@ class EFilter {
     for(var filter of filters){
       const ok = filter.call(this, elt)
       eltObj.classList[ok ? 'remove' : 'add']('hidden')
+      // Dès qu'un filtre ne passe pas, on arrête
+      if ( !ok ) return ;
+    }
+  }
+
+  /**
+   * Supprimer l'application du filtre (remontre tous les éléments)
+   */
+  reset(){
+    this.stt.elements.forEach(elt => this.divOf(elt).classList.remove('hidden'))
+  }
+
+  /**
+   * Mémoriser le filtre courant
+   */
+  memorize(){
+    const fName = prompt("Quel nom donner à ce filtre ?")
+    if ( fName ) {
+      if ( this.stt.preferences.filters && this.stt.preferences.filters[fName]){
+        if (!confirm("Voulez-vous vraiment remplacer le filtre existant ?")) return false;
+      }
+      // On met les valeurs dans this.data
+      this.getFilterValue()
+      this.constructor.addFilter(fName, this.data)
+      this.buildMenuFiltres()
     }
   }
 

@@ -131,8 +131,15 @@ class EFilter {
   filterByText(methodComp, elt){
     return methodComp(elt.pitch)
   }
-  filterByType(type, elt){
-    return elt.type == type
+  filterByType(dfilter, elt){
+    const value = elt.data.type
+    if ( dfilter.condition == 'is' ) { return value == dfilter.value }
+    else { return value != dfilter.value }
+  }
+  filterByState(dfilter, elt){
+    const value = elt.data.state
+    if ( dfilter.condition == 'is' ) { return value == dfilter.value }
+    else { return value != dfilter.value }
   }
   filterByColor(methodComp, elt){
     return methodComp(elt.color)
@@ -148,18 +155,23 @@ class EFilter {
    * Applique les valeurs d'un filtre mémorisé
    */
   setFilterValues(data){
-    ;['text','type','tags','tension','color'].forEach(fprop => {
+    ;['text','type','state','tags','tension','color'].forEach(fprop => {
       const cb = DGet(`input[type="checkbox"].cb-filtre-on-${fprop}`, this.obj)
       const dataProp = data[fprop]
       if ( dataProp ) {
         cb.checked = true
         switch(fprop){
           case 'type':
-            this.typeField.value = dataProp.value
+            this.typeField.value      = dataProp.value
+            this.typeCondField.value  = dataProp.condition
             break;
           case 'text':
-            this.textCondField.value = dataProp.condition;
-            this.textField.value = dataProp.text
+            this.textField.value      = dataProp.text
+            this.textCondField.value  = dataProp.condition
+            break;
+          case 'state':
+            this.stateField.value     = dataProp.value
+            this.stateCondField.value = dataProp.condition
             break;
           case 'tags':
             this.tagCondField.value = dataProp.condition
@@ -219,9 +231,18 @@ class EFilter {
 
     // --- Filtre par type ---
     if ( this.filtreOn('type') ) {
-      const parType = this.typeField.value
+      const parTypeCond = this.typeCondField.value
+      const parType     = {condition: parTypeCond, value:this.typeField.value}
       filter.push(this.filterByType.bind(this, parType))
-      Object.assign(filterData, {type: {value: parType}})
+      Object.assign(filterData, {type: parType})
+    }
+
+    // --- Filtre par état ---
+    if ( this.filtreOn('state') ) {
+      const parStateCond = this.stateCondField.value
+      const parState = {condition: parStateCond, value: this.stateField.value}
+      filter.push(this.filterByState.bind(this, parState))
+      Object.assign(filterData, {state: parState})
     }
 
     // --- Filtre par Tags ---
@@ -263,7 +284,6 @@ class EFilter {
       }
     }
     
-
     // --- Filtre par couleur ---
     if ( this.filtreOn('color') ){
       const colors = {}
@@ -490,6 +510,9 @@ class EFilter {
   get textField(){return DGet('input.filter-text', this.obj)}
   get textCondField(){return DGet('select.filter-text-condition', this.obj)}
   get typeField(){return DGet('select.filter-type', this.obj)}
+  get typeCondField(){return DGet('select.filter-type-condition', this.obj)}
+  get stateField(){return DGet('select.filter-state', this.obj)}
+  get stateCondField(){return DGet('select.filter-state-condition', this.obj)}
   get tagsField(){return DGet('div.filter-tags', this.obj)}
   get tagCondField(){return DGet('select.filter-tags-condition', this.obj)}
   get tensionField(){return DGet('input.filter-tension', this.obj)}

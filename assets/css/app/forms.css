@@ -22,7 +22,7 @@ input[type="number"]{
   outline: none;
 }
 
-textarea {
+textarea, select, select option {
   outline: none;
 }
 

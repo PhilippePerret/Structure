@@ -8,6 +8,7 @@
   <label>FILTRE DES ÉLÉMENTS</label>
 
   <div class="filter-row text-filter-container">
+
     <input type="checkbox" class="cb-filtre-on-text" onchange="EFilter.openPropSetting(this)"
      /><label onclick="EFilter.togglePreviousCb(this)">Le texte contient 
      </label><div class="inline invisible">
@@ -21,6 +22,32 @@
   </div>
   
   <div class="filter-row">
+    <input type="checkbox" class="cb-filtre-on-state" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">L'état</label><div class="inline invisible">
+      <select class="filter-state-condition">
+        <option value="is">doit être</option>
+        <option value="isnot">ne doit pas être</option>
+      </select>
+      <.select_state id="" class={"filter-state"} />
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <input type="checkbox" class="cb-filtre-on-type" onchange="EFilter.openPropSetting(this)"
+    /><label onclick="EFilter.togglePreviousCb(this)">Le type</label><div class="inline invisible">
+      <select class="filter-type-condition">
+        <option value="is">doit être</option>
+        <option value="isnot">ne doit pas être</option>
+      </select>
+      <select class="filter-type">
+        <option value="">…</option>
+        <option value="scene">Scène</option>
+        <option value="seq">Séquence</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="filter-row">
     <input type="checkbox" class="cb-filtre-on-tags" onchange="EFilter.openPropSetting(this)"
     /><label onclick="EFilter.togglePreviousCb(this)">Les tags</label><div class="inline invisible">
       <select class="filter-tags-condition">
@@ -32,17 +59,6 @@
       <div class="filter-tags">
         <!-- ici seront ajoutés les tags -->
       </div>
-    </div>
-  </div>
-
-  <div class="filter-row">
-    <input type="checkbox" class="cb-filtre-on-type" onchange="EFilter.openPropSetting(this)"
-    /><label onclick="EFilter.togglePreviousCb(this)">Le type doit être</label><div class="inline invisible">
-      <select class="filter-type">
-        <option value="">…</option>
-        <option value="scene">Scène</option>
-        <option value="seq">Séquence</option>
-      </select>
     </div>
   </div>
 

@@ -109,14 +109,8 @@ class EFilter {
 
   get disposition(){return this._dispo || (this._dispo = this.stt.disposition.obj)}
 
-  filterByText(dfilter, elt){
-    switch(dfilter.condition){
-      case 'all words':
-        return this.textContainsAllWords(elt.pitch, dfilter.words)
-      case 'one word':
-      case 'sentence':
-        return ` ${elt.pitch} `.match(dfilter.regExp) !== null;
-    }
+  filterByText(methodComp, elt){
+    return methodComp(elt.pitch)
   }
   filterByType(type, elt){
     return elt.type == type
@@ -187,19 +181,21 @@ class EFilter {
     if ( text ) {
       const parText = {condition: this.textCondField.value, text: text}
       Object.assign(filterData, {text: {condition: parText.condition, text: text}})
-      switch(parText.condition){
-        case 'all words':
-          Object.assign(parText, {words: text.split(' ')})
-          break;
-        case 'one word':
-          const words = " (" + text.split(' ').join("|") + ") "
-          Object.assign(parText, {regExp: new RegExp(words, "i")})
-          break
-        case 'sentence':
-          Object.assign(parText, {regExp: new RegExp(text, "i")})
-          break
-      }
-      filter.push(this.filterByText.bind(this, parText))
+
+      const method = (cond => {
+        let regexp;
+        switch(cond){
+          case 'all words':
+            return this.textContainsAllWords.bind(this, text.split(' '))
+          case 'one word':
+            regexp = new RegExp(`(${text.split(' ').join('|')})`, "i")
+            return this.textMatch.bind(this, regexp)
+          case 'sentence':
+            regexp = new RegExp(text, "i")
+            return this.textMatch.bind(this, regexp)
+        }
+      })(parText.condition)
+      filter.push(this.filterByText.bind(this, method))
     }
 
     // --- Filtre par type ---
@@ -286,6 +282,10 @@ class EFilter {
 
   
   // Méthodes de condition
+
+  textMatch(regExp, str){
+    return !(null === str.match(regExp))
+  }
 
   isSup(ref, comp){return comp > ref }
   isSupOrEqual(ref, comp){return comp >= ref}
@@ -434,7 +434,7 @@ class EFilter {
    * @param {String} str Le sujet
    * @param {Array} words La liste des mots
    */
-  textContainsAllWords(str, words){
+  textContainsAllWords(words, str){
     for( var word of words ){
       if ( str.indexOf(word) < 0 ) return false;
     }

@@ -3,6 +3,7 @@
   <button onclick={method}>Filtre</button>
 </div>
 <div id={@id} class="filter-form-container hidden">
+  <button class="btn-hide fright small">x</button>
   <img src={~p"/images/filter.png"} alt="filtre" style="height:20px;" />
   <label>FILTRE DES ÉLÉMENTS</label>
 
@@ -75,10 +76,10 @@
   </div>
   
   <div class="buttons">
-    <button class="btn-hide fleft small">Fermer</button>
     <button class="btn-reset fleft small">Reset liste</button>
     <button class="btn-memo fleft small">Mémoriser…</button>
     <select class="filtres-memo fleft" style="width:200px;"></select>
+    <button class="btn-sup-filter fleft small invisible">x</button>
     <button class="btn-filter main">Filtrer</button>
   </div>
 

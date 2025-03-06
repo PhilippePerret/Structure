@@ -41,18 +41,25 @@ class EFilter {
   }
 
   static addFilter(name, data){
-    const prefs = MetaSTT.current.preferences
-    const filters = MetaSTT.current.preferences.filters || {}
+    const stt     = MetaSTT.current
+    const prefs   = stt.preferences
+    const filters = stt.preferences.filters || {}
     Object.assign(filters, {[name]: data})
-    MetaSTT.current.preferences.filters = filters
-    MetaSTT.current.setModified()
+    stt.preferences.filters = filters
+    stt.setModified()
   }
 
   /**
    * Fonction appelée pour supprimer un filtre
+   * 
+   * @param {String} fName Le nom du filtre, qui sert de clé dans les préférences.
    */
-  static removeFilter(fname) {
-    console.log("Je dois apprendre à supprimer le filtre.")
+  static removeFilter(fName) {
+    if ( !confirm(`Êtes-vous certain de vouloir supprimer le filtre '${fName}'`)){ return false }
+    const stt = MetaSTT.current
+    delete stt.preferences.filters[fName]
+    stt.setModified()
+    return true
   }
 
   // ========= I N S T A N C E   E F I L T E R ==========
@@ -359,6 +366,9 @@ class EFilter {
     return o ; // pour _obj
   }
 
+  /**
+   * Fonction appelée quand on choisit un filtre dans le menu
+   */
   onChooseFilter(ev){
     const menu = this.menuFiltres
     const filterName = menu.value;
@@ -366,7 +376,29 @@ class EFilter {
     this.setFilterValues(dataFilter)
     this.apply()
     menu.selectedIndex = 0
+    this.setRemoveButton(filterName)
   }
+
+  /**
+   * Fonction réglant le bouton pour supprimer le filtre courant
+   * 
+   * @param {String|Undefined} fName Le nom du filtre si on doit montrer le bouton, sinon on le cache.
+   */
+  setRemoveButton(fName){
+    this.btnSupFilter.classList[fName ? 'remove' : 'add']('invisible')
+    this.btnSupFilter.dataset.name = fName || "";
+  }
+
+  /**
+   * Appelée quand on clique sur le bouton pour supprimer le filtre courant
+   */
+  onWantToRemoveFilter(ev){
+    if ( this.constructor.removeFilter(this.btnSupFilter.dataset.name) ) {
+      this.buildMenuFiltres()
+      this.setRemoveButton()
+    }
+  }
+
   buildMenuFiltres(){
     this.menuFiltres.innerHTML = ""
     this.menuFiltres.appendChild(DCreate('OPTION', {value: "", text:"Filtre…"}))
@@ -432,6 +464,7 @@ class EFilter {
     this.btnHide.addEventListener('click', this.hide.bind(this))
     this.btnMemo.addEventListener('click', this.memorize.bind(this))
     this.menuFiltres.addEventListener('change', this.onChooseFilter.bind(this))
+    this.btnSupFilter.addEventListener('click', this.onWantToRemoveFilter.bind(this))
   }
 
   /**
@@ -468,6 +501,7 @@ class EFilter {
   get btnReset(){return DGet('button.btn-reset', this.obj)}
   get btnMemo(){return DGet('button.btn-memo', this.obj)}
   get btnHide(){return DGet('button.btn-hide', this.obj)}
+  get btnSupFilter(){return DGet('button.btn-sup-filter', this.obj)}
 
 }
 

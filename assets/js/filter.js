@@ -9,6 +9,9 @@ class EFilter {
 
   static get PANEL_CLONE(){return DGet('div.filter-form-container')}
 
+  /**
+   * Fonction appelée pour ouvrir la boite de filtre.
+   */
   static openFilter(name){
     const filter = new EFilter(MetaSTT.current)
     filter.show()
@@ -43,6 +46,13 @@ class EFilter {
     Object.assign(filters, {[name]: data})
     MetaSTT.current.preferences.filters = filters
     MetaSTT.current.setModified()
+  }
+
+  /**
+   * Fonction appelée pour supprimer un filtre
+   */
+  static removeFilter(fname) {
+    console.log("Je dois apprendre à supprimer le filtre.")
   }
 
   // ========= I N S T A N C E   E F I L T E R ==========
@@ -281,7 +291,7 @@ class EFilter {
   }
 
   
-  // Méthodes de condition
+  // Méthodes de filtrage
 
   textMatch(regExp, str){
     return !(null === str.match(regExp))
@@ -352,6 +362,7 @@ class EFilter {
     const filterName = menu.value;
     const dataFilter = this.stt.preferences.filters[filterName]
     this.setFilterValues(dataFilter)
+    this.apply()
     menu.selectedIndex = 0
   }
   buildMenuFiltres(){

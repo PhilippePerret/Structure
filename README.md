@@ -58,3 +58,12 @@ La valeur en secondes pour être un nombre :
 1,23,45 + 12s 4h
 => 5:23:57
 ~~~
+
+
+### Alias de lancement
+
+Pour créer une commande qui lance l'application, mettre ce code dans `~/zshrc` et jouer la commande `stt`.
+
+~~~
+alias stt="cd $HOME/Programmes/Phoenix/Structure && mix phx.server > /dev/null 2>&1 & disown && echo \"Dans 3 secondes j'ouvre Safari avec l'application.\" && sleep 3 && open -a Safari http://localhost:4000 && exit > /dev/null 2>&1"
+~~~

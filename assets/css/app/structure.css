@@ -52,6 +52,12 @@ div#stt-editingstt {
   background-color: #FAFFFA;
   left: 2em;
 }
+
+div#stt-horizontalstt div.stt-header,
+div#stt-verticalstt div.stt-header {
+  margin-left: 2em;
+  margin-bottom: 2em;
+}
 /* 
   === Scènes ===
 

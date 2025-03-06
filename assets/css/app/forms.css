@@ -70,6 +70,19 @@ button.soft {
   font-size: 0.9em;
 }
 
+button.main {
+  background-color: #49cb58;
+  color: white;
+  padding:7px 1.5em;
+}
+
+button.small {
+  border-radius: 6px;
+  background: inherit;
+  border: 1px solid #CCCCCC;
+  padding: 1px 0.6em 3px;
+}
+
 form {
   border: 8px solid #EEEEEE;
   border-radius: 1em;
@@ -104,8 +117,12 @@ div.buttons {
   text-align: right;
   margin-top: 1em;
 }
-div.buttons button {
+div.buttons button:not(.small) {
   margin-left: 1em;
+}
+div.buttons button.small,
+div.buttons select {
+  margin-left: 12px;
 }
 
 div.bloc-form > div {

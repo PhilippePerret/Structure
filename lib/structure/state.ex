@@ -16,8 +16,8 @@ defmodule Stt.State do
   def get_last_structure do
     state = whole_data()
     case state["last_op"] do
-    "save" -> state["last_saved"]
-    "load" -> state["last_loaded"]
+    "save" -> state["last_saved"]   || state["last_loaded"] || "default"
+    "load" -> state["last_loaded"]  || state["last_saved"]  || "default"
     _ -> "default"
     end
   end
